@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { waitForRouteReady } from "@/lib/page-enter";
 import { scrollToTarget } from "@/lib/lenis-store";
+import { withBasePath } from "@/lib/site-path";
 
 const LINKS = [
   { label: "Home", href: "/" },
@@ -170,7 +171,7 @@ export default function MenuOverlay({ open, onClose }: MenuOverlayProps) {
             <a
               className="menu__link display"
               data-menu-link
-              href={link.href}
+              href={withBasePath(link.href)}
               onClick={(event) => {
                 event.preventDefault();
                 navigateFromMenu(link.href);
