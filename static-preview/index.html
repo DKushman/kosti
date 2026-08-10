@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halle. — Brand &amp; Spatial Design Studio, Berlin (static preview)</title>
+<link rel="stylesheet" href="globals.css">
+<style>
+  /* preview-only: sandbox has no Google Fonts, use local metric cousins */
+  :root {
+    --font-sans-loaded: "Liberation Sans", "Arial", sans-serif;
+    --font-serif-loaded: "DejaVu Serif", "Georgia", serif;
+  }
+  /* preview-only: emulate SplitText final state = plain text visible */
+</style>
+</head>
+<body>
+
+<div class="preloader" id="preloader" role="status" aria-label="Loading Halle Studio">
+  <p class="preloader__brand" aria-hidden="true"><span>H</span><span>a</span><span>l</span><span>l</span><span>e</span><span>.</span></p>
+  <span class="preloader__count" id="count" aria-hidden="true">000</span>
+  <span class="preloader__hint" aria-hidden="true">Brand &amp; spatial design</span>
+</div>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="header" id="header">
+  <a class="brand" href="#top" aria-label="Halle. Back to start">Halle.</a>
+  <div class="header__marquee">
+    <div class="marquee">
+      <div class="marquee__track" data-marquee-track>
+        <p class="marquee__item">Building spatial identities for more than 20 years <span class="dot">●</span> </p>
+        <p class="marquee__item" aria-hidden="true">Building spatial identities for more than 20 years <span class="dot">●</span> </p>
+        <p class="marquee__item" aria-hidden="true">Building spatial identities for more than 20 years <span class="dot">●</span> </p>
+        <p class="marquee__item" aria-hidden="true">Building spatial identities for more than 20 years <span class="dot">●</span> </p>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-menu">
+    <span class="menu-btn__icon" aria-hidden="true"></span>
+    <span>Menu</span>
+  </button>
+</header>
+
+<nav class="menu" id="site-menu" aria-label="Main navigation" aria-hidden="true">
+  <ul class="menu__list" role="list">
+    <li><a class="menu__link display" href="#top"><span class="menu__num">01</span>Home</a></li>
+    <li><a class="menu__link display" href="#sectors"><span class="menu__num">02</span>Sectors</a></li>
+    <li><a class="menu__link display" href="#work"><span class="menu__num">03</span>Work</a></li>
+    <li><a class="menu__link display" href="#studio"><span class="menu__num">04</span>Studio</a></li>
+    <li><a class="menu__link display" href="#contact"><span class="menu__num">05</span>Contact</a></li>
+  </ul>
+  <div class="menu__meta">
+    <span>Berlin — 52.51° N, 13.40° E</span>
+    <a href="mailto:hello@halle.studio">hello@halle.studio</a>
+    <span>Est. 2004</span>
+  </div>
+</nav>
+
+<main id="main">
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__media" aria-hidden="true">
+      <img src="img/hero.jpg" alt="" draggable="false">
+      <div class="hero__shade"></div>
+    </div>
+    <h1 class="hero__title display" id="hero-title">This is Halle</h1>
+    <a class="hero__reel" href="#work" aria-label="Watch the studio reel">
+      <img src="img/reel.jpg" alt="" draggable="false">
+      <span class="hero__reel-label">Reel ’26</span>
+    </a>
+    <button type="button" class="hero__scroll">Scroll</button>
+  </section>
+
+  <section class="sectors" id="sectors" aria-labelledby="sectors-heading">
+    <div class="sectors__intro">
+      <h2 class="visually-hidden" id="sectors-heading">Sectors we work in</h2>
+      <p class="serif-lede">We have deep experience across a range of commercial sectors, offering a complete end-to-end service — from brand strategy to interior design and build.</p>
+      <a class="link-underline" href="#contact">Our services</a>
+    </div>
+    <div class="sectors__body">
+      <ul class="sectors__list" role="list" id="sector-list">
+        <li class="sectors__item is-active" data-index="0">
+          <span class="sectors__rule" aria-hidden="true"></span>
+          <a class="sectors__link display" href="#work"><span class="split-line" style="display:block"><span style="display:block">Retail</span></span></a>
+        </li>
+        <li class="sectors__item" data-index="1">
+          <span class="sectors__rule" aria-hidden="true"></span>
+          <a class="sectors__link display" href="#work"><span class="split-line" style="display:block"><span style="display:block">Hospitality</span></span></a>
+        </li>
+        <li class="sectors__item" data-index="2">
+          <span class="sectors__rule" aria-hidden="true"></span>
+          <a class="sectors__link display" href="#work"><span class="split-line" style="display:block"><span style="display:block">Workplace</span></span></a>
+        </li>
+        <li class="sectors__item" data-index="3">
+          <span class="sectors__rule" aria-hidden="true"></span>
+          <span class="sectors__rule sectors__rule--bottom" aria-hidden="true"></span>
+          <a class="sectors__link display" href="#work"><span class="split-line" style="display:block"><span style="display:block">Exhibition</span></span></a>
+        </li>
+      </ul>
+      <div class="sectors__media" id="sector-media" aria-hidden="true">
+        <img src="img/sector-retail.jpg" alt="" class="is-active" draggable="false">
+        <img src="img/sector-hospitality.jpg" alt="" draggable="false">
+        <img src="img/sector-workplace.jpg" alt="" draggable="false">
+        <img src="img/sector-exhibition.jpg" alt="" draggable="false">
+      </div>
+    </div>
+  </section>
+
+  <section class="work" id="work" aria-labelledby="work-heading">
+    <header class="work__head">
+      <h2 class="display" id="work-heading">Selected<br>work</h2>
+      <p class="work__count">(2019 — 2026)</p>
+    </header>
+    <ul class="work__grid" role="list">
+      <li class="work__item">
+        <a href="#contact" aria-label="Nova Flagship case study"><figure>
+          <div class="work__media"><img src="img/project-1.jpg" alt="" draggable="false"></div>
+          <figcaption><h3>Nova Flagship</h3><p class="work__tags">Retail — Berlin · 2026</p></figcaption>
+        </figure></a>
+      </li>
+      <li class="work__item">
+        <a href="#contact" aria-label="Kiosk Fortyseven case study"><figure>
+          <div class="work__media"><img src="img/project-2.jpg" alt="" draggable="false"></div>
+          <figcaption><h3>Kiosk Fortyseven</h3><p class="work__tags">Hospitality — München · 2025</p></figcaption>
+        </figure></a>
+      </li>
+      <li class="work__item">
+        <a href="#contact" aria-label="Atlas Campus case study"><figure>
+          <div class="work__media"><img src="img/project-3.jpg" alt="" draggable="false"></div>
+          <figcaption><h3>Atlas Campus</h3><p class="work__tags">Workplace — Hamburg · 2024</p></figcaption>
+        </figure></a>
+      </li>
+      <li class="work__item">
+        <a href="#contact" aria-label="Feldlabor Pavilion case study"><figure>
+          <div class="work__media"><img src="img/project-4.jpg" alt="" draggable="false"></div>
+          <figcaption><h3>Feldlabor Pavilion</h3><p class="work__tags">Exhibition — Köln · 2024</p></figcaption>
+        </figure></a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="studio" id="studio" aria-labelledby="studio-heading">
+    <h2 class="visually-hidden" id="studio-heading">The studio</h2>
+    <p class="studio__statement">We are a Berlin studio shaping brands people can walk into. Strategy, design and build under one roof — spaces that feel <em>inevitable</em>, not decorated.</p>
+    <dl class="studio__stats">
+      <div><dt>Years of craft</dt><dd><span>22</span><sup>+</sup></dd></div>
+      <div><dt>Projects delivered</dt><dd><span>340</span></dd></div>
+      <div><dt>Design awards</dt><dd><span>17</span></dd></div>
+    </dl>
+  </section>
+
+</main>
+
+<footer class="footer" id="contact">
+  <div class="footer__marquee">
+    <div class="marquee">
+      <div class="marquee__track">
+        <p class="marquee__item">Have a space in mind? Let’s build something people remember <span class="dot">●</span> </p>
+        <p class="marquee__item" aria-hidden="true">Have a space in mind? Let’s build something people remember <span class="dot">●</span> </p>
+        <p class="marquee__item" aria-hidden="true">Have a space in mind? Let’s build something people remember <span class="dot">●</span> </p>
+        <p class="marquee__item" aria-hidden="true">Have a space in mind? Let’s build something people remember <span class="dot">●</span> </p>
+      </div>
+    </div>
+  </div>
+  <a class="footer__cta" href="mailto:hello@halle.studio">
+    <span class="display">Let’s talk</span><br>
+    <span class="footer__cta-mail">hello@halle.studio</span>
+  </a>
+  <div class="footer__meta">
+    <address>Halle Studio GmbH · Köpenicker Str. 154 · 10997 Berlin</address>
+    <nav aria-label="Social media">
+      <ul class="footer__social" role="list">
+        <li><a href="https://instagram.com">Instagram</a></li>
+        <li><a href="https://linkedin.com">LinkedIn</a></li>
+        <li><a href="https://behance.net">Behance</a></li>
+      </ul>
+    </nav>
+    <button type="button" class="to-top">Back to top ↑</button>
+    <p>© 2026 Halle. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // preview-only stand-ins for the GSAP layer
+  (function () {
+    var pre = document.getElementById('preloader');
+    var count = document.getElementById('count');
+    var n = 0;
+    var iv = setInterval(function () {
+      n = Math.min(100, n + 20);
+      count.textContent = String(n).padStart(3, '0');
+      if (n >= 100) {
+        clearInterval(iv);
+        pre.style.transition = 'transform .5s cubic-bezier(.65,.05,0,1)';
+        pre.style.transform = 'translateY(-101%)';
+        setTimeout(function(){ pre.remove(); }, 600);
+      }
+    }, 60);
+
+    // header turns solid after the hero
+    addEventListener('scroll', function () {
+      document.getElementById('header').classList.toggle('is-solid', scrollY > innerHeight * 0.72);
+    }, { passive: true });
+
+    // sector hover swap
+    var items = document.querySelectorAll('.sectors__item');
+    var imgs = document.querySelectorAll('#sector-media img');
+    items.forEach(function (item) {
+      item.addEventListener('mouseenter', function () {
+        items.forEach(function (el) { el.classList.remove('is-active'); });
+        imgs.forEach(function (el) { el.classList.remove('is-active'); });
+        item.classList.add('is-active');
+        imgs[Number(item.dataset.index)].classList.add('is-active');
+      });
+    });
+
+    // marquee drift
+    document.querySelectorAll('[data-marquee-track], .marquee__track').forEach(function (track) {
+      var x = 0;
+      function step() {
+        x = (x - 0.04) % 50;
+        track.style.transform = 'translateX(' + x + '%)';
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "halle-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Halle. — award-style studio site. Next.js + GSAP + Lenis.",
+  "scripts": {
+    "dev": "rm -rf .next && next dev --turbo",
+    "dev:fast": "next dev --turbo",
+    "dev:webpack": "rm -rf .next && next dev",
+    "build": "next build",
+    "build:pages": "next build && touch out/.nojekyll",
+    "start": "next start",
+    "preview": "npm run build && npm run start"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.4",
+    "next": "^15.3.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "typescript": "^5.8.3"
+  }
+}

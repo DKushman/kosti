@@ -1,0 +1,738 @@
+[
+  {
+    "id": "konstantin-patsalides",
+    "name": "Konstantin Patsalides",
+    "company": "HYGH Germany GmbH & Co. KG",
+    "linkedin": "https://www.linkedin.com/in/konstantin-patsalides-77b06a28/",
+    "bio": "»Als Berliner mit Wurzeln in Zypern und somit aufgewachsen mit zwei geteilten Hauptstädten weiß ich, wie stark Städte sein können, wenn Menschen zusammenfinden und wie wertvoll Verbundenheit und gemeinsame Visionen sind. In Berlin möchte ich genau diese Kraft stärken – Menschen zusammenbringen, Ideen sichtbar machen und Zukunft mutig mit dem Wissen, das alles möglich ist, gestalten.«",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746079/konstantin-patsalides.jpg"
+  },
+  {
+    "id": "alexander-jochl",
+    "name": "Alexander Jöchl",
+    "company": "Samurai Museum Berlin",
+    "linkedin": "https://www.linkedin.com/in/alexander-joechl/",
+    "bio": "»Berlin ist für mich kein Standort, sondern ein kulturelles System und Verantwortung beginnt dort, wo man beginnt, dieses System aktiv mitzugestalten!«",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746116/alexander-jochl.jpg"
+  },
+  {
+    "id": "nhung-nguyen",
+    "name": "Nhung Nguyen",
+    "company": "Meet Germany",
+    "linkedin": "https://www.linkedin.com/in/nhung-connects/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746235/nhung-nguyen.jpg"
+  },
+  {
+    "id": "florian-kosse",
+    "name": "Florian Kosse",
+    "company": "Carl Bamberg GmbH",
+    "linkedin": "https://www.linkedin.com/in/florian-kosse/",
+    "bio": "»Für mich bedeutet MyBLN, queeres Leben in Berlin sichtbarer und selbstverständlicher zu machen, Projekte in die Kieze zu bringen, die uns alle voranbringen, und Vorurteile abzubauen, die unseren gesellschaftlichen Fortschritt bremsen. Berlin sollte endlich wieder für seine Visionen und seine besondere Anziehungskraft bekannt sein.«",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746172/florian-kosse.jpg"
+  },
+  {
+    "id": "elisa-deftos",
+    "name": "Elisa Deftos",
+    "company": "Studio 49",
+    "linkedin": "https://www.linkedin.com/in/elisa-deftos-0001b0173/",
+    "bio": "»Berlin ist für mich die Stadt, in der Mut und Kreativität Realität formen. Ich will dazu beitragen, dass hier Ideen sichtbar werden, Menschen sich verbinden und echte Zukunft entsteht.«",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746170/elisa-deftos.jpg"
+  },
+  {
+    "id": "tobias-buttner",
+    "name": "Tobias Büttner",
+    "company": "CONNEX Werbeagentur Berlin",
+    "linkedin": "https://www.linkedin.com/in/nilsruestmann/",
+    "bio": "Urberliner und seit 20 Jahren im Marketing und der Kommunikation zuhause. Wir entwickeln Webseiten, Kampagnen und Marken für die Hauptstadt.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746289/tobias-buttner.jpg"
+  },
+  {
+    "id": "nils-ruestman",
+    "name": "Nils Ruestman",
+    "company": "Social Network Group",
+    "linkedin": "https://www.linkedin.com/in/nilsruestmann/",
+    "bio": "»Ostfriese in Berlin – interessiert an Menschen, Ideen und dem, was diese Stadt zusammenhält.«",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746246/nils-ruestman.jpg"
+  },
+  {
+    "id": "uwe-schneider",
+    "name": "Uwe Schneider",
+    "company": "Schneider Medien Gesellschaft mbH",
+    "linkedin": "https://www.linkedin.com/in/uwe-schneider-3ba0089/",
+    "bio": "»Bin direkt am KuDamm geboren, aufgewachsen, zur Schule gegangen, und hab da meine erste Firma gegründet und bin trotzdem irgendwann rausgezogen. Berlin kann aber so viel mehr als „arm aber sexy“ oder neuerdings „Chaos und stromlos“. Berlin kann nämlich wirklich was! Das zu zeigen, dafür gibt es MyBLN; auch damit ich irgendwann wieder zurückziehen will«",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746297/uwe-schneider.jpg"
+  },
+  {
+    "id": "ulrike-dawartz",
+    "name": "Ulrike Dawartz",
+    "company": "Apleona Real Estate GmbH",
+    "linkedin": "https://www.linkedin.com/in/ulrike-dawartz-4903382a2/",
+    "bio": "»Als Ur-Berlinerin ist mir Berlin besonders nah. Bei MyBerlin engagiere ich mich für Begegnung und Austausch, damit wir gemeinsam etwas in dieser Stadt bewegen und verändern können.«",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746297/ulrike-dawartz.jpg"
+  },
+  {
+    "id": "maria-michela-corona",
+    "name": "Maria Michela Corona",
+    "company": "Apleona Real Estate GmbH",
+    "linkedin": "https://www.linkedin.com/in/maria-michela-corona-9aaa0540/",
+    "bio": "»Als italienische Rheinländerin lebe ich seit über 23 Jahren in Berlin und engagiere mich im MyBerlin-Netzwerk, um dieser Stadt mehr Sinn, Seele und eine Prise italienische Dolce Vita einzuhauchen.«",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746220/maria-michela-corona.jpg"
+  },
+  {
+    "id": "agnes-kick",
+    "name": "Agnes Kick",
+    "company": "Theater des Westens",
+    "linkedin": "https://www.linkedin.com/in/agnes-kick-975aaa1a5/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746108/agnes-kick.jpg"
+  },
+  {
+    "id": "matthias-leonhardt",
+    "name": "Matthias Leonhardt",
+    "company": "BEN - Berlin Event Network",
+    "linkedin": "https://www.linkedin.com/in/matthias-leonhardt/",
+    "bio": "Berlin als Eventmetropole ist Innovationstreiber, Wertschöpfung und Begegnung für gesellschaftlichen Zusammenhalt. Berlin ist #GemeinsameSache.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746225/matthias-leonhardt.png"
+  },
+  {
+    "id": "alica-paeske",
+    "name": "Alica Paeske",
+    "company": "sPERANTO ResPeaceAbility gGmbH",
+    "linkedin": "https://www.linkedin.com/in/alicapaeske/",
+    "bio": "Berlin ist meine Wahlheimat – ein Ort, der Raum für Innovation, Kollaboration und Kreativität bietet. Innerhalb der Community MyBLN setze ich mich für eine zukunftsfähige Welt ein, in der jeder junge Mensch Zugang zu Bildung, Gesundheit und gerechten Chancen hat. Ich stehe für eine Zukunft, in der Unternehmen ihre soziale Verantwortung priorisieren und die Stimmen junger Menschen als Motoren für Wandel und Innovation sichtbar gemacht werden.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746122/alica-paeske.jpg"
+  },
+  {
+    "id": "bernhard-bartz",
+    "name": "Bernhard Bartz",
+    "company": "VATERBLUT Agentur für prägende Kommunikation",
+    "linkedin": "http://linkedin.com/in/bbartz0962/",
+    "bio": "Berlin braucht die Expo2035 für eine nachhaltige Infrastruktur danach auch gerne die Olympiade.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746135/bernhard-bartz.jpg"
+  },
+  {
+    "id": "sheila-wolf-teichert",
+    "name": "Sheila Wolf-Teichert",
+    "company": "Vaudeville Variety Revue",
+    "linkedin": "https://www.linkedin.com/in/sheila-wolf/",
+    "bio": "Wenn man über zwei Jahrzente auf unzähligen, internationalen Kultur, Burlesque- und Gala Events als Produzentin, Performerin und Moderatorin tätig ist, hinterlässt das „kreative Narben“ - die sich aber nach wie vor Abend für Abend gekonnt wegeschminken lassen.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746271/sheila-wolf-teichert.jpg"
+  },
+  {
+    "id": "alexander-van-hessen",
+    "name": "Alexander van Hessen",
+    "company": "Rockstar Media & Events GmbH",
+    "linkedin": "https://www.linkedin.com/in/christina-babi%C4%87-a0878b365/",
+    "bio": "stay hungry",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746118/alexander-van-hessen.png"
+  },
+  {
+    "id": "christina-babic",
+    "name": "Christina Babić",
+    "company": "Kaiser Friedrich Museumsverein",
+    "linkedin": "https://www.linkedin.com/in/christina-babi%C4%87-a0878b365/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746145/christina-babic.jpg"
+  },
+  {
+    "id": "aleksander-dzembritzki",
+    "name": "Aleksander Dzembritzki",
+    "company": "Staatssekretär a.D. / Sportberatung",
+    "linkedin": "http://linkedin.com/in/alica-knak-a13318255/",
+    "bio": "Berlin ist eine super Stadt! Ich lebe hier sehr gern!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746112/aleksander-dzembritzki.jpg"
+  },
+  {
+    "id": "alica-knak",
+    "name": "Alica Knak",
+    "company": "Siemens Mobility GmbH",
+    "linkedin": "http://linkedin.com/in/alica-knak-a13318255/",
+    "bio": "Berlin gemeinsam vernetzen und weiterdenken.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746120/alica-knak.jpg"
+  },
+  {
+    "id": "alicia-javan-khoshdel",
+    "name": "Alicia Javan-Khoshdel",
+    "company": "Rochen",
+    "linkedin": "https://www.linkedin.com/in/alicia-javan-khoshdel-88016710?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios/",
+    "bio": "Berlin ist für mich mehr als eine Stadt. Berlin ist dieses Gefühl, dass jederzeit etwas Neues entstehen kann. Zwischen rauen Ecken, großen Ideen und echten Begegnungen erinnert mich diese Stadt jeden Tag daran, warum ich kreative Menschen, Visionen und Gemeinschaft so liebe. Hier wird aus Zufall oft Zukunft.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746125/alicia-javan-khoshdel.png"
+  },
+  {
+    "id": "robert-neumann",
+    "name": "Robert Neumann",
+    "company": "HYGH GmbH",
+    "linkedin": "https://www.linkedin.com/in/robert-neumann-07a48a1a3?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios/",
+    "bio": "Alles beginnt mit einer Entscheidung.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746262/robert-neumann.jpg"
+  },
+  {
+    "id": "alex-wieberneit",
+    "name": "Alex Wieberneit",
+    "company": "Hotel Bristol Berlin",
+    "linkedin": "https://www.linkedin.com/in/runningalex/",
+    "bio": "B. is Berlin B. is my hometown B. is where I grew up B. is where I live B. is where I breathe B. is for you to explore.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746114/alex-wieberneit.jpg"
+  },
+  {
+    "id": "boris-pfeiffer",
+    "name": "Boris Pfeiffer",
+    "company": "Verlag Akademie der Abenteuer",
+    "linkedin": "https://www.linkedin.com/in/boris-pfeiffer-autor/",
+    "bio": "Motivation braucht Freiheit",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746136/boris-pfeiffer.jpg"
+  },
+  {
+    "id": "melanie-muller",
+    "name": "Melanie Müller",
+    "company": "Berliner Volksbank",
+    "linkedin": "https://www.linkedin.com/in/melanie-m%C3%BCller-001559ba/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746227/melanie-muller.jpg"
+  },
+  {
+    "id": "mathias-thiel",
+    "name": "Mathias Thiel",
+    "company": "asisi F&E",
+    "linkedin": "https://www.linkedin.com/in/mathiasthiel?utm_source=share&amp;utm_campaign=share_via&amp;utm_content=profile&amp;utm_medium=ios_app/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746223/mathias-thiel.jpg"
+  },
+  {
+    "id": "severin-hosang",
+    "name": "Severin Hosang",
+    "company": "Deutsche Oper Berlin",
+    "linkedin": "https://www.linkedin.com/in/severinhosang/",
+    "bio": "Berlin lebt von Menschen, die nicht nur hier sind, sondern Verantwortung übernehmen. MyBLN ist für mich der Ort, an dem Haltung sichtbar wird – durch Engagement, durch Vielfalt und durch den Mut, diese Stadt jeden Tag ein Stück besser zu machen.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746268/severin-hosang.jpg"
+  },
+  {
+    "id": "leon-chiosea",
+    "name": "Leon Chiosea",
+    "company": "StaffConnect Event und Veranstaltungspersonal",
+    "linkedin": "https://www.linkedin.com/in/leon-chiosea-33b371242/",
+    "bio": "Ich wünsche mir für Berlin, dass Berlin wieder das wird was es mal war!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746200/leon-chiosea.jpg"
+  },
+  {
+    "id": "stephanie-tatschek",
+    "name": "Stephanie Tatschek",
+    "company": "Telegraphenamt Berlin GmbH",
+    "linkedin": "https://linkedin.com/in/christina-aue/",
+    "bio": "Berlin lebt durch uns. Mit Haltung, Herz und Miteinander. Zusammen bewegen wir etwas – ich bin gerne dabei!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746283/stephanie-tatschek.jpg"
+  },
+  {
+    "id": "christina-aue",
+    "name": "Christina Aue",
+    "company": "AG City",
+    "linkedin": "https://linkedin.com/in/christina-aue/",
+    "bio": "Es genügt nicht, arm und sexy zu sein! Wir sind eine Weltmetropole und müssen uns auch so präsentieren und vermarkten. Mit Charme, Herz und Innovation.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746143/christina-aue.jpg"
+  },
+  {
+    "id": "joel-siewert",
+    "name": "Joel Siewert",
+    "company": "ALBA Berlin GmbH",
+    "linkedin": "http://www.linkedin.com/in/joel-siewert-/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746186/joel-siewert.jpg"
+  },
+  {
+    "id": "petra-kischkewitz",
+    "name": "Petra Kischkewitz",
+    "company": "Neuefische GmbH",
+    "linkedin": "https://www.linkedin.com/in/petra-kischkewitz-35605321?utm_source=share&amp;utm_campaign=share_via&amp;utm_content=profile&amp;utm_medium=ios_app/",
+    "bio": "Everything is figureoutable.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746249/petra-kischkewitz.jpg"
+  },
+  {
+    "id": "viviana-plasil",
+    "name": "Viviana Plasil",
+    "company": "Dialogue Impact gGmbH",
+    "linkedin": "https://www.linkedin.com/in/vivianaplasil/",
+    "bio": "Berlin ist kein Ort. Berlin ist ein Gespräch.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746304/viviana-plasil.jpg"
+  },
+  {
+    "id": "deniz-schneider",
+    "name": "Deniz Schneider",
+    "company": "",
+    "linkedin": "https://www.linkedin.com/in/volker-moser-coach?utm_source=share&amp;utm_campaign=share_via&amp;utm_content=profile&amp;utm_medium=android_app/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746163/deniz-schneider.jpg"
+  },
+  {
+    "id": "volker-moser",
+    "name": "Volker Moser",
+    "company": "Smilebox Germany",
+    "linkedin": "https://www.linkedin.com/in/volker-moser-coach?utm_source=share&amp;utm_campaign=share_via&amp;utm_content=profile&amp;utm_medium=android_app/",
+    "bio": "Vergesst nicht Freunde, wir reisen gemeinsam.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746304/volker-moser.jpg"
+  },
+  {
+    "id": "katharina-arnold",
+    "name": "Katharina Arnold",
+    "company": "Katharina Arnold",
+    "linkedin": "http://linkedin.com/in/julia-kühne-61563a356/",
+    "bio": "„Berlin – Stadt der Möglichkeiten.“",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746194/katharina-arnold.jpg"
+  },
+  {
+    "id": "martin-vahemae-zierold",
+    "name": "Martin Vahemäe-Zierold",
+    "company": "Bezirksamt Mitte von Berlin",
+    "linkedin": "http://linkedin.com/in/julia-kühne-61563a356/",
+    "bio": "Diversity gewinnt….",
+    "image": "https://mybln.de/fileadmin/images/people/Martin_Vahem%C3%A4e-Zierold.jpg"
+  },
+  {
+    "id": "julia-kuhne",
+    "name": "Julia Kühne",
+    "company": "VoT Germany",
+    "linkedin": "http://linkedin.com/in/julia-kühne-61563a356/",
+    "bio": "„Berlin braucht Sichtbarkeit für das, was verbindet – nicht nur für das, was trennt.“",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746190/julia-kuhne.jpg"
+  },
+  {
+    "id": "leon-zipser",
+    "name": "Leon Zipser",
+    "company": "SV Babelsberg 03 / 11mm Fußballfilmfestival",
+    "linkedin": "http://www.linkedin.com/in/sebastian-krüger-a985a334/",
+    "bio": "Jung an Jahren, erfahren im Tun und motiviert, Verantwortung zu übernehmen und Dinge voranzubringen.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746208/leon-zipser.jpg"
+  },
+  {
+    "id": "sebastian-kruger",
+    "name": "Sebastian Krüger",
+    "company": "spreeFinanz & spreeTrail",
+    "linkedin": "http://www.linkedin.com/in/sebastian-krüger-a985a334/",
+    "bio": "Lieber eine Sache richtig, als zehn halbgar!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746266/sebastian-kruger.jpg"
+  },
+  {
+    "id": "andreas-schanzenbach",
+    "name": "Andreas Schanzenbach",
+    "company": "CONCRETE CANDY GmbH",
+    "linkedin": "https://www.linkedin.com/in/schanzboy/",
+    "bio": "Wir wollen, dass Berlin bunt, vielfältig, kreativ und solidarisch bleibt. Deswegen freuen wir uns über jede Idee und Initiative, die zu einer lebenswerten Stadt beitragen. Mit dem Kudamm 229 sind wir jederzeit offen für Ideen, Tests und gemeinwohlorientierte Projekte und freuen uns, diesen Formaten einen Raum und eine Bühne zu geben.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746129/andreas-schanzenbach.jpg"
+  },
+  {
+    "id": "lydia-nora-rumpelhardt",
+    "name": "Lydia Nora Rumpelhardt",
+    "company": "araneaCONSULT GmbH",
+    "linkedin": "http://www.linkedin.com/in/lydia-nora-rumpelhardt-399b1135a/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746214/lydia-nora-rumpelhardt.jpg"
+  },
+  {
+    "id": "nico-fliegel",
+    "name": "Nico Fliegel",
+    "company": "knusperkopp",
+    "linkedin": "https://www.linkedin.com/in/nico-fliegel/",
+    "bio": "Vielseitigkeit in einem Wort: Berlin",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746238/nico-fliegel.png"
+  },
+  {
+    "id": "richard-wehler",
+    "name": "Richard Wehler",
+    "company": "motus Werbeagentur / YogaMoabit",
+    "linkedin": "https://www.linkedin.com/in/susan-sa%C3%9F/",
+    "bio": "Keep on moving!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746252/richard-wehler.jpg"
+  },
+  {
+    "id": "susan-sa",
+    "name": "Susan Saß",
+    "company": "Wirtschaftsvereinigung Stahl",
+    "linkedin": "https://www.linkedin.com/in/susan-sa%C3%9F/",
+    "bio": "Berlin ist Heimat! ❤️",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746287/susan-sass.jpg"
+  },
+  {
+    "id": "anna-ziegler",
+    "name": "Anna Ziegler",
+    "company": "Freaks4U Gaming GmbH",
+    "linkedin": "https://www.linkedin.com/in/irlannaziegler/",
+    "bio": "Berlin ist ein Kaleidoskop: je nachdem wie man es dreht, entsteht immer wieder etwas Neues.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746131/anna-ziegler.png"
+  },
+  {
+    "id": "ben-schafer",
+    "name": "Ben Schäfer",
+    "company": "Dared Studio",
+    "linkedin": "https://www.linkedin.com/in/benski98/",
+    "bio": "Making systems visible at the intersection of culture, tech and space.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746133/ben-schafer.jpg"
+  },
+  {
+    "id": "franziska-dreyer",
+    "name": "Franziska Dreyer",
+    "company": "Hard Rock cafe",
+    "linkedin": "",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746175/franziska-dreyer.jpg"
+  },
+  {
+    "id": "stacey-nana",
+    "name": "Stacey Nana",
+    "company": "",
+    "linkedin": "https://www.linkedin.com/in/tom-müller-heuser-57283973/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746275/stacey-nana.jpg"
+  },
+  {
+    "id": "stefan-hoppe",
+    "name": "Stefan Hoppe",
+    "company": "ENERGY; Radio 103,4 MHz Berlin GmbH",
+    "linkedin": "https://www.linkedin.com/in/tom-müller-heuser-57283973/",
+    "bio": "Freue mich dabei sein zu können!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746281/stefan-hoppe.jpg"
+  },
+  {
+    "id": "karam-samhat",
+    "name": "Karam Samhat",
+    "company": "mandaro GmbH",
+    "linkedin": "https://www.linkedin.com/in/tom-müller-heuser-57283973/",
+    "bio": "Wir sorgen für Sichtbarkeit.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746192/karam-samhat.jpg"
+  },
+  {
+    "id": "nadja-troublefield",
+    "name": "Nadja Troublefield",
+    "company": "Madame Tussauds GmbH Deutschland",
+    "linkedin": "https://www.linkedin.com/in/tom-müller-heuser-57283973/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746233/nadja-troublefield.jpg"
+  },
+  {
+    "id": "tom-muller-heuser",
+    "name": "Tom Müller-Heuser",
+    "company": "Freelancer Arts & Culture",
+    "linkedin": "https://www.linkedin.com/in/tom-müller-heuser-57283973/",
+    "bio": "Go for Gold!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746292/tom-muller-heuser.jpg"
+  },
+  {
+    "id": "jordanis-j-kifle",
+    "name": "Jordanis J. Kifle",
+    "company": "Strategic Consultant & Project Lead | Live Experiences (Independent)",
+    "linkedin": "https://www.linkedin.com/in/jjkifle/",
+    "bio": "Meine Perspektive ist international, vielschichtig und geprägt von dem Wunsch nach Sichtbarkeit und Verbindung. Mit MyBLN möchte ich Menschen kennenlernen, die Berlin prägen, und Teil einer Community sein, die diese Stadt bewusst, mutig und gemeinsam gestaltet.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746187/jordanis-j-kifle.jpg"
+  },
+  {
+    "id": "jean-willy-sassy",
+    "name": "Jean-Willy Sassy",
+    "company": "Mindshare GmbH",
+    "linkedin": "http://linkedin.com/in/jean-willy-sassy-721841229/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746182/jean-willy-sassy.jpg"
+  },
+  {
+    "id": "yvette-ford-badack",
+    "name": "Yvette Ford Badack",
+    "company": "UnOrdinary Spaces",
+    "linkedin": "https://www.linkedin.com/in/yvettebadack/",
+    "bio": "Kultur, Verbindung und grenzüberschreitender Austausch.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746306/yvette-ford-badack.jpg"
+  },
+  {
+    "id": "torben-rutz",
+    "name": "Torben Rutz",
+    "company": "Business Improvement District Kudamm-Tauentzien",
+    "linkedin": "https://www.linkedin.com/in/torben-rutz-227b271b3?utm_source=share&amp;utm_campaign=share_via&amp;utm_content=profile&amp;utm_medium=android_app/",
+    "bio": "Starke Quartiere durch gemeinsames Engagement.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746293/torben-rutz.jpg"
+  },
+  {
+    "id": "suchada-bartz",
+    "name": "Suchada Bartz",
+    "company": "VATERBLUT GmbH",
+    "linkedin": "https://www.linkedin.com/in/suchada-bartz-21557a221/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746285/suchada-bartz.jpg"
+  },
+  {
+    "id": "nikolas-lohr",
+    "name": "Nikolas Löhr",
+    "company": "",
+    "linkedin": "https://www.linkedin.com/in/nikolas-loehr-901a1a100/",
+    "bio": "MyBLN – wo Ideen zu Innovation werden 🚀",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746245/nikolas-lohr.jpg"
+  },
+  {
+    "id": "caroline-francoise-ludecke",
+    "name": "Caroline Francoise Lüdecke",
+    "company": "Hippopotamus Productions GmbH\n@stachelschweine",
+    "linkedin": "https://www.linkedin.com/in/dilhan-görgün-2b33b712a?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios/",
+    "bio": "“Kommt zum Lachen in den Keller” die Stachelschweine im Keller des Europa Centers",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746139/caroline-francoise-ludecke.jpg"
+  },
+  {
+    "id": "dilhan-gorgun",
+    "name": "Dilhan Görgün",
+    "company": "Sanitheke GmbH & Co KG",
+    "linkedin": "https://www.linkedin.com/in/dilhan-görgün-2b33b712a?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios/",
+    "bio": "Innovation aus Berlin – digitale Orthopädietechnik und 3D-Druck für neue Lebensqualität.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746168/dilhan-gorgun.jpg"
+  },
+  {
+    "id": "heiko-stellmacher",
+    "name": "Heiko Stellmacher",
+    "company": "Wölkchen-Die frische Toilette",
+    "linkedin": "",
+    "bio": "Wo ein Wölkchen - da ein Weg!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746178/heiko-stellmacher.jpg"
+  },
+  {
+    "id": "albert-tuemann",
+    "name": "Albert Tuemann",
+    "company": "TREEHOUSE Service GmbH",
+    "linkedin": "http://linkedin.com/in/albert-tuemann/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746110/albert-tuemann.jpg"
+  },
+  {
+    "id": "daniel-schafer",
+    "name": "Daniel Schäfer",
+    "company": "X-Group GmbH",
+    "linkedin": "https://www.linkedin.com/in/daniel-schäfer-31458511/",
+    "bio": "Was nicht wächst, das stirbt....daher bin ich Fan von konstruktivem Wachstum in Teams mit gemeinsamen Werten und ähnlichen Visionen, die Verantwortung übernehmen und mutig als erste Schritte in die richtige Richtung gehen: Sinnvolle Veränderung geschieht durch Mitglieder vom Stamme \"Gib\" und nicht vom Stamme \"Nimm\"! :-)",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746160/daniel-schafer.png"
+  },
+  {
+    "id": "chiara-penelope-berger",
+    "name": "Chiara Penelope Berger",
+    "company": "Apanage",
+    "linkedin": "https://www.linkedin.com/in/bergerchiara/",
+    "bio": "ich bin in berlin aufgewachsen und manchmal wünsch ich mir, ich könnte dich nochmal neu kennenlernen. so wie man jemanden ansieht, in den man sich gerade erst verliebt. jede stadt erzählt ihre eigenen geschichten, aber dich habe ich nie zum ersten mal gesehen. ich bin ein teil von deiner geschichte und ich frag mich wie sie klingt, wenn du sie mir erzählst. vielleicht wär ich gern der grund, warum sich jemand in berlin verliebt. zum ersten mal. so wie ich ein teil meines herzens in einer stadt zurücklasse, wenn ich mich in sie verliebe.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746141/chiara-penelope-berger.jpg"
+  },
+  {
+    "id": "mareen-eichinger",
+    "name": "Mareen Eichinger",
+    "company": "macheete",
+    "linkedin": "https://www.linkedin.com/in/mareeneichinger/",
+    "bio": "Ich mag Berlin, wenn es nicht versucht, cool zu sein.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746218/mareen-eichinger.jpg"
+  },
+  {
+    "id": "jakob-simon-deges",
+    "name": "Jakob Simon Deges",
+    "company": "Chamäleon Berlin gGmbH",
+    "linkedin": "https://www.linkedin.com/in/jsdeges/",
+    "bio": "Unsere Hauptstadt lebt von ihren Freiräumen – für Kreativschaffende, Andersdenkende und Verfolgte. Diese Räume zu schützen und weiterzuentwickeln ist unsere gemeinsame Verantwortung.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746180/jakob-simon-deges.jpg"
+  },
+  {
+    "id": "judith-lange",
+    "name": "Judith Lange",
+    "company": "DDG Wissenschafts GmbH",
+    "linkedin": "https://www.linkedin.com/in/judith-lange-282b50106?utm_source=share&amp;utm_campaign=share_via&amp;utm_content=profile&amp;utm_medium=android_app/",
+    "bio": "Alles geht, nichts muss.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746189/judith-lange.jpg"
+  },
+  {
+    "id": "claudia-gemsemer",
+    "name": "Claudia Gemsemer",
+    "company": "DDG Wissenschafts GmbH",
+    "linkedin": "https://www.linkedin.com/in/claudia-gemsemer/",
+    "bio": "weniger Piefke, mehr Kiezkultur",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746147/claudia-gemsemer.jpg"
+  },
+  {
+    "id": "vishal-shah",
+    "name": "Vishal Shah",
+    "company": "BBA Gallery",
+    "linkedin": "https://www.linkedin.com/in/vishalshah06/",
+    "bio": "A city where dreams do come true",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746300/vishal-shah.jpg"
+  },
+  {
+    "id": "renata-kudlacek",
+    "name": "Renata Kudlacek",
+    "company": "BBA Gallery",
+    "linkedin": "https://www.linkedin.com/in/diana-richter-a605861b8/",
+    "bio": "Support the creatives in Berlin ! Stay creative - be creative !",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746251/renata-kudlacek.jpg"
+  },
+  {
+    "id": "diana-richter",
+    "name": "Diana Richter",
+    "company": "",
+    "linkedin": "https://www.linkedin.com/in/diana-richter-a605861b8/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746167/diana-richter.png"
+  },
+  {
+    "id": "luisa-bollweg",
+    "name": "Luisa Bollweg",
+    "company": "Deutsches Spionagemuseum",
+    "linkedin": "https://de.linkedin.com/in/luisa-bollweg-b64692b2/",
+    "bio": "Das wahre Berlin ist dort, wo Ideen wachsen, weil Austausch möglich wird.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746213/luisa-bollweg.jpg"
+  },
+  {
+    "id": "line-urbanek",
+    "name": "Line Urbanek",
+    "company": "Berliner Kriminal Theater",
+    "linkedin": "http://linkedin.com/in/claudia-vazquez-a8474512b/",
+    "bio": "Zwischen Theater, Marketing und Publikum. Ich entwickle Strategien und Kampagnen für ein privates Sprechtheater und beschäftige mich mit der Frage, wie man Menschen für Kultur begeistert.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746213/line-urbanek.jpg"
+  },
+  {
+    "id": "claudia-vazquez",
+    "name": "Claudia Vazquez",
+    "company": "Monu",
+    "linkedin": "http://linkedin.com/in/claudia-vazquez-a8474512b/",
+    "bio": "Ich wünsche mir ein Berlin, das den Menschen nebenan genauso im Blick hat wie die große Welt.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746149/claudia-vazquez.jpg"
+  },
+  {
+    "id": "manuela-hackney",
+    "name": "Manuela Hackney",
+    "company": "Cinnamon GmbH",
+    "linkedin": "linkedin.com/in/manuela-hackney-b914192b9/",
+    "bio": "",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746216/manuela-hackney.jpg"
+  },
+  {
+    "id": "lauritz-elmshauser",
+    "name": "Lauritz Elmshäuser",
+    "company": "Elmshäuser",
+    "linkedin": "http://www.linkedin.com/in/lauritzelmshaeuser/",
+    "bio": "Weltkonzern oder Atelier, Startup oder Subkultur — in Berlin hat alles seinen Platz. Niemand muss erklären, warum er hier ist. Diese Stadt gibt dir den Raum zu sein, wer du sein willst. Und meint das ernst.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746199/lauritz-elmshauser.jpg"
+  },
+  {
+    "id": "andreas-voigt",
+    "name": "Andreas Voigt",
+    "company": "Get2Card",
+    "linkedin": "http://www.linkedin.com/in/lauritzelmshaeuser/",
+    "bio": "Nicht alles so verbissen sehen.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746129/andreas-voigt.jpg"
+  },
+  {
+    "id": "nicole-watson",
+    "name": "Nicole Watson",
+    "company": "Kerb GmbH",
+    "linkedin": "https://www.linkedin.com/in/nicole-watson-82ba121b6/",
+    "bio": "Nicht quatschen, sondern einfach mal machen!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746242/nicole-watson.jpg"
+  },
+  {
+    "id": "nico-kuhn",
+    "name": "Nico Kühn",
+    "company": "neiko.K.films",
+    "linkedin": "https://www.linkedin.com/in/nico-kühn-82b095260?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android/",
+    "bio": "Nicht jeder kann gut singen, aber jeder kann Spaß dabei haben!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746242/nico-kuhn.png"
+  },
+  {
+    "id": "stefano-alaimo",
+    "name": "Stefano Alaimo",
+    "company": "Stefano Alaimo designer - artist",
+    "linkedin": "https://www.linkedin.com/in/franziska-malas-62522b266/",
+    "bio": "Let's build the common european culture! - Lasst uns die gemeinsame europäische Kultur ausbauen! - Construisons la culture européenne commune ! - Costruiamo la cultura europea comune !",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746281/stefano-alaimo.jpg"
+  },
+  {
+    "id": "franziska-malas",
+    "name": "Franziska Malas",
+    "company": "Ilg-Aussenwerbung GmbH",
+    "linkedin": "https://www.linkedin.com/in/franziska-malas-62522b266/",
+    "bio": "Franzi von der Litfaßsäule – Berlinerin durch und durch | Vertrieblerin mit Passion | Kunde zuerst, Lösungen sofort | Medienberatung mit Tempo &amp; Verstand Berlin ein kleines Stückchen besser machen ... :-)",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746176/franziska-malas.jpg"
+  },
+  {
+    "id": "roland-prejawa",
+    "name": "Roland Prejawa",
+    "company": "Urban Contemporary",
+    "linkedin": "https://www.linkedin.com/in/roland-prejawa-539640112/",
+    "bio": "Kunst ist auch Arbeit! Bertolt Brecht",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746264/roland-prejawa.jpg"
+  },
+  {
+    "id": "cynthia-a-raina",
+    "name": "Cynthia A. Raina",
+    "company": "Acceleraid.ai",
+    "linkedin": "linkedin.com/in/cynthia-angeles-raina-ba291620/",
+    "bio": "Berlin ist für mich kein Ort zum Ankommen, sondern zum Werden — laut, chaotisch, inspirierend. Stillstand fühlt sich hier fast unmöglich an. Genau deshalb liebe ich es.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746160/cynthia-a-raina.jpg"
+  },
+  {
+    "id": "sina-niemann",
+    "name": "Sina Niemann",
+    "company": "a&o hostels Marketing GmbH",
+    "linkedin": "https://www.linkedin.com/in/sina-niemann-b10869156/?locale=en/",
+    "bio": "Arm aber sexy war gestern, ich möchte dazu beitragen unsere schöne Stadt neu zu definieren!",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746273/sina-niemann.jpg"
+  },
+  {
+    "id": "laura-muller",
+    "name": "Laura Müller",
+    "company": "Berliner Philharmonie gGmbH",
+    "linkedin": "https://www.linkedin.com/in/laura-valeria-muller?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios/",
+    "bio": "Räume für Kultur, Begegnung und neue Ideen",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746196/laura-muller.jpg"
+  },
+  {
+    "id": "michael-kandakai",
+    "name": "Michael Kandakai",
+    "company": "KPM Hotel & Residences",
+    "linkedin": "https://www.linkedin.com/in/michael-kandakai-a4534982?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios/",
+    "bio": "Dabei sein 🤗",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746233/michael-kandakai.jpg"
+  },
+  {
+    "id": "david-eickelberg",
+    "name": "David Eickelberg",
+    "company": "Touchdown! Event Solutions",
+    "linkedin": "https://www.linkedin.com/in/david-eickelberg-7ba0b430/",
+    "bio": "Meine Heimatstadt ist immer \"am Werden\" - aber nie fertig. Das gibt jedoch Raum für Entwicklungen in Kultur, Gesellschaft und allem anderen, die es zu unterstützen und zu fördern gilt.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746161/david-eickelberg.jpg"
+  },
+  {
+    "id": "michael-geipel",
+    "name": "Michael Geipel",
+    "company": "michael geipel fotografie",
+    "linkedin": "https://www.linkedin.com/in/michael-geipel-b5336182/",
+    "bio": "Ich fotografiere Berlin, verbinde Menschen und glaube: Diese Stadt wird nicht durch Ansagen groß, sondern durch die Leute, die was miteinander anfangen. Weil aus klugen Köpfen, offenen Gesprächen und ein paar echten Bildern manchmal genau die Stadt entsteht, die wir hier meinen.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746229/michael-geipel.jpg"
+  },
+  {
+    "id": "stefan-bley",
+    "name": "Stefan Bley",
+    "company": "ZEISS Digital Innovation",
+    "linkedin": "https://www.linkedin.com/in/sbley/",
+    "bio": "Berlin baut die Zukunft – ich sorge dafür, dass die Software stimmt.",
+    "image": "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1782746277/stefan-bley.jpg"
+  },
+  {
+    "id": "fabian-kittmann",
+    "name": "Fabian Kittmann",
+    "company": "rehathleticum",
+    "linkedin": "",
+    "bio": "Stadt der Widersprüche. Stadt der Möglichmacher. Mein Labor. Mein Markt. Mein Zuhause. Aus Berlin in die Welt.",
+    "image": "https://mybln.de/fileadmin/_processed_/2/c/csm_Fabian_Kittmann_neu_95c9d8c02a.png"
+  },
+  {
+    "id": "casey-krause",
+    "name": "Casey Krause",
+    "company": "Primestar Hospitality GmbH",
+    "linkedin": "",
+    "bio": "In Berlin findet man nicht nur neue Wege, sondern auch sich selbst. Heimat ist manchmal kein Ort, sondern das Leben, das man sich aufbaut.",
+    "image": "https://mybln.de/fileadmin/_processed_/e/e/csm_ej9ppmj3rdjnd5ljj0jardf5rn29r36i_344dccea1b.jpeg"
+  },
+  {
+    "id": "timur-bagautdinov",
+    "name": "Timur Bagautdinov",
+    "company": "The Upside Down Berlin GmbH",
+    "linkedin": "",
+    "bio": "In Berlin wartet niemand - wer will, bewegt.",
+    "image": "https://mybln.de/fileadmin/_processed_/c/2/csm_elglezuzj244qa7k5jpi5mcb8k1reoze_fd5537c6ac.jpeg"
+  }
+]
