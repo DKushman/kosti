@@ -24,6 +24,11 @@ const SCROLL_MARQUEE = -720;
 const SCROLL_SCRUB = 0.42;
 const PARALLAX_Y = 26;
 const PARALLAX_SCALE = 0.092;
+const MOBILE_MQ = "(max-width: 900px)";
+
+function isMobileHero() {
+  return window.matchMedia(MOBILE_MQ).matches;
+}
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null);
@@ -45,6 +50,12 @@ export default function Hero() {
       "(prefers-reduced-motion: reduce)"
     ).matches;
     if (prefersReduced) return;
+
+    if (isMobileHero()) {
+      gsap.set(portrait, { yPercent: 0, scale: 1 });
+      track.style.removeProperty("transform");
+      return;
+    }
 
     gsap.set(portrait, { yPercent: 4.8, scale: 1.058 });
     track.style.transform = `translate3d(${INTRO_MARQUEE_FROM}px, 0, 0)`;
@@ -68,6 +79,26 @@ export default function Hero() {
 
       if (prefersReduced) {
         track.style.transform = "translate3d(0, 0, 0)";
+        return;
+      }
+
+      if (isMobileHero()) {
+        track.style.removeProperty("transform");
+        track.classList.add("hero__marquee-track--css-marquee");
+        gsap.fromTo(
+          portrait,
+          { yPercent: 5, scale: 1.04 },
+          {
+            yPercent: 0,
+            scale: 1,
+            duration: INTRO_MS / 1000,
+            ease: EASE_PRELOADER_HANDOFF,
+          }
+        );
+        teardown = () => {
+          track.classList.remove("hero__marquee-track--css-marquee");
+          gsap.killTweensOf(portrait);
+        };
         return;
       }
 

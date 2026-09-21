@@ -1181,6 +1181,16 @@ body:has(.page--photo-hero) .header.is-solid::before {
   white-space: nowrap;
 }
 
+@keyframes hero-name-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-25%, 0, 0);
+  }
+}
+
 /* --------------------------------------------------- mission statement */
 
 .mission {
@@ -2178,6 +2188,10 @@ body:has(.page--photo-hero) .header.is-solid::before {
   text-transform: uppercase;
   opacity: 0.55;
   color: inherit;
+}
+
+.studio__stats--intro {
+  display: none;
 }
 
 /* legacy network graphic (andere Seiten) */
@@ -6576,6 +6590,16 @@ body:has(.page--photo-hero) .header.is-solid::before {
     font-size: clamp(3.4rem, 22vw, 8rem);
   }
 
+  .hero__portrait img {
+    height: 100%;
+    object-position: center 10%;
+  }
+
+  .hero__marquee-track--css-marquee {
+    animation: hero-name-marquee 20s linear infinite;
+    will-change: transform;
+  }
+
   .header__cta {
     font-size: 0.85rem;
   }
@@ -6779,25 +6803,36 @@ body:has(.page--photo-hero) .header.is-solid::before {
   }
 
   .studio {
-    height: 100lvh;
-    min-height: 100lvh;
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
   }
 
   .studio__body {
-    --studio-viz-stats-inset: clamp(4rem, 10vh, 5.5rem);
+    display: none;
   }
 
-  .studio-radial__label-text {
-    font-size: clamp(11px, 3.2vw, 14px);
-    letter-spacing: 0.14em;
+  .studio__stats--panel {
+    display: none;
   }
 
-  .studio__stats dd {
+  .studio__stats--intro {
+    display: block;
+    position: static;
+    pointer-events: auto;
+    margin: 0 0 clamp(1.1rem, 4vw, 1.5rem);
+    max-width: min(14rem, 72vw);
+  }
+
+  .studio__stats--intro dd {
     font-size: clamp(2.2rem, 12vw, 3.2rem);
   }
 
-  .studio__stats {
-    max-width: min(14rem, 72vw);
+  .prefooter-contact__media {
+    inset: 0;
+    height: 100%;
+    will-change: auto;
   }
 
   .split,

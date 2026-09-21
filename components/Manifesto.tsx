@@ -34,21 +34,24 @@ export default function Manifesto() {
         },
       });
 
-      const countEl = section.querySelector<HTMLElement>("[data-count]");
-      if (countEl) {
-        const target = Number(countEl.dataset.count ?? "2035");
+      const countEls = section.querySelectorAll<HTMLElement>("[data-count]");
+      if (countEls.length) {
+        const target = Number(countEls[0].dataset.count ?? "2035");
         const counter = { value: 2000 };
         gsap.to(counter, {
           value: target,
           duration: 1.8,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: countEl,
+            trigger: countEls[0],
             start: "top 88%",
             once: true,
           },
           onUpdate: () => {
-            countEl.textContent = String(Math.round(counter.value));
+            const text = String(Math.round(counter.value));
+            countEls.forEach((el) => {
+              el.textContent = text;
+            });
           },
         });
       }
@@ -87,6 +90,14 @@ export default function Manifesto() {
               Wo Wirtschaft, Politik und Kultur zusammenkommen, entstehen die
               Projekte, die Berlin wirklich weiterbringen.
             </p>
+            <dl className="studio__stats studio__stats--intro" data-studio-stats>
+              <div>
+                <dt>EXPO – die Vision</dt>
+                <dd>
+                  <span data-count={2035}>2035</span>
+                </dd>
+              </div>
+            </dl>
             <FillButton
               href="/netzwerk"
               className="btn-fill btn-fill--studio-cta studio__cta"
@@ -101,7 +112,7 @@ export default function Manifesto() {
             <StudioRadialGraphic />
           </div>
 
-          <dl className="studio__stats" data-studio-stats>
+          <dl className="studio__stats studio__stats--panel" data-studio-stats>
             <div>
               <dt>EXPO – die Vision</dt>
               <dd>
