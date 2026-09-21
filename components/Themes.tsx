@@ -3,21 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { fitSectorNames } from "@/lib/fit-display-text";
-import { withBasePath } from "@/lib/site-path";
-
-const SECTORS = [
-  { name: "Retail", img: withBasePath("/img/sector-retail.jpg") },
-  { name: "Hospitality", img: withBasePath("/img/sector-hospitality.jpg") },
-  { name: "Workplace", img: withBasePath("/img/sector-workplace.jpg") },
-  { name: "Exhibition", img: withBasePath("/img/sector-exhibition.jpg") },
-];
+import { HOME_THEMES } from "@/lib/content/themen";
+import Pic from "@/components/Pic";
+import FillButton from "@/components/FillButton";
+import TransitionLink from "@/components/TransitionLink";
 
 /**
- * Cobalt-blue sector index. Giant list items reveal line by line on
- * scroll; hovering (or focusing) an item highlights it and swaps the
- * sticky image column.
+ * Navy theme index (Startseite Block 2 + 3). Giant list items reveal
+ * line by line on scroll; hovering (or focusing) an item highlights it,
+ * swaps the sticky image column and shows its one-line description.
  */
-export default function Sectors() {
+export default function Themes() {
   const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
 
@@ -27,6 +23,7 @@ export default function Sectors() {
 
     const fit = () => {
       if (cancelled || !root.current) return;
+      if (window.matchMedia("(max-width: 900px)").matches) return;
       const names = [
         ...root.current.querySelectorAll<HTMLElement>("[data-sector-name]"),
       ];
@@ -67,8 +64,6 @@ export default function Sectors() {
       ).matches;
       if (prefersReduced) return;
 
-      // serif intro: line-mask reveal (autoSplit re-splits when the
-      // webfont finishes loading so line breaks stay correct)
       const lede = SplitText.create("[data-sectors-lede]", {
         type: "lines",
         linesClass: "split-line",
@@ -99,46 +94,33 @@ export default function Sectors() {
         },
       });
 
-      // giant items: rise out of their own overflow-clipped rows,
-      // separator lines draw in from the left
-      gsap.utils.toArray<HTMLElement>("[data-sector-item]").forEach((item) => {
-        const link = item.querySelector("[data-sector-name]");
-        gsap.from(link, {
-          yPercent: 100,
-          duration: 1.1,
-          ease: "power4.out",
-          scrollTrigger: {
-            trigger: item,
-            start: "top 88%",
-          },
+      const mobileSectors = window.matchMedia("(max-width: 900px)").matches;
+      if (!mobileSectors) {
+        gsap.utils.toArray<HTMLElement>("[data-sector-item]").forEach((item) => {
+          const link = item.querySelector<HTMLElement>(".sectors__link");
+          if (!link) return;
+          gsap.from(link, {
+            yPercent: 100,
+            duration: 1.1,
+            ease: "power4.out",
+            clearProps: "transform",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 88%",
+            },
+          });
+          const rules = item.querySelectorAll("[data-sector-rule]");
+          gsap.from(rules, {
+            scaleX: 0,
+            duration: 1.2,
+            ease: "power3.inOut",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 92%",
+            },
+          });
         });
-        const rules = item.querySelectorAll("[data-sector-rule]");
-        gsap.from(rules, {
-          scaleX: 0,
-          duration: 1.2,
-          ease: "power3.inOut",
-          scrollTrigger: {
-            trigger: item,
-            start: "top 92%",
-          },
-        });
-      });
-
-      // image column drifts gently while the list scrolls
-      gsap.fromTo(
-        "[data-sectors-media]",
-        { yPercent: -4 },
-        {
-          yPercent: 4,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "[data-sectors-body]",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
+      }
 
       return () => lede.revert();
     },
@@ -148,65 +130,83 @@ export default function Sectors() {
   return (
     <section
       className="sectors"
-      id="sectors"
+      id="themen"
       ref={root}
       aria-labelledby="sectors-heading"
     >
       <div className="sectors__intro">
         <h2 className="visually-hidden" id="sectors-heading">
-          Sectors we work in
+          Meine Themen für Berlin
         </h2>
-        <p className="serif-lede" data-sectors-lede>
-          We have deep experience across a range of commercial sectors,
-          offering a complete end-to-end service — from brand strategy to
-          interior design and build.
+        <p className="sectors__lede" data-sectors-lede>
+          Ob in Unternehmen, Verbänden, Netzwerken oder eigenen Projekten –
+          mich beschäftigt, wie aus Kontakten Kooperationen, aus Ideen Projekte
+          und aus Projekten konkrete Veränderungen entstehen.
         </p>
-        <a className="link-underline" href="#contact" data-sectors-cta>
-          Our services
-        </a>
+        <FillButton href="/ueber-mich" data-sectors-cta>
+          Über mich
+        </FillButton>
       </div>
 
+      <p className="sectors__body-label">Themen, mit den ich mich befasse.</p>
       <div className="sectors__body" data-sectors-body>
         <ul className="sectors__list" role="list">
-          {SECTORS.map((sector, i) => (
+          {HOME_THEMES.map((theme, i) => (
             <li
               className={`sectors__item${active === i ? " is-active" : ""}`}
               data-sector-item
-              key={sector.name}
+              key={theme.name}
             >
               <span className="sectors__rule" data-sector-rule aria-hidden="true" />
-              {i === SECTORS.length - 1 && (
+              {i === HOME_THEMES.length - 1 && (
                 <span
                   className="sectors__rule sectors__rule--bottom"
                   data-sector-rule
                   aria-hidden="true"
                 />
               )}
-              <a
+              <div className="sectors__card-media" aria-hidden="true">
+                <Pic
+                  name={theme.img}
+                  sizes="(max-width: 900px) 86vw, 0px"
+                  alt=""
+                />
+              </div>
+              <TransitionLink
                 className="sectors__link display"
-                href="#work"
+                href={theme.href}
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}
               >
-                <span className="split-line">
-                  <span data-sector-name>{sector.name}</span>
+                <span className="sectors__link-title">
+                  <span className="split-line">
+                    <span data-sector-name>{theme.name}</span>
+                  </span>
                 </span>
-              </a>
+                <span className="sectors__card-eyebrow">{theme.name}</span>
+                <span className="sectors__card-copy">
+                  <span className="sectors__card-headline">{theme.text}</span>
+                </span>
+                <span className="sectors__card-action" aria-hidden="true">
+                  +
+                </span>
+              </TransitionLink>
+              <p className="sectors__desc">{theme.text}</p>
             </li>
           ))}
         </ul>
 
         <div className="sectors__media" data-sectors-media aria-hidden="true">
-          {SECTORS.map((sector, i) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={sector.name}
-              src={sector.img}
+          {HOME_THEMES.map((theme, i) => (
+            <Pic
+              key={theme.name}
+              name={theme.img}
+              sizes="(max-width: 900px) 420px, 38vw"
               alt=""
               className={active === i ? "is-active" : ""}
-              draggable={false}
             />
           ))}
+          <p className="sectors__media-caption">{HOME_THEMES[active].text}</p>
         </div>
       </div>
     </section>

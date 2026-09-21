@@ -1,0 +1,210 @@
+"use client";
+
+import { useRef, useState, type ReactNode } from "react";
+import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
+import { ABOUT } from "@/lib/content/about";
+import { withBasePath } from "@/lib/site-path";
+
+const IMG_ZYPERN = withBasePath("/img/pexels-mikhail-nilov-8332863.webp");
+const IMG_BERLIN = withBasePath(
+  "/img/pexels-marcel-condurachi-765466373-35828097.webp"
+);
+
+type HoverWordProps = {
+  id: string;
+  children: string;
+  imageSrc: string;
+  imageAlt: string;
+};
+
+function BioInlineWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
+  return (
+    <span className="bio-word bio-word--inline" id={id}>
+      <span className="bio-word__text">{children}</span>
+      <span className="bio-word__thumb" aria-hidden="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          width={440}
+          height={330}
+          loading="lazy"
+          decoding="async"
+          fetchPriority="low"
+        />
+      </span>
+    </span>
+  );
+}
+
+function BioHoverWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
+  const [showPreview, setShowPreview] = useState(false);
+
+  return (
+    <span
+      className="bio-word"
+      id={id}
+      tabIndex={0}
+      onMouseEnter={() => setShowPreview(true)}
+      onFocus={() => setShowPreview(true)}
+    >
+      <span className="bio-word__text">{children}</span>
+      {showPreview ? (
+        <span className="bio-word__preview" aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageSrc}
+            alt={imageAlt}
+            width={440}
+            height={330}
+            loading="lazy"
+            decoding="async"
+          />
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+function BioLine({ children }: { children: ReactNode }) {
+  return (
+    <span className="bio-display__line-slot">
+      <span className="bio-display__line-clip">
+        <span className="bio-display__line">{children}</span>
+      </span>
+    </span>
+  );
+}
+
+/**
+ * Biografie: 2×2-Grid (oben links h2, unten rechts Fließtext), Hover-Bilder über Wörtern.
+ */
+export default function BioCinematic() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const proseRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const section = sectionRef.current;
+      const heading = headlineRef.current;
+      const prose = proseRef.current;
+      if (!section || !heading || !prose) return;
+
+      const reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      if (reduced) return;
+
+      const headLines = heading.querySelectorAll<HTMLElement>(
+        ".bio-display__line"
+      );
+      const paragraphs = prose.querySelectorAll<HTMLElement>("p");
+      if (!headLines.length || !paragraphs.length) return;
+
+      let scrollTrigger: ScrollTrigger | undefined;
+      let paragraphSplits: ReturnType<typeof SplitText.create>[] = [];
+
+      const setupAndPlay = () => {
+        paragraphSplits = Array.from(paragraphs).map((p) =>
+          SplitText.create(p, {
+            type: "lines",
+            linesClass: "split-line",
+            mask: "lines",
+            aria: "auto",
+          })
+        );
+
+        gsap.set(headLines, { yPercent: 110, force3D: true });
+        paragraphSplits.forEach((split) => {
+          gsap.set(split.lines, { yPercent: 110, force3D: true });
+        });
+
+        const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+        tl.to(
+          headLines,
+          { yPercent: 0, duration: 1.05, stagger: 0.09 },
+          0
+        );
+        paragraphSplits.forEach((split, i) => {
+          tl.to(
+            split.lines,
+            { yPercent: 0, duration: 0.95, stagger: 0.07 },
+            0.14 + i * 0.11
+          );
+        });
+      };
+
+      scrollTrigger = ScrollTrigger.create({
+        trigger: section,
+        start: "top 88%",
+        once: true,
+        onEnter: setupAndPlay,
+      });
+
+      return () => {
+        scrollTrigger?.kill();
+        paragraphSplits.forEach((split) => split.revert());
+      };
+    },
+    { scope: sectionRef }
+  );
+
+  return (
+    <section ref={sectionRef} id="biografie" className="bio-display">
+      <div className="bio-display__grid" id="bio-display-grid">
+        <div className="bio-display__lead" id="bio-display-lead">
+          <h2
+            ref={headlineRef}
+            id="bio-display-heading"
+            className="bio-display__headline"
+          >
+            <BioLine>
+              <BioInlineWord
+                id="bio-word-berlin-head"
+                imageSrc={IMG_BERLIN}
+                imageAlt="Berlin"
+              >
+                Berlin
+              </BioInlineWord>{" "}
+              und{" "}
+              <BioInlineWord
+                id="bio-word-zypern-head"
+                imageSrc={IMG_ZYPERN}
+                imageAlt="Zypern"
+              >
+                Zypern
+              </BioInlineWord>
+            </BioLine>
+            <BioLine>prägen meine</BioLine>
+            <BioLine>persönliche</BioLine>
+            <BioLine>Geschichte.</BioLine>
+          </h2>
+        </div>
+
+        <div className="bio-display__main" id="bio-display-main">
+          <div className="bio-display__prose prose" ref={proseRef}>
+            <p id="bio-display-p1">
+              Meine zypriotischen Wurzeln haben mir früh gezeigt, wie wertvoll
+              unterschiedliche Perspektiven, Kulturen und internationale
+              Beziehungen sind.
+            </p>
+            <p id="bio-display-p2">
+              <BioHoverWord
+                id="bio-word-berlin-p2"
+                imageSrc={IMG_BERLIN}
+                imageAlt="Berlin"
+              >
+                Berlin
+              </BioHoverWord>{" "}
+              ist der Ort, an dem ich Ideen ausprobieren, Unternehmen
+              kennenlernen, eigene Projekte aufbauen und außergewöhnliche
+              Menschen zusammenbringen konnte.
+            </p>
+            <p id="bio-display-p3">{ABOUT.bio[2]}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

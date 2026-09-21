@@ -1,107 +1,98 @@
-"use client";
+import TransitionLink from "@/components/TransitionLink";
+import { InstagramIcon, LinkedInIcon } from "@/components/SocialIcons";
+import { PARTNER_LOGOS } from "@/lib/partner-logos";
+import { FOOTER_COLUMNS, SITE } from "@/lib/site";
 
-import { useRef } from "react";
-import { gsap, SplitText, useGSAP } from "@/lib/gsap";
-import Marquee from "@/components/Marquee";
-import { scrollToTarget } from "@/lib/lenis-store";
+function isExternal(href: string) {
+  return href.startsWith("http") || href.startsWith("mailto:");
+}
 
 /**
- * Cobalt footer: ticker, giant mailto CTA whose characters roll in
- * from below, meta bar with address / socials / back-to-top.
+ * Site footer — column nav, partner logos, socials, giant KOSTI wordmark.
  */
 export default function Footer() {
-  const root = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      if (!root.current) return;
-      const prefersReduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      if (prefersReduced) return;
-
-      const cta = SplitText.create("[data-footer-cta]", {
-        type: "chars",
-        charsClass: "char",
-        aria: "auto",
-      });
-
-      gsap.from(cta.chars, {
-        yPercent: 115,
-        duration: 1,
-        stagger: 0.035,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: "[data-footer-cta]",
-          start: "top 85%",
-        },
-      });
-
-      gsap.from("[data-footer-meta] > *", {
-        y: 24,
-        autoAlpha: 0,
-        duration: 0.7,
-        stagger: 0.08,
-        clearProps: "all",
-        scrollTrigger: {
-          trigger: "[data-footer-meta]",
-          start: "top 95%",
-        },
-      });
-
-      return () => cta.revert();
-    },
-    { scope: root }
-  );
-
-  const toTop = () => {
-    scrollToTarget(0);
-  };
-
   return (
-    <footer className="footer" id="contact" ref={root}>
-      <div className="footer__marquee">
-        <Marquee
-          text="Have a space in mind? Let’s build something people remember"
-          speed={18}
-        />
-      </div>
+    <footer className="footer">
+      <div className="footer__inner">
+        <div className="footer__columns">
+          {FOOTER_COLUMNS.map((column) => (
+            <div className="footer__col" key={column.title}>
+              <p className="footer__col-title">{column.title}</p>
+              <ul className="footer__col-list" role="list">
+                {column.links.map((link) => (
+                  <li key={`${column.title}-${link.label}`}>
+                    {isExternal(link.href) ? (
+                      <a href={link.href} target="_blank" rel="noreferrer">
+                        {link.label}
+                      </a>
+                    ) : (
+                      <TransitionLink href={link.href}>{link.label}</TransitionLink>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
-      <a className="footer__cta" href="mailto:hello@halle.studio">
-        <span className="display" data-footer-cta aria-hidden="true">
-          Let’s talk
-        </span>
-        <span className="visually-hidden">Write us: hello@halle.studio</span>
-        <span className="footer__cta-mail" aria-hidden="true">
-          hello@halle.studio
-        </span>
-      </a>
-
-      <div className="footer__meta" data-footer-meta>
-        <address>Halle Studio GmbH · Köpenicker Str. 154 · 10997 Berlin</address>
-        <nav aria-label="Social media">
-          <ul className="footer__social" role="list">
-            <li>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer">
-                Instagram
-              </a>
-            </li>
-            <li>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer">
-                LinkedIn
-              </a>
-            </li>
-            <li>
-              <a href="https://behance.net" target="_blank" rel="noreferrer">
-                Behance
-              </a>
-            </li>
+        <div className="footer__bar">
+          <ul className="footer__partners" role="list" aria-label="Partner und Projekte">
+            {PARTNER_LOGOS.map((logo) => (
+              <li key={logo.alt}>
+                <TransitionLink href={logo.href} className="footer__partner-link">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    className={`footer__partner-logo footer__partner-logo--${logo.variant}`}
+                    draggable={false}
+                  />
+                </TransitionLink>
+              </li>
+            ))}
           </ul>
-        </nav>
-        <button type="button" className="to-top" onClick={toTop}>
-          Back to top ↑
-        </button>
-        <p>© 2026 Konstantin Patsalides. All rights reserved.</p>
+
+          <div className="footer__socials" aria-label="Social Media">
+            <a
+              className="footer__social-btn"
+              href={SITE.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+            >
+              <LinkedInIcon size={24} />
+            </a>
+            <a
+              className="footer__social-btn"
+              href={SITE.instagram}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram"
+            >
+              <InstagramIcon size={24} />
+            </a>
+          </div>
+        </div>
+
+        <div className="footer__utility">
+          <p className="footer__location">{SITE.location}</p>
+        </div>
+
+        <p className="footer__wordmark display" aria-hidden="true">
+          KOSTI
+        </p>
+
+        <div className="footer__fine">
+          <p className="footer__copy">© 2026 {SITE.name}</p>
+          <a
+            className="footer__credit"
+            href={SITE.credits.href}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {SITE.credits.label}
+          </a>
+        </div>
       </div>
     </footer>
   );

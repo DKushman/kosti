@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useIntro } from "@/lib/intro-context";
-import { HERO_IMAGE, PRELOADER_WORDS } from "@/lib/intro-sequence";
+import { dispatchPageEnter } from "@/lib/page-enter";
+import { PRELOADER_CURTAIN_MS, PRELOADER_WORDS } from "@/lib/intro-sequence";
 
 /** Visible pause while a word sits in the slot */
-const HOLD_MS = 280;
+const HOLD_MS = 320;
 /** Must match CSS keyframe duration */
-const SWAP_MS = 380;
-const CURTAIN_MS = 420;
+const SWAP_MS = 480;
+const CURTAIN_MS = PRELOADER_CURTAIN_MS;
 
 /**
  * Vertical slot swap: outgoing + incoming share one ease/duration
@@ -29,12 +30,9 @@ export default function Preloader() {
         timers.push(window.setTimeout(resolve, ms));
       });
 
-    const img = new Image();
-    img.src = HERO_IMAGE;
-    void img.decode?.().catch(() => undefined);
-
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       finish();
+      dispatchPageEnter(window.location.pathname);
       setGone(true);
       return;
     }
@@ -55,6 +53,7 @@ export default function Preloader() {
 
       setCurtain(true);
       finish();
+      dispatchPageEnter(window.location.pathname);
       await wait(CURTAIN_MS);
       if (cancelled) return;
       setGone(true);

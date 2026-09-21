@@ -1,15 +1,21 @@
 import Hero from "@/components/Hero";
-import Sectors from "@/components/Sectors";
+import MissionStatement from "@/components/MissionStatement";
+import Themes from "@/components/Themes";
+import Werdegang from "@/components/Werdegang";
 import Projects from "@/components/Projects";
-import Studio from "@/components/Studio";
+import Manifesto from "@/components/Manifesto";
+import Posts from "@/components/Posts";
 
 export default function Home() {
   return (
     <main id="main">
       <Hero />
-      <Sectors />
+      <MissionStatement />
+      <Themes />
+      <Werdegang />
       <Projects />
-      <Studio />
+      <Manifesto />
+      <Posts />
     </main>
   );
 }

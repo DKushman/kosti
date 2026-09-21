@@ -7,7 +7,7 @@ import { useGSAP } from "@gsap/react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
-  gsap.defaults({ ease: "power3.out", duration: 1 });
+  gsap.defaults({ ease: "power4.out", duration: 1.05 });
 }
 
 export { gsap, ScrollTrigger, SplitText, useGSAP };

@@ -1,196 +1,353 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { gsap, useGSAP } from "@/lib/gsap";
-import { waitForRouteReady } from "@/lib/page-enter";
-import { scrollToTarget } from "@/lib/lenis-store";
-import { withBasePath } from "@/lib/site-path";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { gsap } from "@/lib/gsap";
+import {
+  CURTAIN,
+  coverWith,
+  registerMenu,
+  resetPanels,
+  revealFrom,
+} from "@/lib/curtain";
+import { lockScroll, scrollToTarget, unlockScroll } from "@/lib/lenis-store";
+import { useNavigation } from "@/lib/navigation";
+import { FOOTER_LINKS, MENU_LINKS, SITE } from "@/lib/site";
+import { InstagramIcon, LinkedInIcon } from "@/components/SocialIcons";
+import TransitionLink from "@/components/TransitionLink";
 
-const LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Netzwerk", href: "/netzwerk" },
-  { label: "Sectors", href: "/#sectors" },
-  { label: "Work", href: "/#work" },
-  { label: "Studio", href: "/#studio" },
-  { label: "Contact", href: "/#contact" },
-];
-
-type MenuOverlayProps = {
-  open: boolean;
-  onClose: () => void;
-};
-
-function parseHref(href: string) {
-  const hashIndex = href.indexOf("#");
-  if (hashIndex === -1) {
-    return { path: href, hash: "" };
-  }
-  return {
-    path: href.slice(0, hashIndex) || "/",
-    hash: href.slice(hashIndex),
-  };
+function MenuNavLink({
+  href,
+  label,
+  menuOpen,
+}: {
+  href: string;
+  label: string;
+  menuOpen: boolean;
+}) {
+  return (
+    <TransitionLink
+      className="menu__link display"
+      href={href}
+      source="menu"
+      tabIndex={menuOpen ? 0 : -1}
+      aria-label={label}
+    >
+      <span className="menu__link-window" aria-hidden="true">
+        <span className="menu__link-roll">
+          <span>{label}</span>
+          <span>{label}</span>
+        </span>
+      </span>
+    </TransitionLink>
+  );
 }
 
-export default function MenuOverlay({ open, onClose }: MenuOverlayProps) {
-  const root = useRef<HTMLElement>(null);
-  const wasOpen = useRef(false);
-  const pendingScroll = useRef<string | null>(null);
-  const isNavigating = useRef(false);
-  const targetPath = useRef<string | null>(null);
-  const router = useRouter();
-  const pathname = usePathname();
+export default function MenuOverlay() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const panelsRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const wasOpenRef = useRef(false);
+  const actionId = useRef(0);
+  const [hydrated, setHydrated] = useState(false);
+  const [contentHidden, setContentHidden] = useState(true);
 
-  const dismiss = useCallback(() => {
-    isNavigating.current = false;
-    targetPath.current = null;
-    pendingScroll.current = null;
-    onClose();
-  }, [onClose]);
+  const { menuOpen, closeMenu, closeMenuSilently, silentClose, pendingHash } =
+    useNavigation();
 
-  const navigateFromMenu = (href: string) => {
-    const { path, hash } = parseHref(href);
+  const panels = useCallback(
+    () =>
+      panelsRef.current
+        ? (Array.from(panelsRef.current.children) as HTMLElement[])
+        : [],
+    []
+  );
 
-    if (path === pathname) {
-      pendingScroll.current = hash || null;
-      onClose();
-      return;
-    }
+  const contentItems = useCallback(
+    () =>
+      contentRef.current
+        ? gsap.utils.toArray<HTMLElement>(
+            "[data-menu-item]",
+            contentRef.current
+          )
+        : [],
+    []
+  );
 
-    isNavigating.current = true;
-    targetPath.current = path;
-    router.push(href);
-  };
+  const linkRolls = useCallback(
+    () =>
+      contentRef.current
+        ? gsap.utils.toArray<HTMLElement>(
+            ".menu__link-roll",
+            contentRef.current
+          )
+        : [],
+    []
+  );
 
-  useEffect(() => {
-    if (!open) return;
-    LINKS.forEach((link) => {
-      const { path } = parseHref(link.href);
-      if (path !== pathname) router.prefetch(path);
-    });
-  }, [open, pathname, router]);
+  const killAll = useCallback(() => {
+    const content = contentRef.current;
+    gsap.killTweensOf([
+      ...panels(),
+      ...contentItems(),
+      ...linkRolls(),
+      ...(content ? [content] : []),
+      ...(rootRef.current ? [rootRef.current] : []),
+    ]);
+  }, [contentItems, linkRolls, panels]);
 
-  useEffect(() => {
-    if (!isNavigating.current || pathname !== targetPath.current) return;
+  const clearContentStyles = useCallback(() => {
+    const content = contentRef.current;
+    if (content) gsap.set(content, { clearProps: "all" });
+    gsap.set(contentItems(), { clearProps: "all", autoAlpha: 1, y: 0 });
+    gsap.set(linkRolls(), { clearProps: "transform", autoAlpha: 1 });
+  }, [contentItems, linkRolls]);
 
-    let cancelled = false;
+  const hideMenu = useCallback(() => {
+    const ps = panels();
+    killAll();
+    clearContentStyles();
+    setContentHidden(true);
+    resetPanels(ps, "top");
+    gsap.set(rootRef.current, { visibility: "hidden", pointerEvents: "none" });
+  }, [clearContentStyles, killAll, panels]);
 
-    void waitForRouteReady().then(() => {
-      if (cancelled || !isNavigating.current) return;
-      isNavigating.current = false;
-      targetPath.current = null;
-      onClose();
-    });
+  const animateContentIn = useCallback(
+    (id: number) => {
+      if (actionId.current !== id) return;
+      gsap.to(linkRolls(), {
+        yPercent: 0,
+        duration: 0.92,
+        stagger: 0.07,
+        ease: "power4.out",
+        clearProps: "transform",
+      });
+      gsap.to(contentItems(), {
+        autoAlpha: 1,
+        yPercent: 0,
+        duration: 0.75,
+        stagger: 0.045,
+        ease: "power4.out",
+        delay: 0.08,
+        clearProps: "transform",
+      });
+    },
+    [contentItems, linkRolls]
+  );
 
-    return () => {
-      cancelled = true;
-    };
-  }, [pathname, onClose]);
+  const openMenuAnim = useCallback(async () => {
+    const id = ++actionId.current;
+    const ps = panels();
+    if (!ps.length) return;
 
-  useGSAP(
-    () => {
-      if (!root.current) return;
-      const links = gsap.utils.toArray<HTMLElement>("[data-menu-link]");
+    killAll();
+    setContentHidden(true);
+    lockScroll();
+    wasOpenRef.current = true;
 
-      if (open) {
-        wasOpen.current = true;
-        const tl = gsap.timeline();
-        tl.set(root.current, { visibility: "visible" })
-          .to(root.current, {
-            clipPath: "inset(0% 0% 0% 0%)",
-            duration: 0.8,
-            ease: "power4.inOut",
-          })
-          .from(
-            links,
-            {
-              yPercent: 110,
-              opacity: 0,
-              duration: 0.7,
-              stagger: 0.06,
-              ease: "power4.out",
-              clearProps: "all",
-            },
-            "-=0.35"
+    gsap.set(rootRef.current, { visibility: "visible", pointerEvents: "auto" });
+    gsap.set(contentItems(), { autoAlpha: 0, yPercent: 40 });
+    gsap.set(linkRolls(), { yPercent: 100, autoAlpha: 0 });
+
+    const { covered } = coverWith(ps, "top");
+    await covered;
+    if (actionId.current !== id) return;
+
+    setContentHidden(false);
+    gsap.set(linkRolls(), { autoAlpha: 1 });
+    animateContentIn(id);
+  }, [animateContentIn, contentItems, killAll, linkRolls, panels]);
+
+  const closeMenuAnim = useCallback(
+    async (fromNavigation = false) => {
+      const id = ++actionId.current;
+      const ps = panels();
+      const content = contentRef.current;
+      if (!ps.length) return;
+
+      killAll();
+      gsap.set(rootRef.current, { pointerEvents: "none" });
+      gsap.to(contentItems(), {
+        autoAlpha: 0,
+        yPercent: -30,
+        duration: 0.35,
+        stagger: 0.02,
+        ease: "power2.in",
+      });
+      gsap.to(linkRolls(), {
+        yPercent: -100,
+        duration: 0.35,
+        stagger: 0.02,
+        ease: "power2.in",
+      });
+
+      await Promise.all([
+        revealFrom(ps),
+        content
+          ? new Promise<void>((resolve) => {
+              gsap.to(content, {
+                yPercent: -100,
+                duration: CURTAIN.reveal.duration,
+                ease: CURTAIN.reveal.ease,
+                onComplete: resolve,
+              });
+            })
+          : Promise.resolve(),
+      ]);
+
+      if (actionId.current !== id) return;
+
+      hideMenu();
+      wasOpenRef.current = false;
+
+      if (!fromNavigation) {
+        unlockScroll();
+        if (pendingHash.current) {
+          const hash = pendingHash.current;
+          pendingHash.current = null;
+          requestAnimationFrame(() =>
+            scrollToTarget(hash === "#top" ? 0 : hash)
           );
-      } else if (wasOpen.current) {
-        gsap.to(root.current, {
-          clipPath: "inset(0% 0% 100% 0%)",
-          duration: 0.65,
-          ease: "power4.inOut",
-          onComplete: () => {
-            gsap.set(root.current, { visibility: "hidden" });
-
-            if (pendingScroll.current) {
-              const hash = pendingScroll.current;
-              pendingScroll.current = null;
-              requestAnimationFrame(() => scrollToTarget(hash));
-            }
-          },
-        });
-      } else {
-        gsap.set(root.current, {
-          visibility: "hidden",
-          clipPath: "inset(0% 0% 100% 0%)",
-        });
+        }
       }
     },
-    { scope: root, dependencies: [open] }
+    [contentItems, hideMenu, killAll, linkRolls, panels, pendingHash]
   );
 
   useEffect(() => {
-    if (!open) return;
+    setHydrated(true);
+  }, []);
+
+  const openRef = useRef(openMenuAnim);
+  const closeRef = useRef(closeMenuAnim);
+  const hideRef = useRef(hideMenu);
+  openRef.current = openMenuAnim;
+  closeRef.current = closeMenuAnim;
+  hideRef.current = hideMenu;
+
+  useEffect(() => {
+    if (!hydrated) return;
+    hideRef.current();
+  }, [hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+
+    if (menuOpen) {
+      void openRef.current();
+      return;
+    }
+
+    if (silentClose.current) {
+      silentClose.current = false;
+      hideRef.current();
+      wasOpenRef.current = false;
+      unlockScroll();
+      return;
+    }
+
+    if (wasOpenRef.current) {
+      void closeRef.current(false);
+    }
+  }, [menuOpen, hydrated]);
+
+  const closeNavRef = useRef(closeMenuAnim);
+  const silentCloseRef = useRef(closeMenuSilently);
+  closeNavRef.current = closeMenuAnim;
+  silentCloseRef.current = closeMenuSilently;
+
+  useEffect(() => {
+    return registerMenu({
+      exit: () =>
+        closeNavRef.current(true).then(() => silentCloseRef.current()),
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") dismiss();
+      if (e.key === "Escape") closeMenu();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, dismiss]);
+  }, [menuOpen, closeMenu]);
 
   return (
-    <nav
-      className="menu"
+    <div
+      className={`menu${contentHidden ? " is-content-hidden" : ""}`}
       id="site-menu"
-      ref={root}
-      aria-label="Main navigation"
-      aria-hidden={!open}
+      ref={rootRef}
+      aria-hidden={!menuOpen}
+      suppressHydrationWarning
     >
-      <button
-        type="button"
-        className="menu__close"
-        aria-label="Menü schließen"
-        onClick={dismiss}
-        tabIndex={open ? 0 : -1}
-      >
-        <span className="menu__close-icon" aria-hidden="true" />
-      </button>
-
-      <ul className="menu__list" role="list">
-        {LINKS.map((link, i) => (
-          <li key={link.href}>
-            <a
-              className="menu__link display"
-              data-menu-link
-              href={withBasePath(link.href)}
-              onClick={(event) => {
-                event.preventDefault();
-                navigateFromMenu(link.href);
-              }}
-              tabIndex={open ? 0 : -1}
-            >
-              <span className="menu__num">0{i + 1}</span>
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="menu__meta">
-        <span>Berlin — 52.51° N, 13.40° E</span>
-        <a href="mailto:hello@halle.studio" tabIndex={open ? 0 : -1}>
-          hello@halle.studio
-        </a>
-        <span>Est. 2004</span>
+      <div className="menu__panels" ref={panelsRef} aria-hidden="true">
+        <div className="menu__panel menu__panel--navy" />
+        <div className="menu__panel menu__panel--slate" />
+        <div className="menu__panel menu__panel--gold" />
       </div>
-    </nav>
+
+      <div className="menu__content" ref={contentRef}>
+        <div className="menu__layout">
+          <aside className="menu__side" data-menu-item>
+            <ul className="menu__socials" role="list">
+              <li>
+                <a
+                  className="menu__social"
+                  href={SITE.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  tabIndex={menuOpen ? 0 : -1}
+                >
+                  <InstagramIcon size={26} />
+                </a>
+              </li>
+              <li>
+                <a
+                  className="menu__social"
+                  href={SITE.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  tabIndex={menuOpen ? 0 : -1}
+                >
+                  <LinkedInIcon size={26} />
+                </a>
+              </li>
+            </ul>
+          </aside>
+
+          <nav className="menu__nav" aria-label="Hauptnavigation">
+            <ul className="menu__list" role="list">
+              {MENU_LINKS.map((link) => (
+                <li key={link.href}>
+                  <MenuNavLink
+                    href={link.href}
+                    label={link.label}
+                    menuOpen={menuOpen}
+                  />
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        <footer className="menu__foot" data-menu-item>
+          <nav className="menu__legal" aria-label="Rechtliches">
+            {FOOTER_LINKS.map((link) => (
+              <TransitionLink
+                key={link.href}
+                href={link.href}
+                source="menu"
+                className="menu__legal-link"
+                tabIndex={menuOpen ? 0 : -1}
+              >
+                {link.label}
+              </TransitionLink>
+            ))}
+          </nav>
+          <p className="menu__coords">{SITE.location}</p>
+        </footer>
+      </div>
+    </div>
   );
 }

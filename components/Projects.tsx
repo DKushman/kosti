@@ -2,39 +2,16 @@
 
 import { useRef } from "react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
-import { withBasePath } from "@/lib/site-path";
-
-const PROJECTS = [
-  {
-    name: "Nova Flagship",
-    tags: "Retail — Berlin",
-    year: "2026",
-    img: withBasePath("/img/project-1.jpg"),
-  },
-  {
-    name: "Kiosk Fortyseven",
-    tags: "Hospitality — München",
-    year: "2025",
-    img: withBasePath("/img/project-2.jpg"),
-  },
-  {
-    name: "Atlas Campus",
-    tags: "Workplace — Hamburg",
-    year: "2024",
-    img: withBasePath("/img/project-3.jpg"),
-  },
-  {
-    name: "Feldlabor Pavilion",
-    tags: "Exhibition — Köln",
-    year: "2024",
-    img: withBasePath("/img/project-4.jpg"),
-  },
-];
+import { PROJECTS } from "@/lib/content/projekte";
+import Pic from "@/components/Pic";
+import FillButton from "@/components/FillButton";
+import TransitionLink from "@/components/TransitionLink";
+import BerlinWord from "@/components/BerlinWord";
 
 /**
- * Staggered editorial grid on warm paper. Every image parallaxes
- * inside its clipped frame; captions and the section head reveal
- * as they enter.
+ * Staggered editorial grid on warm paper (Startseite Block 4). Every
+ * image parallaxes inside its clipped frame; captions and the section
+ * head reveal as they enter.
  */
 export default function Projects() {
   const root = useRef<HTMLElement>(null);
@@ -71,7 +48,6 @@ export default function Projects() {
         const media = item.querySelector("[data-work-media]");
         const caption = item.querySelector("figcaption");
 
-        // frame unclips upward
         gsap.from(media, {
           clipPath: "inset(100% 0% 0% 0%)",
           duration: 1.2,
@@ -82,7 +58,6 @@ export default function Projects() {
           },
         });
 
-        // image drifts inside the clipped frame
         gsap.fromTo(
           img,
           { yPercent: -12 },
@@ -118,36 +93,44 @@ export default function Projects() {
   return (
     <section
       className="work"
-      id="work"
+      id="projekte"
       ref={root}
       aria-labelledby="work-heading"
     >
       <header className="work__head">
         <h2 className="display" id="work-heading" data-work-heading>
-          Selected
+          Projekte
           <br />
-          work
+          für <BerlinWord />
         </h2>
-        <p className="work__count">(2019 — 2026)</p>
+        <FillButton href="/projekte" className="btn-fill work__all">
+          Alle Projekte
+        </FillButton>
       </header>
 
       <ul className="work__grid" role="list">
         {PROJECTS.map((project) => (
-          <li className="work__item" data-work-item key={project.name}>
-            <a href="#contact" aria-label={`${project.name} case study`}>
+          <li className="work__item" data-work-item key={project.slug}>
+            <TransitionLink
+              href={`/projekte/${project.slug}`}
+              aria-label={`${project.name} – ${project.short}`}
+            >
               <figure>
                 <div className="work__media" data-work-media>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={project.img} alt="" loading="lazy" draggable={false} />
+                  <Pic
+                    name={project.img}
+                    sizes="(max-width: 900px) 100vw, 58vw"
+                    alt=""
+                  />
                 </div>
                 <figcaption>
                   <h3>{project.name}</h3>
                   <p className="work__tags">
-                    {project.tags} · {project.year}
+                    {project.category} · {project.year}
                   </p>
                 </figcaption>
               </figure>
-            </a>
+            </TransitionLink>
           </li>
         ))}
       </ul>

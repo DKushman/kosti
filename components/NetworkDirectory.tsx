@@ -204,8 +204,6 @@ export default function NetworkDirectory({ members }: NetworkDirectoryProps) {
             <ListIcon />
           </button>
         </div>
-
-        <p className="network__count">{members.length} Mitglieder</p>
       </header>
 
       {view === "grid" ? (

@@ -1,7 +1,28 @@
-# Halle. — Studio Site
+# Konstantin Patsalides — Website
 
-Award-style one-pager built with **Next.js (App Router) + React + GSAP + Lenis**.
-Placeholder brand, copy and generative artwork — swap freely.
+Built with **Next.js (App Router) + React + GSAP + Lenis**.
+Structure and copy follow the website concept (Aug 2026): Startseite,
+Über mich, Themen, Projekte, Netzwerk, Positionen, Kontakt (+ Impressum /
+Datenschutz). `/ihk-2027` is not created yet — activate once the candidacy
+is public (see `lib/content/themen.ts`, section IHK).
+
+## Content & config
+
+| What | Where |
+| --- | --- |
+| Name, claim, e-mail, LinkedIn, Instagram, site URL | `lib/site.ts` |
+| Navigation | `lib/site.ts` (`NAV_LINKS`) |
+| Page copy | `lib/content/*.ts` (about, themen, projekte, netzwerk, positionen) |
+| Articles („Positionen“) | `lib/content/positionen.ts` — add an entry, the route is generated |
+| Photos | drop JPEGs into `public/img`, run `node scripts/optimize-images.mjs`, reference by name via `<Pic name="…" />` |
+
+## Menu + page transitions
+
+Both use one primitive (`lib/curtain.ts`): three full-screen panels
+(gold · slate · navy). The menu drops them from the top; navigation lifts
+them upwards one after another. Page links rise the panels from the
+bottom, wait for the next route, then lift them. Use `<TransitionLink>`
+for internal links.
 
 ## Quick start
 
@@ -11,7 +32,7 @@ npm run dev      # http://localhost:3000
 npm run build    # production build
 ```
 
-Requires Node 18.18+ (Node 20+ recommended). Fonts (Archivo, Newsreader) are
+Requires Node 20+. Fonts (Archivo, Newsreader) are
 pulled at build time via `next/font/google`.
 
 ## What's inside
@@ -59,3 +80,28 @@ anything. It is not part of the Next.js build.
    imports in `Hero/Sectors/Projects`).
 2. Copy lives inline in each component — search for the obvious strings.
 3. Colors/typography: CSS custom properties at the top of `app/globals.css`.
+
+## GitHub & Vercel
+
+**Repository:** [github.com/DKushman/kosti](https://github.com/DKushman/kosti)
+
+### Vercel (recommended hosting)
+
+1. Sign in at [vercel.com](https://vercel.com) with GitHub.
+2. **Add New Project** → import **`DKushman/kosti`**.
+3. Framework preset: **Next.js** (auto-detected).
+4. Build command: `npm run build` — do **not** set `GITHUB_PAGES` (that flag is only for the GitHub Pages static export).
+5. Deploy. Future pushes to `main` deploy automatically.
+
+Optional CLI (after `npm i -g vercel` and `vercel login`):
+
+```bash
+vercel link    # link local folder to the Vercel project
+vercel --prod  # production deploy
+```
+
+### GitHub Pages (optional)
+
+The workflow `.github/workflows/deploy.yml` still builds a static export to
+GitHub Pages (`GITHUB_PAGES=true`, base path `/kosti`). Use either Vercel
+**or** Pages as the primary host to avoid confusion.

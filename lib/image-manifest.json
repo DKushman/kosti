@@ -1,0 +1,113 @@
+{
+  "hero": {
+    "width": 1600,
+    "height": 1000,
+    "widths": [
+      480,
+      960,
+      1440,
+      1600
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADwAwCdASoUAA0APwFqrU6rJiQiMAgBYCAJagCdMoAC86xb0uHy130AAP6iy/dOJyzRlgW16Cw9Ru66h8UxE0Br2x3l8QlWHxCqkpDvdCUzxr0si7mXgktOnsAAAA=="
+  },
+  "kosti": {
+    "width": 2560,
+    "height": 1707,
+    "widths": [
+      480,
+      960,
+      1440,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRpQAAABXRUJQVlA4IIgAAAAQBACdASoUAA0APwFqrE8rJiQiMAgBYCAJZQDA3CLFv8i/S+UtgmnmAAD+t43gOcsUXEb6NYwguOzcUnDN2hN7e5E1GUcLA35Wj+NCiYcQjqGxHqZYOMAivmRNhFHfwSPfL/TOZNZQ3R093nkqr7pYNvZgyUcesE85Sd965inpZc9TDDnrCAAA"
+  },
+  "project-1": {
+    "width": 1400,
+    "height": 1000,
+    "widths": [
+      480,
+      960,
+      1400
+    ],
+    "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADQAwCdASoUAA4APwFqrE6rJiQiMAgBYCAJYgCdACFr8rY/GtatQAAA/tjtPUH4WXLq6R65SW+R2EO4Fng+efWE0G3nUtzZF+AJMPUBDSI5AAAA"
+  },
+  "project-2": {
+    "width": 1400,
+    "height": 1000,
+    "widths": [
+      480,
+      960,
+      1400
+    ],
+    "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAwCdASoUAA4APwFqrE6rJiQiMAgBYCAJQBWAA3NKte3pJg+0QAD+2VK8HCcBL73lp9pyK2xWEd8wdDzeSFs9zUmAAA=="
+  },
+  "project-3": {
+    "width": 1400,
+    "height": 1000,
+    "widths": [
+      480,
+      960,
+      1400
+    ],
+    "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAAAwAwCdASoUAA4APwFqrE8rJiQiMAgBYCAJYgAAetCb/mgAAP7hFW8KoeVdJ9moOERP8Tzf9a+bO4AmsjDtIH6uwAA="
+  },
+  "project-4": {
+    "width": 1400,
+    "height": 1000,
+    "widths": [
+      480,
+      960,
+      1400
+    ],
+    "lqip": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACQAwCdASoUAA4APwFqrU8rJaQiMAgBYCAJQBOgAz81XQ8ps1ywAP7L9217uQr8+tFquWZw17zU8F7ho6vOHLIi0zJC5iwAAAA="
+  },
+  "reel": {
+    "width": 480,
+    "height": 320,
+    "widths": [
+      480
+    ],
+    "lqip": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAAAQAwCdASoUAA0APwFqrU8rJiQiMAgBYCAJaQAAetHZgAAA/u+fR/o92o+Objbmq4VFrJrZ6wgAAA=="
+  },
+  "sector-exhibition": {
+    "width": 1100,
+    "height": 1300,
+    "widths": [
+      480,
+      960,
+      1100
+    ],
+    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAAAwBACdASoUABgAPwFysVIrJqSiqAqpYCAJZQDMHBEcH00JVB1TABzMIiwA/uvagHHAS4nwV665quBR+nEzY4UjgN9PNlrJxsbndpLm6wDZLWowUUCvZCyZVhko9RpGu0wAAA=="
+  },
+  "sector-hospitality": {
+    "width": 1100,
+    "height": 1300,
+    "widths": [
+      480,
+      960,
+      1100
+    ],
+    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAACQBACdASoUABgAPwFwr1CrJqQnMBgIAWAgCWUAvzgQ79tvRqVDbOt9mKVllgAA/uveef889H847BXXoGKm/e8RShHsQcdjBPFfcsrXmUtnCeQQiwl/uC+DQ+BC4EHPcEM4AAAA"
+  },
+  "sector-retail": {
+    "width": 1100,
+    "height": 1300,
+    "widths": [
+      480,
+      960,
+      1100
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAACQBACdASoUABgAPwFysFKrJqSiqAqpYCAJZQDDNBEQP0IVc74eoMcqRvGoDQAA/ujD0i3FuwozmvszN9xporT9Ys6ByEHggMRQ89xqotCPGndntTJxyBQMK34AAA=="
+  },
+  "sector-workplace": {
+    "width": 1100,
+    "height": 1300,
+    "widths": [
+      480,
+      960,
+      1100
+    ],
+    "lqip": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAAAwAwCdASoUABgAPwFwrFEvJikiqA1R4CAJYwDA3BmNgB/AAP7sY3tBhN57rT0KBLDi/cEiYrgGTHaAAAA="
+  }
+}
