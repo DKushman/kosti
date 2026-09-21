@@ -82,14 +82,14 @@ function BioLine({ children }: { children: ReactNode }) {
 export default function BioCinematic() {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
-  const proseRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLParagraphElement>(null);
 
   useGSAP(
     () => {
       const section = sectionRef.current;
       const heading = headlineRef.current;
-      const prose = proseRef.current;
-      if (!section || !heading || !prose) return;
+      const main = mainRef.current;
+      if (!section || !heading || !main) return;
 
       const reduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
@@ -99,26 +99,21 @@ export default function BioCinematic() {
       const headLines = heading.querySelectorAll<HTMLElement>(
         ".bio-display__line"
       );
-      const paragraphs = prose.querySelectorAll<HTMLElement>("p");
-      if (!headLines.length || !paragraphs.length) return;
+      if (!headLines.length) return;
 
       let scrollTrigger: ScrollTrigger | undefined;
-      let paragraphSplits: ReturnType<typeof SplitText.create>[] = [];
+      let mainSplit: ReturnType<typeof SplitText.create> | undefined;
 
       const setupAndPlay = () => {
-        paragraphSplits = Array.from(paragraphs).map((p) =>
-          SplitText.create(p, {
-            type: "lines",
-            linesClass: "split-line",
-            mask: "lines",
-            aria: "auto",
-          })
-        );
+        mainSplit = SplitText.create(main, {
+          type: "lines",
+          linesClass: "split-line",
+          mask: "lines",
+          aria: "auto",
+        });
 
         gsap.set(headLines, { yPercent: 110, force3D: true });
-        paragraphSplits.forEach((split) => {
-          gsap.set(split.lines, { yPercent: 110, force3D: true });
-        });
+        gsap.set(mainSplit.lines, { yPercent: 110, force3D: true });
 
         const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
         tl.to(
@@ -126,13 +121,11 @@ export default function BioCinematic() {
           { yPercent: 0, duration: 1.05, stagger: 0.09 },
           0
         );
-        paragraphSplits.forEach((split, i) => {
-          tl.to(
-            split.lines,
-            { yPercent: 0, duration: 0.95, stagger: 0.07 },
-            0.14 + i * 0.11
-          );
-        });
+        tl.to(
+          mainSplit.lines,
+          { yPercent: 0, duration: 0.95, stagger: 0.07 },
+          0.2
+        );
       };
 
       scrollTrigger = ScrollTrigger.create({
@@ -144,7 +137,7 @@ export default function BioCinematic() {
 
       return () => {
         scrollTrigger?.kill();
-        paragraphSplits.forEach((split) => split.revert());
+        mainSplit?.revert();
       };
     },
     { scope: sectionRef }
@@ -182,28 +175,25 @@ export default function BioCinematic() {
           </h2>
         </div>
 
-        <div className="bio-display__main" id="bio-display-main">
-          <div className="bio-display__prose prose" ref={proseRef}>
-            <p id="bio-display-p1">
-              Meine zypriotischen Wurzeln haben mir früh gezeigt, wie wertvoll
-              unterschiedliche Perspektiven, Kulturen und internationale
-              Beziehungen sind.
-            </p>
-            <p id="bio-display-p2">
-              <BioHoverWord
-                id="bio-word-berlin-p2"
-                imageSrc={IMG_BERLIN}
-                imageAlt="Berlin"
-              >
-                Berlin
-              </BioHoverWord>{" "}
-              ist der Ort, an dem ich Ideen ausprobieren, Unternehmen
-              kennenlernen, eigene Projekte aufbauen und außergewöhnliche
-              Menschen zusammenbringen konnte.
-            </p>
-            <p id="bio-display-p3">{ABOUT.bio[2]}</p>
-          </div>
-        </div>
+        <p
+          ref={mainRef}
+          id="bio-display-main"
+          className="bio-display__main"
+        >
+          Meine zypriotischen Wurzeln haben mir früh gezeigt, wie wertvoll
+          unterschiedliche Perspektiven, Kulturen und internationale Beziehungen
+          sind.{" "}
+          <BioHoverWord
+            id="bio-word-berlin-p2"
+            imageSrc={IMG_BERLIN}
+            imageAlt="Berlin"
+          >
+            Berlin
+          </BioHoverWord>{" "}
+          ist der Ort, an dem ich Ideen ausprobieren, Unternehmen kennenlernen,
+          eigene Projekte aufbauen und außergewöhnliche Menschen zusammenbringen
+          konnte. {ABOUT.bio[2]}
+        </p>
       </div>
     </section>
   );

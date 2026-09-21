@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, type MouseEvent } from "react";
+import { useCallback, useRef, type PointerEvent } from "react";
 import { usePathname } from "next/navigation";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useIntro } from "@/lib/intro-context";
@@ -63,24 +63,47 @@ export default function AboutSplitHero() {
   const ICON_Y_MIN = 0;
   const ICON_Y_MAX = 62;
   const ICON_Y_DEFAULT = 35;
+  const ICON_Y_MOBILE_REST = 62;
+  const ICON_MOBILE_VISIBLE_Y = 10;
 
-  const setIconOffset = useCallback((yPercent: number) => {
-    const icon = iconRef.current;
-    if (!icon) return;
-    icon.style.transform = `translate3d(0, ${yPercent}%, 0)`;
-  }, []);
+  const isMobileLayout = useCallback(
+    () => window.matchMedia("(max-width: 900px)").matches,
+    []
+  );
+
+  const setIconOffset = useCallback(
+    (yPercent: number) => {
+      const icon = iconRef.current;
+      if (!icon) return;
+      icon.style.transform = `translate3d(0, ${yPercent}%, 0)`;
+      if (isMobileLayout()) {
+        const opacity =
+          yPercent <= ICON_MOBILE_VISIBLE_Y
+            ? 1
+            : Math.max(0, 1 - (yPercent - ICON_MOBILE_VISIBLE_Y) / 22);
+        icon.style.opacity = String(opacity);
+        icon.style.visibility = opacity > 0.04 ? "visible" : "hidden";
+      }
+    },
+    [isMobileLayout]
+  );
 
   const updateIconFromPointer = useCallback(
     (clientY: number) => {
       const hero = root.current;
       if (!hero) return;
-      const r = hero.getBoundingClientRect();
+
+      const track =
+        (isMobileLayout()
+          ? hero.querySelector<HTMLElement>(".about-hero__kosti-wrap")
+          : null) ?? hero;
+      const r = track.getBoundingClientRect();
       if (r.height <= 0) return;
       const t = Math.min(1, Math.max(0, (clientY - r.top) / r.height));
       const y = ICON_Y_MIN + t * (ICON_Y_MAX - ICON_Y_MIN);
       setIconOffset(y);
     },
-    [setIconOffset]
+    [isMobileLayout, setIconOffset]
   );
 
   const scheduleIconFromPointer = useCallback(
@@ -112,7 +135,8 @@ export default function AboutSplitHero() {
     rightPupil.current.setAttribute("transform", `translate(${r.x} ${r.y})`);
   }, []);
 
-  const onHeroPointer = (e: MouseEvent<HTMLElement>) => {
+  const onHeroPointer = (e: PointerEvent<HTMLElement>) => {
+    if (e.pointerType === "touch" && e.buttons === 0) return;
     const hero = root.current;
     if (!hero) return;
     const r = hero.getBoundingClientRect();
@@ -123,7 +147,9 @@ export default function AboutSplitHero() {
 
   const onHeroLeave = () => {
     resetEyes();
-    setIconOffset(ICON_Y_DEFAULT);
+    setIconOffset(
+      isMobileLayout() ? ICON_Y_MOBILE_REST : ICON_Y_DEFAULT
+    );
   };
 
   useGSAP(
@@ -141,6 +167,8 @@ export default function AboutSplitHero() {
         "(prefers-reduced-motion: reduce)"
       ).matches;
 
+      const mobileHero = window.matchMedia("(max-width: 900px)").matches;
+
       const playEnter = () => {
         if (enterPlayed.current) return;
         enterPlayed.current = true;
@@ -151,16 +179,24 @@ export default function AboutSplitHero() {
         });
         tl.to(kosti, { yPercent: 0, duration: 0.88 }, 0);
         if (iconEnter && iconEl) {
-          tl.to(
-            iconEnter,
-            { yPercent: 0, duration: 0.82, ease: "power4.out" },
-            0.82
-          );
-          tl.to(
-            iconEl,
-            { autoAlpha: 1, duration: 0.82, ease: "power4.out" },
-            0.82
-          );
+          if (mobileHero) {
+            tl.add(() => {
+              gsap.set(iconEnter, { yPercent: 0, clearProps: "transform" });
+              gsap.set(iconEl, { autoAlpha: 0, clearProps: "visibility" });
+              setIconOffset(ICON_Y_MOBILE_REST);
+            }, 0.82);
+          } else {
+            tl.to(
+              iconEnter,
+              { yPercent: 0, duration: 0.82, ease: "power4.out" },
+              0.82
+            );
+            tl.to(
+              iconEl,
+              { autoAlpha: 1, duration: 0.82, ease: "power4.out" },
+              0.82
+            );
+          }
         }
         tl.to(sub, { yPercent: 0, duration: 0.88 }, 0.14);
         tl.fromTo(
@@ -182,7 +218,14 @@ export default function AboutSplitHero() {
 
       gsap.set([kosti, sub], { yPercent: 108 });
       if (iconEnter) gsap.set(iconEnter, { yPercent: 115 });
-      if (iconEl) gsap.set(iconEl, { autoAlpha: 0 });
+      if (iconEl) {
+        gsap.set(iconEl, { autoAlpha: 0 });
+        if (mobileHero) {
+          iconEl.style.opacity = "0";
+          iconEl.style.visibility = "hidden";
+          iconEl.style.transform = `translate3d(0, ${ICON_Y_MOBILE_REST}%, 0)`;
+        }
+      }
       gsap.set(mediaEl, { clipPath: "inset(100% 0% 0% 0%)" });
 
       const attemptEnter = () => {
@@ -200,15 +243,15 @@ export default function AboutSplitHero() {
         offPageEnter();
       };
     },
-    { scope: root, dependencies: [introDone, pathname] }
+    { scope: root, dependencies: [introDone, pathname, setIconOffset] }
   );
 
   return (
     <header
       ref={root}
       className="about-hero"
-      onMouseMove={onHeroPointer}
-      onMouseLeave={onHeroLeave}
+      onPointerMove={onHeroPointer}
+      onPointerLeave={onHeroLeave}
     >
       <div className="about-hero__copy">
         <h1 className="about-hero__title display">
