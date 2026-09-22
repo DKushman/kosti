@@ -31,8 +31,12 @@ const HERO_BUILDS = [
   { label: "MyBLN", href: "/projekte/mybln" },
 ] as const;
 
-const HERO_LEDE =
-  "Diese Metropole zu gestalten ist mein Ziel – und meine Aufgabe. Ich bin Unternehmer aus Überzeugung und Netzwerker aus Leidenschaft.";
+const HERO_LEDE_LINES = [
+  "Diese Metropole zu gestalten ist mein Ziel – und meine Aufgabe.",
+  "Ich bin Unternehmer aus Überzeugung und Netzwerker aus Leidenschaft.",
+] as const;
+
+const PORTRAIT_INTRO_FALLBACK_MS = 1100;
 
 function isMobileHero() {
   return window.matchMedia(MOBILE_MQ).matches;
@@ -69,6 +73,18 @@ function MarqueeItems() {
   );
 }
 
+function LedeLines() {
+  return (
+    <>
+      {HERO_LEDE_LINES.map((line) => (
+        <span className="hero__line-clip" key={line}>
+          <span className="hero__line-rise">{line}</span>
+        </span>
+      ))}
+    </>
+  );
+}
+
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -87,23 +103,26 @@ export default function Hero() {
 
   useLayoutEffect(() => {
     if (!done) return;
-    const portrait = portraitRef.current;
+    const root = rootRef.current;
     const stage = stageRef.current;
-    const track = trackRef.current;
-    if (!portrait || !track || introStarted.current) return;
+    if (!root) return;
 
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    if (prefersReduced) return;
+    if (prefersReduced) {
+      root.classList.add("is-entered", "is-intro-done");
+      return;
+    }
 
+    root.classList.add("is-entered");
+
+    if (introStarted.current) return;
     if (isMobileHero()) {
-      gsap.set(portrait, { yPercent: 0, scale: 1 });
       stage?.style.removeProperty("--hero-marquee-x");
       return;
     }
 
-    gsap.set(portrait, { yPercent: 4.8, scale: 1.058 });
     stage?.style.setProperty("--hero-marquee-x", `${INTRO_MARQUEE_FROM}px`);
   }, [done, pathname]);
 
@@ -165,29 +184,34 @@ export default function Hero() {
         renderMarquee();
       });
 
-      if (mobile) {
-        gsap.fromTo(
-          portrait,
-          { yPercent: 5, scale: 1.04 },
-          {
-            yPercent: 0,
-            scale: 1,
-            duration: INTRO_MS / 1000,
-            ease: EASE_PRELOADER_HANDOFF,
-          }
-        );
-      } else {
-        gsap.set(portrait, { yPercent: 4.8, scale: 1.058 });
+      let introDoneTimer = 0;
+      let onPortraitEnd: ((event: TransitionEvent) => void) | undefined;
+      const frame = root.querySelector<HTMLElement>(".hero__portrait");
+      const markIntroDone = () => {
+        if (root.classList.contains("is-intro-done")) {
+          portraitIntroDone = true;
+          return;
+        }
+        portraitIntroDone = true;
+        root.classList.add("is-intro-done");
+      };
 
-        gsap.to(portrait, {
-          yPercent: 0,
-          scale: 1,
-          duration: INTRO_MS / 1000,
-          ease: EASE_PRELOADER_HANDOFF,
-          onComplete: () => {
-            portraitIntroDone = true;
-          },
-        });
+      if (!mobile) {
+        onPortraitEnd = (event: TransitionEvent) => {
+          if (
+            event.propertyName !== "clip-path" &&
+            event.propertyName !== "-webkit-clip-path"
+          ) {
+            return;
+          }
+          if (onPortraitEnd && frame) {
+            frame.removeEventListener("transitionend", onPortraitEnd);
+          }
+          window.clearTimeout(introDoneTimer);
+          markIntroDone();
+        };
+        frame?.addEventListener("transitionend", onPortraitEnd);
+        introDoneTimer = window.setTimeout(markIntroDone, PORTRAIT_INTRO_FALLBACK_MS);
 
         gsap.to(motion, {
           introOffset: 0,
@@ -195,6 +219,8 @@ export default function Hero() {
           ease: EASE_PRELOADER_HANDOFF,
           onUpdate: renderMarquee,
         });
+      } else {
+        introDoneTimer = window.setTimeout(markIntroDone, PORTRAIT_INTRO_FALLBACK_MS);
       }
 
       let scrollFx: ScrollTrigger | undefined;
@@ -263,6 +289,10 @@ export default function Hero() {
       teardown = () => {
         stopLoop();
         visibility.kill();
+        window.clearTimeout(introDoneTimer);
+        if (onPortraitEnd && frame) {
+          frame.removeEventListener("transitionend", onPortraitEnd);
+        }
         window.removeEventListener("resize", onResize);
         scrollFx?.kill();
         gsap.killTweensOf(motion);
@@ -291,13 +321,19 @@ export default function Hero() {
       aria-labelledby="hero-title"
     >
       <div className="hero__viewport">
-        <p className="hero__lede hero__lede--stage">{HERO_LEDE}</p>
+        <p className="hero__lede hero__lede--stage" id="hero-lede-stage">
+          <LedeLines />
+        </p>
 
         <div className="hero__stage" ref={stageRef}>
         <div className="hero__marquee-band hero__marquee-band--base" aria-hidden="true">
           <div className="hero__marquee hero__marquee--base">
-            <span className="hero__marquee-track" ref={trackRef}>
-              <MarqueeItems />
+            <span className="hero__marquee-slot">
+              <span className="hero__marquee-rise">
+                <span className="hero__marquee-track" ref={trackRef}>
+                  <MarqueeItems />
+                </span>
+              </span>
             </span>
           </div>
         </div>
@@ -325,8 +361,12 @@ export default function Hero() {
           <span className="visually-hidden">Konstantin Patsalides</span>
           <div className="hero__marquee-band hero__marquee-band--over" aria-hidden="true">
             <div className="hero__marquee hero__marquee--on-photo">
-              <span className="hero__marquee-track">
-                <MarqueeItems />
+              <span className="hero__marquee-slot">
+                <span className="hero__marquee-rise">
+                  <span className="hero__marquee-track">
+                    <MarqueeItems />
+                  </span>
+                </span>
               </span>
             </div>
           </div>
@@ -335,21 +375,35 @@ export default function Hero() {
 
         <div className="hero__foot" id="hero-bottom">
         <p className="hero__loc">
-          <LocationPin />
-          <span>Berlin, Germany</span>
+          <span className="hero__line-clip">
+            <span className="hero__line-rise">
+              <LocationPin />
+              <span>Berlin, Germany</span>
+            </span>
+          </span>
         </p>
 
-        <p className="hero__lede hero__lede--foot">{HERO_LEDE}</p>
+        <p className="hero__lede hero__lede--foot" id="hero-lede-foot">
+          <LedeLines />
+        </p>
 
         <div className="hero__builds">
-          <p className="hero__builds-label">Meine Baustellen</p>
+          <p className="hero__builds-label">
+            <span className="hero__line-clip">
+              <span className="hero__line-rise">Meine Baustellen</span>
+            </span>
+          </p>
           <p className="hero__builds-list">
-            {HERO_BUILDS.map((item, i) => (
-              <span key={item.href}>
-                {i > 0 ? ", " : null}
-                <TransitionLink href={item.href}>{item.label}</TransitionLink>
+            <span className="hero__line-clip">
+              <span className="hero__line-rise">
+                {HERO_BUILDS.map((item, i) => (
+                  <span key={item.href}>
+                    {i > 0 ? ", " : null}
+                    <TransitionLink href={item.href}>{item.label}</TransitionLink>
+                  </span>
+                ))}
               </span>
-            ))}
+            </span>
           </p>
         </div>
       </div>
