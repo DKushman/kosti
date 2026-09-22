@@ -181,9 +181,6 @@ export default function Themes() {
                     <span className="sectors__card-copy">
                       <span className="sectors__card-headline">{theme.text}</span>
                     </span>
-                    <span className="sectors__card-action" aria-hidden="true">
-                      +
-                    </span>
                   </TransitionLink>
                   <p className="sectors__desc">{theme.text}</p>
                 </div>
