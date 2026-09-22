@@ -1,11 +1,23 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { useEffect, useRef } from "react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import {
+  REVEAL_START,
+  markRevealed,
+  observeRevealOnce,
+} from "@/lib/reveal-io";
 
 type Station = { title: string; meta: string; text: string };
 
 type Props = { items: readonly Station[] };
+
+function supportsScrollTimeline() {
+  return (
+    typeof CSS !== "undefined" &&
+    CSS.supports("animation-timeline", "view()")
+  );
+}
 
 /**
  * Vertical station list. A gold progress line draws down with scroll
@@ -14,14 +26,16 @@ type Props = { items: readonly Station[] };
 export default function Timeline({ items }: Props) {
   const root = useRef<HTMLOListElement>(null);
 
-  useGSAP(
-    () => {
-      const el = root.current;
-      if (!el) return;
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduced) return;
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
 
-      gsap.fromTo(
+    const cleanups: (() => void)[] = [];
+
+    if (!supportsScrollTimeline()) {
+      const tween = gsap.fromTo(
         "[data-timeline-progress]",
         { scaleY: 0 },
         {
@@ -36,26 +50,32 @@ export default function Timeline({ items }: Props) {
           },
         }
       );
-
-      gsap.utils.toArray<HTMLElement>("[data-station]", el).forEach((item) => {
-        gsap.from(item, {
-          y: 40,
-          autoAlpha: 0,
-          duration: 0.9,
-          ease: "power3.out",
-          clearProps: "all",
-          scrollTrigger: { trigger: item, start: "top 88%" },
-        });
-        gsap.from(item.querySelector("[data-dot]"), {
-          scale: 0,
-          duration: 0.6,
-          ease: "back.out(3)",
-          scrollTrigger: { trigger: item, start: "top 80%" },
-        });
+      cleanups.push(() => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
       });
-    },
-    { scope: root }
-  );
+    }
+
+    el.querySelectorAll<HTMLElement>("[data-station]").forEach((item) => {
+      cleanups.push(
+        observeRevealOnce(item, {
+          startTop: REVEAL_START.timelineItem,
+          onEnter: () => markRevealed(item),
+        })
+      );
+      const dot = item.querySelector<HTMLElement>("[data-dot]");
+      if (dot) {
+        cleanups.push(
+          observeRevealOnce(dot, {
+            startTop: REVEAL_START.timelineDot,
+            onEnter: () => markRevealed(dot),
+          })
+        );
+      }
+    });
+
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   return (
     <ol className="timeline" ref={root} role="list">

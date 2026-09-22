@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
+import { REVEAL_START, observeRevealOnce } from "@/lib/reveal-io";
 import { ValuesHaltungCard } from "@/components/blocks/ValuesHaltungCard";
 import { imageSetForPath } from "@/lib/images";
 
@@ -273,10 +274,8 @@ export default function ValuesHaltungScene({
       if (inView) {
         playIntro();
       } else {
-        ScrollTrigger.create({
-          trigger: track,
-          start: "top 82%",
-          once: true,
+        observeRevealOnce(track, {
+          startTop: REVEAL_START.sectorsLede,
           onEnter: playIntro,
         });
       }

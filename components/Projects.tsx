@@ -1,12 +1,24 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { useEffect, useRef } from "react";
+import { gsap, SplitText, ScrollTrigger } from "@/lib/gsap";
 import { PROJECTS } from "@/lib/content/projekte";
 import Pic from "@/components/Pic";
 import FillButton from "@/components/FillButton";
 import TransitionLink from "@/components/TransitionLink";
 import BerlinWord from "@/components/BerlinWord";
+import {
+  REVEAL_START,
+  markRevealed,
+  observeRevealOnce,
+} from "@/lib/reveal-io";
+
+function supportsScrollTimeline() {
+  return (
+    typeof CSS !== "undefined" &&
+    CSS.supports("animation-timeline", "view()")
+  );
+}
 
 /**
  * Staggered editorial grid on warm paper (Startseite Block 4). Every
@@ -16,49 +28,66 @@ import BerlinWord from "@/components/BerlinWord";
 export default function Projects() {
   const root = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      if (!root.current) return;
-      const prefersReduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      if (prefersReduced) return;
+  useEffect(() => {
+    if (!root.current) return;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) return;
 
-      const head = SplitText.create("[data-work-heading]", {
+    const cleanups: (() => void)[] = [];
+    const scrollCleanups: (() => void)[] = [];
+
+    const heading = root.current.querySelector<HTMLElement>("[data-work-heading]");
+    if (heading) {
+      heading.dataset.reveal = "lines";
+      const split = SplitText.create(heading, {
         type: "lines",
         linesClass: "split-line",
         mask: "lines",
         aria: "auto",
         autoSplit: true,
-        onSplit: (self: { lines: Element[] }) =>
-          gsap.from(self.lines, {
-            yPercent: 110,
-            duration: 1.1,
-            stagger: 0.1,
-            ease: "power4.out",
-            scrollTrigger: {
-              trigger: "[data-work-heading]",
-              start: "top 85%",
-            },
-          }),
+        onSplit: (self: { lines: Element[] }) => {
+          self.lines.forEach((line, i) => {
+            (line as HTMLElement).style.setProperty("--line-i", String(i));
+          });
+        },
       });
+      cleanups.push(() => split.revert());
 
-      gsap.utils.toArray<HTMLElement>("[data-work-item]").forEach((item) => {
-        const img = item.querySelector("img");
-        const media = item.querySelector("[data-work-media]");
-        const caption = item.querySelector("figcaption");
+      cleanups.push(
+        observeRevealOnce(heading, {
+          startTop: REVEAL_START.workHead,
+          onEnter: () => markRevealed(heading),
+        })
+      );
+    }
 
-        gsap.from(media, {
-          clipPath: "inset(100% 0% 0% 0%)",
-          duration: 1.2,
-          ease: "power4.inOut",
-          scrollTrigger: {
-            trigger: item,
-            start: "top 85%",
-          },
-        });
+    root.current.querySelectorAll<HTMLElement>("[data-work-item]").forEach((item) => {
+      const img = item.querySelector<HTMLElement>("[data-work-parallax]");
+      const media = item.querySelector<HTMLElement>("[data-work-media]");
+      const caption = item.querySelector<HTMLElement>("[data-work-caption]");
 
-        gsap.fromTo(
+      if (media) {
+        cleanups.push(
+          observeRevealOnce(media, {
+            startTop: REVEAL_START.workItem,
+            onEnter: () => markRevealed(media),
+          })
+        );
+      }
+
+      if (caption) {
+        cleanups.push(
+          observeRevealOnce(caption, {
+            startTop: REVEAL_START.workCaption,
+            onEnter: () => markRevealed(caption),
+          })
+        );
+      }
+
+      if (img && !supportsScrollTimeline()) {
+        const tween = gsap.fromTo(
           img,
           { yPercent: -12 },
           {
@@ -69,30 +98,26 @@ export default function Projects() {
               start: "top bottom",
               end: "bottom top",
               scrub: true,
-              /* GPU layer only while the item is on screen */
               onToggle: (self) => {
-                if (img) gsap.set(img, { willChange: self.isActive ? "transform" : "auto" });
+                gsap.set(img, {
+                  willChange: self.isActive ? "transform" : "auto",
+                });
               },
             },
           }
         );
-
-        gsap.from(caption, {
-          autoAlpha: 0,
-          y: 28,
-          duration: 0.8,
-          clearProps: "all",
-          scrollTrigger: {
-            trigger: item,
-            start: "top 70%",
-          },
+        scrollCleanups.push(() => {
+          tween.scrollTrigger?.kill();
+          tween.kill();
         });
-      });
+      }
+    });
 
-      return () => head.revert();
-    },
-    { scope: root }
-  );
+    return () => {
+      cleanups.forEach((fn) => fn());
+      scrollCleanups.forEach((fn) => fn());
+    };
+  }, []);
 
   return (
     <section
@@ -125,9 +150,10 @@ export default function Projects() {
                     name={project.img}
                     sizes="(max-width: 900px) 100vw, 58vw"
                     alt=""
+                    data-work-parallax=""
                   />
                 </div>
-                <figcaption>
+                <figcaption data-work-caption>
                   <h3>{project.name}</h3>
                   <p className="work__tags">
                     {project.category} · {project.year}

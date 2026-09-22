@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { scheduleRefresh } from "@/lib/st-refresh";
 import { getLenis } from "@/lib/lenis-store";
 import { useNavigation } from "@/lib/navigation";
@@ -40,19 +39,23 @@ export default function Header() {
     });
   }, [menuOpen]);
 
-  useGSAP(
-    () => {
-      ScrollTrigger.create({
-        start: () => headerSolidThreshold(),
-        onEnter: () => root.current?.classList.add("is-solid"),
-        onLeaveBack: () => {
-          if (menuOpenRef.current) return;
-          root.current?.classList.remove("is-solid");
-        },
-      });
-    },
-    { scope: root }
-  );
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      if (menuOpenRef.current) return;
+      syncHeaderSolid(el);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    getLenis()?.on("scroll", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   return (
     <>

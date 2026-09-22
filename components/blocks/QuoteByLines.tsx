@@ -1,7 +1,13 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
-import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
+import { useEffect, useRef, type ReactNode } from "react";
+import { SplitText } from "@/lib/gsap";
+import {
+  REVEAL_START,
+  isInInitialView,
+  markRevealed,
+  observeRevealOnce,
+} from "@/lib/reveal-io";
 
 type Props = {
   children: ReactNode;
@@ -12,56 +18,48 @@ type Props = {
 export default function QuoteByLines({ children, className }: Props) {
   const ref = useRef<HTMLParagraphElement>(null);
 
-  useGSAP(
-    () => {
-      const el = ref.current;
-      if (!el) return;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
 
-      const reduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      if (reduced) return;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (reduced) return;
 
-      const split = SplitText.create(el, {
-        type: "lines",
-        linesClass: "split-line",
-        mask: "lines",
-        aria: "auto",
-        autoSplit: true,
+    const split = SplitText.create(el, {
+      type: "lines",
+      linesClass: "split-line",
+      mask: "lines",
+      aria: "auto",
+      autoSplit: true,
+      onSplit: (self: { lines: Element[] }) => {
+        self.lines.forEach((line, i) => {
+          (line as HTMLElement).style.setProperty("--line-i", String(i));
+        });
+      },
+    });
+
+    el.dataset.reveal = "lines";
+
+    const play = () => markRevealed(el);
+
+    let cleanup = () => {};
+
+    if (isInInitialView(el)) {
+      play();
+    } else {
+      cleanup = observeRevealOnce(el, {
+        startTop: REVEAL_START.quote,
+        onEnter: play,
       });
+    }
 
-      gsap.set(split.lines, { yPercent: 110, force3D: true });
-
-      const inView = el.getBoundingClientRect().top < window.innerHeight * 0.88;
-
-      const play = () => {
-        gsap.to(split.lines, {
-          yPercent: 0,
-          duration: 1.05,
-          stagger: 0.09,
-          ease: "power4.out",
-        });
-      };
-
-      let scrollTrigger: ScrollTrigger | undefined;
-      if (inView) {
-        play();
-      } else {
-        scrollTrigger = ScrollTrigger.create({
-          trigger: el,
-          start: "top 85%",
-          once: true,
-          onEnter: play,
-        });
-      }
-
-      return () => {
-        scrollTrigger?.kill();
-        split.revert();
-      };
-    },
-    { scope: ref }
-  );
+    return () => {
+      cleanup();
+      split.revert();
+    };
+  }, []);
 
   return (
     <p ref={ref} className={className}>

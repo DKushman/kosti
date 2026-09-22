@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
+import { REVEAL_START, observeRevealOnce } from "@/lib/reveal-io";
 
 /** Quadratisches Koordinatensystem – skaliert per CSS in den Viz-Frame. */
 const VIEW = 1000;
@@ -223,9 +224,8 @@ export default function StudioRadialGraphic() {
       };
 
       if (!reduced) {
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: el, start: "top 85%", once: true },
-        });
+        let enterPlayed = false;
+        const tl = gsap.timeline({ paused: true });
         tl.to(majorLines, {
           strokeDashoffset: 0,
           duration: 0.95,
@@ -243,24 +243,37 @@ export default function StudioRadialGraphic() {
             0
           );
 
-        ScrollTrigger.create({
-          trigger: "#netzwerk",
-          start: "top bottom",
-          end: "bottom top",
-          onToggle: (self) => {
-            sectionActive.current = self.isActive;
-            if (self.isActive) {
-              ensureLoop();
-            } else {
-              pointer.current.x = CX;
-              pointer.current.y = CY;
-              smooth.current.x = CX;
-              smooth.current.y = CY;
-              stopLoop();
-              resetAll();
-            }
+        observeRevealOnce(el, {
+          startTop: REVEAL_START.studioRadial,
+          onEnter: () => {
+            if (enterPlayed) return;
+            enterPlayed = true;
+            tl.play();
           },
         });
+
+        const section = document.querySelector("#netzwerk");
+        const visibilityTarget = section ?? el;
+        const vis =
+          typeof IntersectionObserver !== "undefined"
+            ? new IntersectionObserver(
+                ([entry]) => {
+                  sectionActive.current = entry.isIntersecting;
+                  if (entry.isIntersecting) {
+                    ensureLoop();
+                  } else {
+                    pointer.current.x = CX;
+                    pointer.current.y = CY;
+                    smooth.current.x = CX;
+                    smooth.current.y = CY;
+                    stopLoop();
+                    resetAll();
+                  }
+                },
+                { threshold: 0 }
+              )
+            : null;
+        vis?.observe(visibilityTarget);
 
         const onMove = (e: PointerEvent) => {
           if (!sectionActive.current) return;
@@ -282,6 +295,7 @@ export default function StudioRadialGraphic() {
         }
 
         return () => {
+          vis?.disconnect();
           el.removeEventListener("pointermove", onMove);
           el.removeEventListener("pointerleave", onLeave);
           stopLoop();

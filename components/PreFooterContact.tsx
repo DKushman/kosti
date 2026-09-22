@@ -1,9 +1,16 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { useEffect, useRef } from "react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import Pic from "@/components/Pic";
 import FillButton from "@/components/FillButton";
+
+function supportsScrollTimeline() {
+  return (
+    typeof CSS !== "undefined" &&
+    CSS.supports("animation-timeline", "view()")
+  );
+}
 
 /**
  * Full-bleed-ish image band before the footer: footer headline + contact CTA.
@@ -11,41 +18,44 @@ import FillButton from "@/components/FillButton";
 export default function PreFooterContact() {
   const root = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      if (!root.current) return;
+  useEffect(() => {
+    if (!root.current) return;
 
-      const prefersReduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      const isMobile = window.matchMedia("(max-width: 900px)").matches;
-      if (prefersReduced || isMobile) return;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const isMobile = window.matchMedia("(max-width: 900px)").matches;
+    if (prefersReduced || isMobile || supportsScrollTimeline()) return;
 
-      const media = root.current.querySelector<HTMLElement>(
-        ".prefooter-contact__media"
-      );
-      if (!media) return;
+    const media = root.current.querySelector<HTMLElement>(
+      ".prefooter-contact__media"
+    );
+    if (!media) return;
 
-      gsap.fromTo(
-        media,
-        { yPercent: -12 },
-        {
-          yPercent: 12,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 0.4,
-            /* GPU layer only while the band is on screen */
-            onToggle: (self) =>
-              gsap.set(media, { willChange: self.isActive ? "transform" : "auto" }),
-          },
-        }
-      );
-    },
-    { scope: root }
-  );
+    const tween = gsap.fromTo(
+      media,
+      { yPercent: -12 },
+      {
+        yPercent: 12,
+        ease: "none",
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.4,
+          onToggle: (self) =>
+            gsap.set(media, {
+              willChange: self.isActive ? "transform" : "auto",
+            }),
+        },
+      }
+    );
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  }, []);
 
   return (
     <section
@@ -56,16 +66,15 @@ export default function PreFooterContact() {
     >
       <div className="prefooter-contact__frame">
         <div className="prefooter-contact__media" aria-hidden="true">
-          <Pic
-            name="hero"
-            sizes="98vw"
-            alt=""
-          />
+          <Pic name="hero" sizes="98vw" alt="" />
         </div>
         <div className="prefooter-contact__scrim" aria-hidden="true" />
         <div className="prefooter-contact__content">
           <p className="prefooter-contact__eyebrow eyebrow">Kontakt</p>
-          <h2 className="prefooter-contact__title" id="prefooter-contact-heading">
+          <h2
+            className="prefooter-contact__title"
+            id="prefooter-contact-heading"
+          >
             Berlin entsteht
             <br />
             im Austausch.

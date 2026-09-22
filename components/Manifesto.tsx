@@ -1,9 +1,14 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { useEffect, useRef } from "react";
+import { gsap } from "@/lib/gsap";
 import FillButton from "@/components/FillButton";
 import StudioRadialGraphic from "@/components/graphics/StudioRadialGraphic";
+import {
+  REVEAL_START,
+  markRevealed,
+  observeRevealOnce,
+} from "@/lib/reveal-io";
 
 /**
  * Studio / Netzwerk – fester dunkler Block.
@@ -11,42 +16,49 @@ import StudioRadialGraphic from "@/components/graphics/StudioRadialGraphic";
 export default function Manifesto() {
   const root = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      const section = root.current;
-      if (!section) return;
+  useEffect(() => {
+    const section = root.current;
+    if (!section) return;
 
-      const prefersReduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) return;
 
-      if (prefersReduced) return;
+    const cleanups: (() => void)[] = [];
 
-      gsap.from("[data-studio-intro]", {
-        y: 28,
-        autoAlpha: 0,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: section,
-          start: "top 55%",
-          once: true,
-        },
-      });
+    const intro = section.querySelector<HTMLElement>("[data-studio-intro]");
+    if (intro) {
+      cleanups.push(
+        observeRevealOnce(intro, {
+          startTop: REVEAL_START.studioIntro,
+          onEnter: () => markRevealed(intro),
+        })
+      );
+    }
 
-      const countEls = section.querySelectorAll<HTMLElement>("[data-count]");
-      if (countEls.length) {
-        const target = Number(countEls[0].dataset.count ?? "2035");
-        const counter = { value: 2000 };
+    section.querySelectorAll<HTMLElement>("[data-studio-stats]").forEach((el) => {
+      cleanups.push(
+        observeRevealOnce(el, {
+          startTop: REVEAL_START.studioStats,
+          onEnter: () => markRevealed(el),
+        })
+      );
+    });
+
+    const countEls = section.querySelectorAll<HTMLElement>("[data-count]");
+    if (countEls.length) {
+      const target = Number(countEls[0].dataset.count ?? "2035");
+      const counter = { value: 2000 };
+      let counterPlayed = false;
+
+      const runCounter = () => {
+        if (counterPlayed) return;
+        counterPlayed = true;
         gsap.to(counter, {
           value: target,
           duration: 1.8,
           ease: "power3.out",
-          scrollTrigger: {
-            trigger: countEls[0],
-            start: "top 88%",
-            once: true,
-          },
           onUpdate: () => {
             const text = String(Math.round(counter.value));
             countEls.forEach((el) => {
@@ -54,22 +66,18 @@ export default function Manifesto() {
             });
           },
         });
-      }
+      };
 
-      gsap.from("[data-studio-stats]", {
-        y: 32,
-        autoAlpha: 0,
-        duration: 0.85,
-        clearProps: "all",
-        scrollTrigger: {
-          trigger: "[data-studio-stats]",
-          start: "top 88%",
-          once: true,
-        },
-      });
-    },
-    { scope: root }
-  );
+      cleanups.push(
+        observeRevealOnce(countEls[0], {
+          startTop: REVEAL_START.studioStats,
+          onEnter: runCounter,
+        })
+      );
+    }
+
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   return (
     <section

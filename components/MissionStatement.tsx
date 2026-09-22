@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { useEffect, useRef } from "react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import NetworkBackdrop from "@/components/graphics/NetworkBackdrop";
 
 const MISSION_LINES = [
@@ -10,6 +10,13 @@ const MISSION_LINES = [
   "Zukunft gestalten.",
 ] as const;
 
+function supportsScrollTimeline() {
+  return (
+    typeof CSS !== "undefined" &&
+    CSS.supports("animation-timeline", "view()")
+  );
+}
+
 /**
  * Three lines: each fills left → right in sequence while scrolling.
  * Large network SVG sits centered behind the copy (transform-only motion).
@@ -17,45 +24,55 @@ const MISSION_LINES = [
 export default function MissionStatement() {
   const root = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      if (!root.current) return;
-      const reduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
+  useEffect(() => {
+    if (!root.current) return;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-      const fills = gsap.utils.toArray<HTMLElement>(
-        "[data-mission-line-fill]",
-        root.current
-      );
-      if (!fills.length) return;
+    const fills = root.current.querySelectorAll<HTMLElement>(
+      "[data-mission-line-fill]"
+    );
+    if (!fills.length) return;
 
-      if (reduced) {
-        gsap.set(fills, { clipPath: "inset(0% 0% 0% 0%)" });
-        return;
-      }
-
-      gsap.set(fills, { clipPath: "inset(0% 100% 0% 0%)" });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top 62%",
-          end: "center 22%",
-          scrub: true,
-        },
-      });
-
+    if (reduced) {
       fills.forEach((el) => {
-        tl.to(el, {
-          clipPath: "inset(0% 0% 0% 0%)",
-          ease: "none",
-          duration: 1,
-        });
+        el.style.clipPath = "inset(0% 0% 0% 0%)";
       });
+      return;
+    }
 
-      gsap.fromTo(
-        "[data-mission-graphic]",
+    const cleanups: (() => void)[] = [];
+
+    if (supportsScrollTimeline()) {
+      return;
+    }
+
+    gsap.set(fills, { clipPath: "inset(0% 100% 0% 0%)" });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: root.current,
+        start: "top 62%",
+        end: "center 22%",
+        scrub: true,
+      },
+    });
+
+    fills.forEach((el) => {
+      tl.to(el, {
+        clipPath: "inset(0% 0% 0% 0%)",
+        ease: "none",
+        duration: 1,
+      });
+    });
+
+    const graphic = root.current.querySelector<HTMLElement>(
+      "[data-mission-graphic]"
+    );
+    if (graphic) {
+      const tween = gsap.fromTo(
+        graphic,
         { yPercent: 10, rotate: -12, scale: 0.94 },
         {
           yPercent: -12,
@@ -70,11 +87,19 @@ export default function MissionStatement() {
           },
         }
       );
+      cleanups.push(() => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      });
+    }
 
-      return undefined;
-    },
-    { scope: root }
-  );
+    cleanups.push(() => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    });
+
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   return (
     <section

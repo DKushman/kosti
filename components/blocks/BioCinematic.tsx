@@ -1,14 +1,20 @@
 "use client";
 
-import { useRef, useState, type ReactNode } from "react";
-import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { SplitText } from "@/lib/gsap";
 import { ABOUT } from "@/lib/content/about";
-import { imageSetForPath } from "@/lib/images";
+import { withBasePath } from "@/lib/site-path";
+import {
+  REVEAL_START,
+  isInInitialView,
+  markRevealed,
+  observeRevealOnce,
+} from "@/lib/reveal-io";
 
-const IMG_ZYPERN = "/img/pexels-mikhail-nilov-8332863.webp";
-const IMG_BERLIN = "/img/pexels-marcel-condurachi-765466373-35828097.webp";
-/** Thumbnails render at 440px: never decode the full-size photo for them. */
-const THUMB_SIZES = "440px";
+const IMG_ZYPERN = withBasePath("/img/pexels-mikhail-nilov-8332863.webp");
+const IMG_BERLIN = withBasePath(
+  "/img/pexels-marcel-condurachi-765466373-35828097.webp"
+);
 
 type HoverWordProps = {
   id: string;
@@ -18,26 +24,20 @@ type HoverWordProps = {
 };
 
 function BioInlineWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
-  const img = imageSetForPath(imageSrc);
   return (
     <span className="bio-word bio-word--inline" id={id}>
       <span className="bio-word__text">{children}</span>
       <span className="bio-word__thumb" aria-hidden="true">
-        <picture>
-          {img.srcSet ? (
-            <source type="image/webp" srcSet={img.srcSet} sizes={THUMB_SIZES} />
-          ) : null}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={img.src}
-            alt={imageAlt}
-            width={440}
-            height={330}
-            loading="lazy"
-            decoding="async"
-            fetchPriority="low"
-          />
-        </picture>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          width={440}
+          height={330}
+          loading="lazy"
+          decoding="async"
+          fetchPriority="low"
+        />
       </span>
     </span>
   );
@@ -45,7 +45,6 @@ function BioInlineWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
 
 function BioHoverWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
   const [showPreview, setShowPreview] = useState(false);
-  const img = imageSetForPath(imageSrc);
 
   return (
     <span
@@ -58,31 +57,37 @@ function BioHoverWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
       <span className="bio-word__text">{children}</span>
       {showPreview ? (
         <span className="bio-word__preview" aria-hidden="true">
-          <picture>
-            {img.srcSet ? (
-              <source type="image/webp" srcSet={img.srcSet} sizes={THUMB_SIZES} />
-            ) : null}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={img.src}
-              alt={imageAlt}
-              width={440}
-              height={330}
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageSrc}
+            alt={imageAlt}
+            width={440}
+            height={330}
+            loading="lazy"
+            decoding="async"
+          />
         </span>
       ) : null}
     </span>
   );
 }
 
-function BioLine({ children }: { children: ReactNode }) {
+function BioLine({
+  children,
+  index,
+}: {
+  children: ReactNode;
+  index: number;
+}) {
   return (
     <span className="bio-display__line-slot">
       <span className="bio-display__line-clip">
-        <span className="bio-display__line">{children}</span>
+        <span
+          className="bio-display__line"
+          style={{ ["--line-i" as string]: String(index) }}
+        >
+          {children}
+        </span>
       </span>
     </span>
   );
@@ -93,78 +98,63 @@ function BioLine({ children }: { children: ReactNode }) {
  */
 export default function BioCinematic() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headlineRef = useRef<HTMLHeadingElement>(null);
   const mainRef = useRef<HTMLParagraphElement>(null);
 
-  useGSAP(
-    () => {
-      const section = sectionRef.current;
-      const heading = headlineRef.current;
-      const main = mainRef.current;
-      if (!section || !heading || !main) return;
+  useEffect(() => {
+    const section = sectionRef.current;
+    const main = mainRef.current;
+    if (!section || !main) return;
 
-      const reduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      if (reduced) return;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (reduced) return;
 
-      const headLines = heading.querySelectorAll<HTMLElement>(
-        ".bio-display__line"
-      );
-      if (!headLines.length) return;
+    const headLines = section.querySelectorAll<HTMLElement>(".bio-display__line");
+    headLines.forEach((line, i) => {
+      line.style.setProperty("--line-i", String(i));
+    });
 
-      let scrollTrigger: ScrollTrigger | undefined;
-      let mainSplit: ReturnType<typeof SplitText.create> | undefined;
+    let mainSplit: ReturnType<typeof SplitText.create> | undefined;
 
-      const setupAndPlay = () => {
-        mainSplit = SplitText.create(main, {
-          type: "lines",
-          linesClass: "split-line",
-          mask: "lines",
-          aria: "auto",
-        });
-
-        gsap.set(headLines, { yPercent: 110, force3D: true });
-        gsap.set(mainSplit.lines, { yPercent: 110, force3D: true });
-
-        const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
-        tl.to(
-          headLines,
-          { yPercent: 0, duration: 1.05, stagger: 0.09 },
-          0
-        );
-        tl.to(
-          mainSplit.lines,
-          { yPercent: 0, duration: 0.95, stagger: 0.07 },
-          0.2
-        );
-      };
-
-      scrollTrigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top 88%",
-        once: true,
-        onEnter: setupAndPlay,
+    const arm = () => {
+      mainSplit = SplitText.create(main, {
+        type: "lines",
+        linesClass: "split-line",
+        mask: "lines",
+        aria: "auto",
+        onSplit: (self: { lines: Element[] }) => {
+          self.lines.forEach((line, i) => {
+            (line as HTMLElement).style.setProperty("--line-i", String(i));
+          });
+        },
       });
+      requestAnimationFrame(() => markRevealed(section));
+    };
 
-      return () => {
-        scrollTrigger?.kill();
-        mainSplit?.revert();
-      };
-    },
-    { scope: sectionRef }
-  );
+    let cleanup = () => {};
+
+    if (isInInitialView(section)) {
+      arm();
+    } else {
+      cleanup = observeRevealOnce(section, {
+        startTop: REVEAL_START.bio,
+        onEnter: arm,
+      });
+    }
+
+    return () => {
+      cleanup();
+      mainSplit?.revert();
+    };
+  }, []);
 
   return (
     <section ref={sectionRef} id="biografie" className="bio-display">
       <div className="bio-display__grid" id="bio-display-grid">
         <div className="bio-display__lead" id="bio-display-lead">
-          <h2
-            ref={headlineRef}
-            id="bio-display-heading"
-            className="bio-display__headline"
-          >
-            <BioLine>
+          <h2 id="bio-display-heading" className="bio-display__headline">
+            <BioLine index={0}>
               <BioInlineWord
                 id="bio-word-berlin-head"
                 imageSrc={IMG_BERLIN}
@@ -181,17 +171,13 @@ export default function BioCinematic() {
                 Zypern
               </BioInlineWord>
             </BioLine>
-            <BioLine>prägen meine</BioLine>
-            <BioLine>persönliche</BioLine>
-            <BioLine>Geschichte.</BioLine>
+            <BioLine index={1}>prägen meine</BioLine>
+            <BioLine index={2}>persönliche</BioLine>
+            <BioLine index={3}>Geschichte.</BioLine>
           </h2>
         </div>
 
-        <p
-          ref={mainRef}
-          id="bio-display-main"
-          className="bio-display__main"
-        >
+        <p ref={mainRef} id="bio-display-main" className="bio-display__main">
           Meine zypriotischen Wurzeln haben mir früh gezeigt, wie wertvoll
           unterschiedliche Perspektiven, Kulturen und internationale Beziehungen
           sind.{" "}

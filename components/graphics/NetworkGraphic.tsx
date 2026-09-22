@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { useEffect, useRef } from "react";
+import { gsap } from "@/lib/gsap";
+import { REVEAL_START, observeRevealOnce } from "@/lib/reveal-io";
 
 /* deterministic node layout (viewBox 400×400) */
 const NODES = [
@@ -24,64 +25,80 @@ const LINKS: [number, number][] = [
 export default function NetworkGraphic() {
   const root = useRef<SVGSVGElement>(null);
 
-  useGSAP(
-    () => {
-      const svg = root.current;
-      if (!svg) return;
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduced) return;
+  useEffect(() => {
+    const svg = root.current;
+    if (!svg) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
 
-      const lines = gsap.utils.toArray<SVGLineElement>("[data-edge]", svg);
-      const nodes = gsap.utils.toArray<SVGCircleElement>("[data-node]", svg);
+    const lines = gsap.utils.toArray<SVGLineElement>("[data-edge]", svg);
+    const nodes = gsap.utils.toArray<SVGCircleElement>("[data-node]", svg);
 
-      lines.forEach((line) => {
-        const len = Math.hypot(
-          Number(line.getAttribute("x2")) - Number(line.getAttribute("x1")),
-          Number(line.getAttribute("y2")) - Number(line.getAttribute("y1"))
-        );
-        gsap.set(line, { strokeDasharray: len, strokeDashoffset: len });
-      });
-
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: svg, start: "top 80%" },
-      });
-      tl.from(nodes, {
-        scale: 0,
-        transformOrigin: "center",
-        duration: 0.7,
-        stagger: 0.05,
-        ease: "back.out(2)",
-      }).to(
-        lines,
-        { strokeDashoffset: 0, duration: 1.1, stagger: 0.04, ease: "power2.inOut" },
-        "-=0.5"
+    lines.forEach((line) => {
+      const len = Math.hypot(
+        Number(line.getAttribute("x2")) - Number(line.getAttribute("x1")),
+        Number(line.getAttribute("y2")) - Number(line.getAttribute("y1"))
       );
+      gsap.set(line, { strokeDasharray: len, strokeDashoffset: len });
+    });
 
-      const breathe = gsap.to("[data-float]", {
-        y: (i) => (i % 2 ? 6 : -6),
-        x: (i) => (i % 3 ? -4 : 4),
-        duration: 3.2,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        stagger: { each: 0.25, from: "random" },
-        paused: true,
-      });
+    let played = false;
+    const tl = gsap.timeline({ paused: true });
+    tl.from(nodes, {
+      scale: 0,
+      transformOrigin: "center",
+      duration: 0.7,
+      stagger: 0.05,
+      ease: "back.out(2)",
+    }).to(
+      lines,
+      { strokeDashoffset: 0, duration: 1.1, stagger: 0.04, ease: "power2.inOut" },
+      "-=0.5"
+    );
 
-      const st = ScrollTrigger.create({
-        trigger: svg,
-        start: "top bottom",
-        end: "bottom top",
-        onToggle: (self) => (self.isActive ? breathe.play() : breathe.pause()),
-      });
+    const playEnter = () => {
+      if (played) return;
+      played = true;
+      tl.play();
+    };
 
-      return () => {
-        breathe.kill();
-        st.kill();
-      };
-    },
-    { scope: root }
-  );
+    const breathe = gsap.to("[data-float]", {
+      y: (i) => (i % 2 ? 6 : -6),
+      x: (i) => (i % 3 ? -4 : 4),
+      duration: 3.2,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      stagger: { each: 0.25, from: "random" },
+      paused: true,
+    });
+
+    const cleanups: (() => void)[] = [
+      observeRevealOnce(svg, {
+        startTop: REVEAL_START.networkSvg,
+        onEnter: playEnter,
+      }),
+    ];
+
+    const vis =
+      typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            ([entry]) => {
+              if (entry.isIntersecting) breathe.play();
+              else breathe.pause();
+            },
+            { threshold: 0 }
+          )
+        : null;
+    vis?.observe(svg);
+    if (vis) cleanups.push(() => vis.disconnect());
+
+    return () => {
+      cleanups.forEach((fn) => fn());
+      breathe.kill();
+      tl.kill();
+    };
+  }, []);
 
   return (
     <svg

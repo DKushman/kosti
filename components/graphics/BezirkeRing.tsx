@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { useEffect, useRef } from "react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { REVEAL_START, observeRevealOnce } from "@/lib/reveal-io";
 
 const SEGMENTS = 12;
 const R = 150;
@@ -19,6 +20,13 @@ function arc(i: number) {
   return `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${R} ${R} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
 }
 
+function supportsScrollTimeline() {
+  return (
+    typeof CSS !== "undefined" &&
+    CSS.supports("animation-timeline", "view()")
+  );
+}
+
 type Props = { label?: string; sub?: string };
 
 /**
@@ -28,28 +36,39 @@ type Props = { label?: string; sub?: string };
 export default function BezirkeRing({ label = "12", sub = "Bezirke" }: Props) {
   const root = useRef<SVGSVGElement>(null);
 
-  useGSAP(
-    () => {
-      const svg = root.current;
-      if (!svg) return;
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduced) return;
+  useEffect(() => {
+    const svg = root.current;
+    if (!svg) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
 
-      const arcs = gsap.utils.toArray<SVGPathElement>("[data-arc]", svg);
-      arcs.forEach((p) => {
-        const len = p.getTotalLength();
-        gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
-      });
+    const arcs = gsap.utils.toArray<SVGPathElement>("[data-arc]", svg);
+    arcs.forEach((p) => {
+      const len = p.getTotalLength();
+      gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+    });
 
+    let played = false;
+    const draw = () => {
+      if (played) return;
+      played = true;
       gsap.to(arcs, {
         strokeDashoffset: 0,
         duration: 1.2,
         stagger: 0.06,
         ease: "power3.out",
-        scrollTrigger: { trigger: svg, start: "top 82%" },
       });
+    };
 
-      gsap.to("[data-ring]", {
+    const cleanups: (() => void)[] = [
+      observeRevealOnce(svg, {
+        startTop: REVEAL_START.bezirkeArc,
+        onEnter: draw,
+      }),
+    ];
+
+    if (!supportsScrollTimeline()) {
+      const tween = gsap.to("[data-ring]", {
         rotate: 120,
         transformOrigin: "center",
         ease: "none",
@@ -60,9 +79,14 @@ export default function BezirkeRing({ label = "12", sub = "Bezirke" }: Props) {
           scrub: 0.6,
         },
       });
-    },
-    { scope: root }
-  );
+      cleanups.push(() => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      });
+    }
+
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   return (
     <svg
@@ -71,6 +95,7 @@ export default function BezirkeRing({ label = "12", sub = "Bezirke" }: Props) {
       viewBox="0 0 400 400"
       role="img"
       aria-label={`${label} ${sub}`}
+      data-scroll-rotate=""
     >
       <g data-ring>
         {Array.from({ length: SEGMENTS }, (_, i) => (

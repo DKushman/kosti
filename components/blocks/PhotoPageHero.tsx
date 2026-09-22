@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { preload } from "react-dom";
 import { usePathname } from "next/navigation";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useIntro } from "@/lib/intro-context";
 import { peekPending } from "@/lib/curtain";
 import { onPageEnter } from "@/lib/page-enter";
@@ -119,36 +119,44 @@ export default function PhotoPageHero({
     { dependencies: [introDone, pathname, titleLineB] }
   );
 
-  useGSAP(
-    () => {
-      const el = hero.current;
-      const layerEl = layer.current;
-      if (!el || !layerEl) return;
+  useEffect(() => {
+    const el = hero.current;
+    const layerEl = layer.current;
+    if (!el || !layerEl) return;
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      gsap.fromTo(
-        layerEl,
-        { scale: 1, y: 0, willChange: "transform" },
-        {
-          scale: 1.1,
-          y: 0,
-          transformOrigin: "50% 100%",
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-            /* keep the GPU layer only while the hero is on screen */
-            onToggle: (self) =>
-              gsap.set(layerEl, { willChange: self.isActive ? "transform" : "auto" }),
-          },
-        }
-      );
-    },
-    { scope: hero, dependencies: [introDone] }
-  );
+    const supportsTimeline =
+      typeof CSS !== "undefined" &&
+      CSS.supports("animation-timeline", "view()");
+    if (supportsTimeline) return;
+
+    const tween = gsap.fromTo(
+      layerEl,
+      { scale: 1, y: 0, willChange: "transform" },
+      {
+        scale: 1.1,
+        y: 0,
+        transformOrigin: "50% 100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+          onToggle: (self) =>
+            gsap.set(layerEl, {
+              willChange: self.isActive ? "transform" : "auto",
+            }),
+        },
+      }
+    );
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  }, [introDone]);
 
   return (
     <header ref={hero} className="photo-hero photo-hero--sticky">

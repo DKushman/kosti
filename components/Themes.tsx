@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { SplitText } from "@/lib/gsap";
 import { fitSectorNames } from "@/lib/fit-display-text";
 import { HOME_THEMES } from "@/lib/content/themen";
 import Pic from "@/components/Pic";
 import FillButton from "@/components/FillButton";
 import TransitionLink from "@/components/TransitionLink";
+import {
+  REVEAL_START,
+  markRevealed,
+  observeRevealOnce,
+} from "@/lib/reveal-io";
 
 /**
  * Navy theme index (Startseite Block 2 + 3). Giant list items reveal
@@ -55,77 +60,75 @@ export default function Themes() {
     };
   }, []);
 
-  useGSAP(
-    () => {
-      if (!root.current) return;
+  useEffect(() => {
+    if (!root.current) return;
 
-      const prefersReduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      if (prefersReduced) return;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) return;
 
-      const lede = SplitText.create("[data-sectors-lede]", {
+    const cleanups: (() => void)[] = [];
+
+    const ledeEl = root.current.querySelector<HTMLElement>("[data-sectors-lede]");
+    if (ledeEl) {
+      ledeEl.dataset.reveal = "lines";
+      const split = SplitText.create(ledeEl, {
         type: "lines",
         linesClass: "split-line",
         mask: "lines",
         aria: "auto",
         autoSplit: true,
-        onSplit: (self: { lines: Element[] }) =>
-          gsap.from(self.lines, {
-            yPercent: 110,
-            duration: 1,
-            stagger: 0.09,
-            ease: "power4.out",
-            scrollTrigger: {
-              trigger: "[data-sectors-lede]",
-              start: "top 82%",
-            },
-          }),
-      });
-
-      gsap.from("[data-sectors-cta]", {
-        autoAlpha: 0,
-        y: 24,
-        duration: 0.8,
-        clearProps: "all",
-        scrollTrigger: {
-          trigger: "[data-sectors-cta]",
-          start: "top 88%",
+        onSplit: (self: { lines: Element[] }) => {
+          self.lines.forEach((line, i) => {
+            (line as HTMLElement).style.setProperty("--line-i", String(i));
+          });
         },
       });
+      cleanups.push(() => split.revert());
+      cleanups.push(
+        observeRevealOnce(ledeEl, {
+          startTop: REVEAL_START.sectorsLede,
+          onEnter: () => markRevealed(ledeEl),
+        })
+      );
+    }
 
-      const mobileSectors = window.matchMedia("(max-width: 900px)").matches;
-      if (!mobileSectors) {
-        gsap.utils.toArray<HTMLElement>("[data-sector-item]").forEach((item) => {
-          const link = item.querySelector<HTMLElement>(".sectors__link");
-          if (!link) return;
-          gsap.from(link, {
-            yPercent: 100,
-            duration: 1.1,
-            ease: "power4.out",
-            clearProps: "transform",
-            scrollTrigger: {
-              trigger: item,
-              start: "top 88%",
-            },
-          });
-          const rules = item.querySelectorAll("[data-sector-rule]");
-          gsap.from(rules, {
-            scaleX: 0,
-            duration: 1.2,
-            ease: "power3.inOut",
-            scrollTrigger: {
-              trigger: item,
-              start: "top 92%",
-            },
-          });
+    const cta = root.current.querySelector<HTMLElement>("[data-sectors-cta]");
+    if (cta) {
+      cleanups.push(
+        observeRevealOnce(cta, {
+          startTop: REVEAL_START.sectorsCta,
+          onEnter: () => markRevealed(cta),
+        })
+      );
+    }
+
+    const mobileSectors = window.matchMedia("(max-width: 900px)").matches;
+    if (!mobileSectors) {
+      root.current.querySelectorAll<HTMLElement>("[data-sector-item]").forEach((item) => {
+        const link = item.querySelector<HTMLElement>(".sectors__link");
+        if (link) {
+          cleanups.push(
+            observeRevealOnce(link, {
+              startTop: REVEAL_START.sectorItem,
+              onEnter: () => link.classList.add("is-revealed"),
+            })
+          );
+        }
+        item.querySelectorAll<HTMLElement>("[data-sector-rule]").forEach((rule) => {
+          cleanups.push(
+            observeRevealOnce(rule, {
+              startTop: REVEAL_START.sectorRule,
+              onEnter: () => rule.classList.add("is-revealed"),
+            })
+          );
         });
-      }
+      });
+    }
 
-      return () => lede.revert();
-    },
-    { scope: root }
-  );
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   return (
     <section
