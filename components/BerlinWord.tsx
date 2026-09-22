@@ -9,6 +9,7 @@ export default function BerlinWord({ className }: Props) {
   return (
     <span
       className={className ? `berlin-word ${className}` : "berlin-word"}
+      role="img"
       aria-label="Berlin"
     >
       Berl

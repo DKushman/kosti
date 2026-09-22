@@ -236,7 +236,7 @@ export default function ValuesHaltungScene({
         type: "lines",
         linesClass: "split-line",
         mask: "lines",
-        aria: "auto",
+        aria: "none",
         autoSplit: true,
       });
 
@@ -244,7 +244,7 @@ export default function ValuesHaltungScene({
         type: "lines",
         linesClass: "split-line",
         mask: "lines",
-        aria: "auto",
+        aria: "none",
         autoSplit: true,
       });
 

@@ -1544,8 +1544,13 @@ body:has(.page--photo-hero) .header.is-solid::before {
 }
 
 .hero__logo-link {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
+  align-items: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.8125rem;
+  margin: -0.8125rem;
   opacity: 0.92;
   transition: opacity 0.25s ease, transform 0.35s var(--ease-out);
 }
@@ -2032,6 +2037,12 @@ body:has(.page--photo-hero) .header.is-solid::before {
 .werdegang__status--fallback {
   flex: 1 1 100%;
   margin: 0 0 0.15rem;
+  color: #156640;
+}
+
+.werdegang__status--fallback .werdegang__status-dot {
+  background: #156640;
+  box-shadow: 0 0 0 3px rgba(21, 102, 64, 0.22);
 }
 
 .werdegang__label {
@@ -2186,7 +2197,7 @@ body:has(.page--photo-hero) .header.is-solid::before {
   font-weight: 700;
   letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
-  opacity: 0.55;
+  color: rgba(11, 11, 14, 0.68);
 }
 
 .werdegang__fallback-label {
@@ -3591,7 +3602,7 @@ body:has(.page--photo-hero) .header.is-solid::before {
 }
 
 .page-hero__index {
-  color: var(--gold-deep);
+  color: #7a6335;
 }
 
 .page-hero__title {
@@ -4238,7 +4249,7 @@ body:has(.page--photo-hero) .header.is-solid::before {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
-  color: rgba(11, 11, 14, 0.55);
+  color: rgba(11, 11, 14, 0.7);
 }
 
 .about-stations__rule {
@@ -6843,7 +6854,7 @@ body:has(.page--photo-hero) .header.is-solid::before {
   margin-top: 0.2rem;
   font-size: 0.8125rem;
   line-height: 1.35;
-  color: #888;
+  color: #5c5c5c;
   font-weight: 400;
 }
 

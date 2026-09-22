@@ -122,7 +122,7 @@ export default function BioCinematic() {
         type: "lines",
         linesClass: "split-line",
         mask: "lines",
-        aria: "auto",
+        aria: "none",
         onSplit: (self: { lines: Element[] }) => {
           self.lines.forEach((line, i) => {
             (line as HTMLElement).style.setProperty("--line-i", String(i));

@@ -77,7 +77,7 @@ export default function Themes() {
         type: "lines",
         linesClass: "split-line",
         mask: "lines",
-        aria: "auto",
+        aria: "none",
         autoSplit: true,
         onSplit: (self: { lines: Element[] }) => {
           self.lines.forEach((line, i) => {
