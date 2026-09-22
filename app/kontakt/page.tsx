@@ -1,55 +1,56 @@
 import type { Metadata } from "next";
-import { SITE } from "@/lib/site";
-import PageHero from "@/components/blocks/PageHero";
+import ContactForm from "@/components/ContactForm";
 import RevealScope from "@/components/RevealScope";
+import { imageSet } from "@/lib/images";
+import { SITE } from "@/lib/site";
+
+const PORTRAIT = imageSet("konstantin-portrait");
 
 export const metadata: Metadata = {
   title: "Kontakt",
   description:
-    "Sie haben eine Idee für Berlin? Sie möchten ein Projekt vorstellen oder sich vernetzen? Konstantin Patsalides freut sich auf den Austausch.",
+    "Projekt, Kollaboration oder Frage für Berlin? Konstantin Patsalides freut sich auf den Austausch — schreib mir eine Nachricht.",
 };
-
-const WAYS = [
-  { label: "LinkedIn", value: "Konstantin Patsalides", href: SITE.linkedin, hint: "Beruflich vernetzen", external: true },
-  { label: "E-Mail", value: SITE.email, href: `mailto:${SITE.email}`, hint: "Direkt schreiben", external: false },
-  { label: "Instagram", value: "@konstantin.patsalides", href: SITE.instagram, hint: "Berlin im Bild", external: true },
-];
 
 export default function KontaktPage() {
   return (
     <main id="main" className="page page--light">
-      <PageHero
-        index="06"
-        eyebrow="Kontakt"
-        title="Berlin entsteht im Austausch."
-        lede="Sie haben eine Idee für Berlin? Sie möchten ein Projekt vorstellen? Sie möchten sich vernetzen? Oder Sie möchten einfach miteinander ins Gespräch kommen?"
-      />
+      <RevealScope as="section" className="contact-page" aria-labelledby="contact-heading">
+        <div className="contact-split">
+          <div className="contact-split__intro" data-reveal="up">
+            <p className="contact-split__eyebrow eyebrow">Kontakt</p>
+            <h1 className="contact-split__title display" id="contact-heading">
+              Lass uns was verändern!
+            </h1>
+            <p className="contact-split__lede serif-lede">
+              Ob Kollaboration für Berlin, ein konkretes Projekt oder eine offene Frage — ich
+              freue mich auf den Austausch. Schreib mir, worum es geht, dann melde ich mich
+              persönlich.
+            </p>
 
-      <RevealScope as="section" className="block block--paper contact">
-        <ul className="ways" role="list" data-reveal="stagger">
-          {WAYS.map((w, i) => (
-            <li className="ways__item" key={w.label}>
-              <a
-                className="ways__link"
-                href={w.href}
-                target={w.external ? "_blank" : undefined}
-                rel={w.external ? "noreferrer" : undefined}
-              >
-                <span className="ways__num">{String(i + 1).padStart(2, "0")}</span>
-                <span className="ways__label display">{w.label}</span>
-                <span className="ways__value">{w.value}</span>
-                <span className="ways__hint">{w.hint}</span>
-                <span className="ways__arrow" aria-hidden="true">↗</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-        <p className="contact__closing serif-lede" data-reveal="up">
-          Ich freue mich auf den Austausch.
-        </p>
-        <p className="contact__sig display" data-reveal="lines">
-          Konstantin
-        </p>
+            <div className="contact-split__hi">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className="contact-split__avatar"
+                src={PORTRAIT.src}
+                alt=""
+                width={80}
+                height={80}
+                decoding="async"
+              />
+              <div>
+                <p className="contact-split__hi-label">Schreib mir</p>
+                <a className="contact-split__hi-mail" href={`mailto:${SITE.email}`}>
+                  {SITE.email}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="contact-split__form" data-reveal="up" data-reveal-delay="0.12">
+            <ContactForm />
+          </div>
+        </div>
       </RevealScope>
     </main>
   );

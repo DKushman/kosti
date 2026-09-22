@@ -1675,7 +1675,7 @@ body:has(.page--photo-hero) .header.is-solid::before {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: clamp(1rem, 3vw, 2.5rem);
-  align-items: end;
+  align-items: last baseline;
   padding: clamp(1rem, 2.5vh, 1.75rem) var(--gutter)
     clamp(1.25rem, 3vh, 2rem);
   pointer-events: auto;
@@ -1693,12 +1693,15 @@ body:has(.page--photo-hero) .header.is-solid::before {
 
 .hero__loc .hero__line-rise {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.45rem;
 }
 
 .hero__loc-pin {
   flex-shrink: 0;
+  width: 1.05em;
+  height: 1.05em;
+  align-self: center;
   color: #2f6fed;
 }
 
@@ -1737,6 +1740,10 @@ body:has(.page--photo-hero) .header.is-solid::before {
   font-size: var(--hero-foot-size);
   line-height: 1.12;
   letter-spacing: -0.02em;
+}
+
+.hero__builds-list .hero__line-rise {
+  display: inline-block;
 }
 
 .hero__builds-list a {
@@ -3368,6 +3375,16 @@ body:has(.hero--paper) .header:not(.is-solid):not(.is-menu-open) .brand__logo {
   .footer__wordmark {
     font-size: clamp(3.6rem, 28vw, 7rem);
   }
+
+  .footer__fine {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .footer__credit {
+    margin-left: 0;
+  }
 }
 
 /* ===================================================== subpage system */
@@ -3841,38 +3858,23 @@ body:has(.hero--paper) .header:not(.is-solid):not(.is-menu-open) .brand__logo {
 
 .about-hero__kosti-wrap {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
-  cursor: pointer;
 }
 
-/* Nur der Bereich oberhalb von „Kosti“ zeigt das Icon */
 .about-hero__kosti-slot {
   position: relative;
   z-index: 2;
-  width: 100%;
-  height: clamp(5rem, 18cqw, 9.5rem);
-  margin-bottom: -0.12em;
+  display: block;
+  width: clamp(5rem, 18cqw, 9.5rem);
+  margin: 0 0 clamp(0.15rem, 1vh, 0.35rem);
   overflow: hidden;
   pointer-events: none;
 }
 
-.about-hero__kosti-icon {
-  position: absolute;
-  left: 4%;
-  bottom: 0;
-  z-index: 1;
-  width: clamp(5rem, 18cqw, 9.5rem);
-  height: auto;
-  opacity: 0;
-  visibility: hidden;
-  transform: translate3d(0, 35%, 0);
-  transform-origin: 50% 100%;
-  transition: transform 0.12s var(--ease-out);
-  will-change: transform, opacity;
-}
-
-.about-hero__kosti-icon-motion {
+.about-hero__kosti-rise {
   display: block;
   will-change: transform;
 }
@@ -3934,12 +3936,6 @@ body:has(.hero--paper) .header:not(.is-solid):not(.is-menu-open) .brand__logo {
   fill: #24150f;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .about-hero__kosti-icon {
-    transition: none;
-  }
-}
-
 .about-hero__media {
   position: relative;
   min-height: clamp(22rem, 52vh, 100%);
@@ -3984,18 +3980,7 @@ body:has(.hero--paper) .header:not(.is-solid):not(.is-menu-open) .brand__logo {
   }
 
   .about-hero__kosti-slot {
-    height: clamp(4.25rem, 22vw, 7rem);
-  }
-
-  .about-hero__kosti-icon {
     width: clamp(4.25rem, 22vw, 7rem);
-    opacity: 0;
-    visibility: hidden;
-    transform: translate3d(0, 62%, 0);
-  }
-
-  .about-hero__kosti-wrap {
-    touch-action: pan-y;
   }
 
   .about-hero__title-kosti {
@@ -6631,6 +6616,204 @@ body:has(.hero--paper) .header:not(.is-solid):not(.is-menu-open) .brand__logo {
 }
 
 /* contact ------------------------------------------------------------- */
+
+.contact-page {
+  padding-top: clamp(5.5rem, 14vh, 7.5rem);
+}
+
+.contact-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding: 0 0 clamp(4rem, 12vh, 7rem);
+}
+
+.contact-split__intro,
+.contact-split__form {
+  padding-inline: var(--gutter);
+}
+
+.contact-split__eyebrow {
+  margin-bottom: 1rem;
+}
+
+.contact-split__title {
+  margin: 0 0 clamp(1.25rem, 3vh, 2rem);
+  font-size: clamp(2.35rem, 5.2vw, 4.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.contact-split__lede {
+  margin: 0 0 clamp(2rem, 5vh, 3rem);
+  max-width: 34ch;
+  font-size: clamp(1.05rem, 1.45vw, 1.25rem);
+  line-height: 1.45;
+  color: rgba(11, 11, 14, 0.78);
+}
+
+.contact-split__hi {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contact-split__avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  object-fit: cover;
+  border-radius: 0.35rem;
+}
+
+.contact-split__hi-label {
+  margin: 0 0 0.2rem;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+.contact-split__hi-mail {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.contact-split__hi-mail:hover,
+.contact-split__hi-mail:focus-visible {
+  color: var(--navy);
+}
+
+.contact-form {
+  display: grid;
+  gap: clamp(1.35rem, 3vh, 2rem);
+}
+
+.contact-form__field {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.contact-form__field--roles {
+  min-width: 0;
+}
+
+.contact-form__label {
+  display: block;
+  margin-bottom: 0.55rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
+  letter-spacing: -0.02em;
+}
+
+.contact-form__optional {
+  font-weight: 500;
+  color: rgba(11, 11, 14, 0.45);
+}
+
+.contact-form__input {
+  display: block;
+  width: 100%;
+  padding: 0.65rem 0 0.75rem;
+  border: none;
+  border-bottom: 1px solid rgba(11, 11, 14, 0.22);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  transition: border-color 0.25s ease;
+}
+
+.contact-form__input::placeholder {
+  color: rgba(11, 11, 14, 0.38);
+}
+
+.contact-form__input:focus {
+  outline: none;
+  border-bottom-color: var(--ink);
+}
+
+.contact-form__input--area {
+  resize: vertical;
+  min-height: 6.5rem;
+  line-height: 1.45;
+}
+
+.contact-form__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.15rem;
+}
+
+.contact-form__pill {
+  padding: 0.55rem 1.15rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(11, 11, 14, 0.12);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease;
+}
+
+.contact-form__pill:hover,
+.contact-form__pill:focus-visible {
+  background: rgba(11, 11, 14, 0.2);
+}
+
+.contact-form__pill.is-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.contact-form__actions {
+  display: grid;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.contact-form__hint {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: rgba(11, 11, 14, 0.58);
+}
+
+.contact-form__hint a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+@media (max-width: 900px) {
+  .contact-split {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .hero__foot {
+    align-items: last baseline;
+  }
+}
 
 .ways {
   display: grid;

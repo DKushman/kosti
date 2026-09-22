@@ -39,6 +39,7 @@ export const MENU_LINKS: NavLink[] = [
   { label: "Projekte", href: "/projekte" },
   { label: "Netzwerk", href: "/netzwerk" },
   { label: "Positionen", href: "/positionen" },
+  { label: "Kontakt", href: "/kontakt" },
 ];
 
 export const FOOTER_LINKS: NavLink[] = [
