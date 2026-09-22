@@ -58,7 +58,7 @@ export default function AboutSplitHero() {
   const iconRef = useRef<HTMLSpanElement>(null);
   const iconEnterRef = useRef<HTMLSpanElement>(null);
   const iconRaf = useRef<number | null>(null);
-  const pendingIconY = useRef<number | null>(null);
+  const pendingPointer = useRef<{ x: number; y: number } | null>(null);
 
   const ICON_Y_MIN = 0;
   const ICON_Y_MAX = 62;
@@ -106,20 +106,6 @@ export default function AboutSplitHero() {
     [isMobileLayout, setIconOffset]
   );
 
-  const scheduleIconFromPointer = useCallback(
-    (clientY: number) => {
-      pendingIconY.current = clientY;
-      if (iconRaf.current != null) return;
-      iconRaf.current = requestAnimationFrame(() => {
-        iconRaf.current = null;
-        if (pendingIconY.current != null) {
-          updateIconFromPointer(pendingIconY.current);
-        }
-      });
-    },
-    [updateIconFromPointer]
-  );
-
   const resetEyes = useCallback(() => {
     const t = `translate(${LOOK.x} ${LOOK.y})`;
     leftPupil.current?.setAttribute("transform", t);
@@ -135,14 +121,28 @@ export default function AboutSplitHero() {
     rightPupil.current.setAttribute("transform", `translate(${r.x} ${r.y})`);
   }, []);
 
+  /* eyes + icon update together, once per frame, from the latest pointer */
+  const schedulePointer = useCallback(
+    (clientX: number, clientY: number) => {
+      pendingPointer.current = { x: clientX, y: clientY };
+      if (iconRaf.current != null) return;
+      iconRaf.current = requestAnimationFrame(() => {
+        iconRaf.current = null;
+        const p = pendingPointer.current;
+        const hero = root.current;
+        if (!p || !hero) return;
+        const r = hero.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        moveEyes(p.x, p.y);
+        updateIconFromPointer(p.y);
+      });
+    },
+    [moveEyes, updateIconFromPointer]
+  );
+
   const onHeroPointer = (e: PointerEvent<HTMLElement>) => {
     if (e.pointerType === "touch" && e.buttons === 0) return;
-    const hero = root.current;
-    if (!hero) return;
-    const r = hero.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > window.innerHeight) return;
-    moveEyes(e.clientX, e.clientY);
-    scheduleIconFromPointer(e.clientY);
+    schedulePointer(e.clientX, e.clientY);
   };
 
   const onHeroLeave = () => {

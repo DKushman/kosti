@@ -30,7 +30,7 @@ export default function Pic({
         height={height || undefined}
         loading={priority ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : undefined}
-        decoding={priority ? "sync" : "async"}
+        decoding="async"
         draggable={false}
         {...rest}
       />

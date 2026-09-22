@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { ScrollTrigger } from "@/lib/gsap";
+import { scheduleRefresh } from "@/lib/st-refresh";
 import { clearPending, getMenuHandlers, peekPending } from "@/lib/curtain";
 import { jumpToTarget, unlockScroll } from "@/lib/lenis-store";
 import { dispatchPageEnter, waitForRouteReady } from "@/lib/page-enter";
@@ -37,7 +37,7 @@ export default function MenuRouteHandoff() {
         if (still.path !== targetPath) return;
 
         jumpToTarget(still.hash || 0);
-        ScrollTrigger.refresh();
+        scheduleRefresh();
 
         const menu = getMenuHandlers();
         if (menu) await menu.exit();
@@ -47,7 +47,7 @@ export default function MenuRouteHandoff() {
 
         document.documentElement.classList.remove("is-menu-navigating");
         unlockScroll();
-        ScrollTrigger.refresh();
+        scheduleRefresh();
       } finally {
         running.current = false;
       }

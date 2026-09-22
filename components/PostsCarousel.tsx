@@ -51,12 +51,22 @@ export default function PostsCarousel({ articles }: Props) {
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
+    let raf = 0;
+    /* one layout read per frame, not one per scroll event */
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        syncPage();
+      });
+    };
     syncPage();
-    track.addEventListener("scroll", syncPage, { passive: true });
-    window.addEventListener("resize", syncPage);
+    track.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
     return () => {
-      track.removeEventListener("scroll", syncPage);
-      window.removeEventListener("resize", syncPage);
+      window.cancelAnimationFrame(raf);
+      track.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
     };
   }, [syncPage]);
 

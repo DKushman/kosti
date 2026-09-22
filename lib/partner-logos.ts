@@ -14,7 +14,7 @@ export const PARTNER_LOGOS = [
     variant: "partner" as const,
   },
   {
-    src: withBasePath("/img/logo%20(1).png"),
+    src: withBasePath("/img/logo-ag-city.webp"),
     alt: "AG City Berlin",
     href: "/projekte/ag-city",
     variant: "partner-wide" as const,

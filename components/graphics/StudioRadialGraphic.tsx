@@ -11,6 +11,9 @@ const POLE_RADIUS = 368;
 const LERP = 0.11;
 const PULL = 0.18;
 
+/** Server and browser stringify floats differently in the 17th digit — round so SSR markup hydrates cleanly. */
+const r3 = (v: number) => Math.round(v * 1000) / 1000;
+
 type SpokeDef = {
   id: string;
   angle: number;
@@ -49,8 +52,8 @@ const SPOKES: SpokeDef[] = [
 
 const SPOKE_POINTS = SPOKES.map((s) => ({
   ...s,
-  x: CX + Math.cos(s.angle) * POLE_RADIUS,
-  y: CY + Math.sin(s.angle) * POLE_RADIUS,
+  x: r3(CX + Math.cos(s.angle) * POLE_RADIUS),
+  y: r3(CY + Math.sin(s.angle) * POLE_RADIUS),
 }));
 
 const RADIALS = Array.from({ length: 56 }, (_, i) => {
@@ -104,6 +107,8 @@ export default function StudioRadialGraphic() {
       if (!el) return;
 
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      /* pointer-follow only makes sense with a hovering pointer */
+      const hoverable = window.matchMedia("(hover: hover)").matches;
 
       const majorLines = gsap.utils.toArray<SVGLineElement>("[data-spoke]", el);
       const fineLines = gsap.utils.toArray<SVGLineElement>("[data-radial]", el);
@@ -117,8 +122,8 @@ export default function StudioRadialGraphic() {
 
       const fineMeta = RADIALS.map((r) => ({
         ...r,
-        baseX: CX + Math.cos(r.angle) * r.len,
-        baseY: CY + Math.sin(r.angle) * r.len,
+        baseX: r3(CX + Math.cos(r.angle) * r.len),
+        baseY: r3(CY + Math.sin(r.angle) * r.len),
       }));
 
       majorLines.forEach((line, i) => {
@@ -188,8 +193,18 @@ export default function StudioRadialGraphic() {
           loopId.current = null;
           return;
         }
-        smooth.current.x += (pointer.current.x - smooth.current.x) * LERP;
-        smooth.current.y += (pointer.current.y - smooth.current.y) * LERP;
+        const dx = pointer.current.x - smooth.current.x;
+        const dy = pointer.current.y - smooth.current.y;
+        if (Math.abs(dx) + Math.abs(dy) < 0.05) {
+          /* settled: draw the final state once, then idle until the pointer moves */
+          smooth.current.x = pointer.current.x;
+          smooth.current.y = pointer.current.y;
+          render(smooth.current.x, smooth.current.y);
+          loopId.current = null;
+          return;
+        }
+        smooth.current.x += dx * LERP;
+        smooth.current.y += dy * LERP;
         render(smooth.current.x, smooth.current.y);
         loopId.current = requestAnimationFrame(tick);
       };
@@ -261,8 +276,10 @@ export default function StudioRadialGraphic() {
           ensureLoop();
         };
 
-        el.addEventListener("pointermove", onMove);
-        el.addEventListener("pointerleave", onLeave);
+        if (hoverable) {
+          el.addEventListener("pointermove", onMove);
+          el.addEventListener("pointerleave", onLeave);
+        }
 
         return () => {
           el.removeEventListener("pointermove", onMove);
@@ -292,8 +309,8 @@ export default function StudioRadialGraphic() {
               data-radial
               x1={CX}
               y1={CY}
-              x2={CX + Math.cos(r.angle) * r.len}
-              y2={CY + Math.sin(r.angle) * r.len}
+              x2={r3(CX + Math.cos(r.angle) * r.len)}
+              y2={r3(CY + Math.sin(r.angle) * r.len)}
               strokeWidth={r.width}
               opacity={r.opacity}
             />

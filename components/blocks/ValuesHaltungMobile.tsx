@@ -1,4 +1,4 @@
-import { withBasePath } from "@/lib/site-path";
+import { imageSetForPath } from "@/lib/images";
 
 type ValueItem = { title: string; text: string; image: string };
 
@@ -26,19 +26,26 @@ export default function ValuesHaltungMobile({ title, lede, items }: Props) {
         aria-label="Haltung und Werte"
       >
         <ul className="values-haltung-mobile__track" role="list">
-          {items.map((item, i) => (
+          {items.map((item, i) => {
+            const img = imageSetForPath(item.image);
+            return (
             <li key={item.title} className="values-haltung-mobile__slide" role="listitem">
               <article className="values-haltung-mobile__card">
                 <div className="values-haltung-mobile__media">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={withBasePath(item.image)}
-                    alt=""
-                    width={960}
-                    height={640}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                  />
+                  <picture>
+                    {img.srcSet ? (
+                      <source type="image/webp" srcSet={img.srcSet} sizes="88vw" />
+                    ) : null}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={img.src}
+                      alt=""
+                      width={960}
+                      height={640}
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  </picture>
                 </div>
                 <div className="values-haltung-mobile__copy">
                   <h2 className="values-haltung-mobile__card-title">{item.title}</h2>
@@ -46,7 +53,8 @@ export default function ValuesHaltungMobile({ title, lede, items }: Props) {
                 </div>
               </article>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </div>
     </div>

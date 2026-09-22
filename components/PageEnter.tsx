@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { ScrollTrigger } from "@/lib/gsap";
+import { scheduleRefresh } from "@/lib/st-refresh";
 import { clearPending, getMenuHandlers, peekPending, revealPage } from "@/lib/curtain";
 import { jumpToTarget, unlockScroll } from "@/lib/lenis-store";
 import { dispatchPageEnter, waitForRouteReady } from "@/lib/page-enter";
@@ -34,7 +34,7 @@ export default function PageEnter({ children }: PageEnterProps) {
       if (!again || again.source === "menu") return;
 
       jumpToTarget(again.hash || 0);
-      ScrollTrigger.refresh();
+      scheduleRefresh();
 
       let entered = false;
       const fireEnter = () => {
@@ -48,7 +48,7 @@ export default function PageEnter({ children }: PageEnterProps) {
       fireEnter();
 
       unlockScroll();
-      ScrollTrigger.refresh();
+      scheduleRefresh();
     })();
 
     return () => {

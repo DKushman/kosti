@@ -1,13 +1,16 @@
 "use client";
 
 import { useRef } from "react";
+import { preload } from "react-dom";
 import { usePathname } from "next/navigation";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useIntro } from "@/lib/intro-context";
 import { peekPending } from "@/lib/curtain";
 import { onPageEnter } from "@/lib/page-enter";
 import { SITE } from "@/lib/site";
-import { withBasePath } from "@/lib/site-path";
+import { imageSetForPath } from "@/lib/images";
+
+const HERO_SIZES = "100vw";
 
 export type PhotoPageHeroProps = {
   imageSrc: string;
@@ -44,7 +47,14 @@ export default function PhotoPageHero({
   const pathname = usePathname();
   const { done: introDone } = useIntro();
   const enterPlayed = useRef(false);
-  const image = withBasePath(imageSrc);
+  const image = imageSetForPath(imageSrc);
+
+  preload(image.src, {
+    as: "image",
+    fetchPriority: "high",
+    imageSrcSet: image.srcSet || undefined,
+    imageSizes: image.srcSet ? HERO_SIZES : undefined,
+  });
 
   useGSAP(
     () => {
@@ -119,7 +129,7 @@ export default function PhotoPageHero({
 
       gsap.fromTo(
         layerEl,
-        { scale: 1, y: 0 },
+        { scale: 1, y: 0, willChange: "transform" },
         {
           scale: 1.1,
           y: 0,
@@ -130,6 +140,9 @@ export default function PhotoPageHero({
             start: "top top",
             end: "bottom top",
             scrub: true,
+            /* keep the GPU layer only while the hero is on screen */
+            onToggle: (self) =>
+              gsap.set(layerEl, { willChange: self.isActive ? "transform" : "auto" }),
           },
         }
       );
@@ -141,14 +154,21 @@ export default function PhotoPageHero({
     <header ref={hero} className="photo-hero photo-hero--sticky">
       <div ref={layer} className="photo-hero__layer">
         <div className="photo-hero__media" aria-hidden="true">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={image}
-            alt=""
-            data-hero-img
-            fetchPriority="high"
-            decoding="async"
-          />
+          <picture>
+            {image.srcSet ? (
+              <source type="image/webp" srcSet={image.srcSet} sizes={HERO_SIZES} />
+            ) : null}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={image.src}
+              alt=""
+              width={image.width || undefined}
+              height={image.height || undefined}
+              data-hero-img
+              fetchPriority="high"
+              decoding="async"
+            />
+          </picture>
         </div>
         <div className="photo-hero__shade" aria-hidden="true" />
 

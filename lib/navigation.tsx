@@ -113,6 +113,8 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         setMenuOpen(false);
       }
 
+      /* fetch the route while the curtain is still closing */
+      router.prefetch(path);
       const { covered } = coverPage();
       void covered.then(() => router.push(href));
     },

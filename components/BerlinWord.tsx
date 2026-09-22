@@ -15,7 +15,7 @@ export default function BerlinWord({ className }: Props) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className="berlin-word__bear"
-        src={withBasePath("/img/image 17.png")}
+        src={withBasePath("/img/bear.webp")}
         alt=""
         width={48}
         height={64}

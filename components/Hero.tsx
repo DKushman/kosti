@@ -6,14 +6,14 @@ import { preload } from "react-dom";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useIntro } from "@/lib/intro-context";
 import { onPageEnter } from "@/lib/page-enter";
-import { withBasePath } from "@/lib/site-path";
+import { imageSet } from "@/lib/images";
 import TransitionLink from "@/components/TransitionLink";
 import { HERO_PARTNER_LOGOS } from "@/lib/partner-logos";
 import { PRELOADER_CURTAIN_MS } from "@/lib/intro-sequence";
 import { EASE_PRELOADER_HANDOFF } from "@/lib/motion";
 
-const PORTRAIT_WEBP = withBasePath("/img/konstantin-portrait.webp");
-const PORTRAIT_JPG = withBasePath("/img/konstantin-portrait.jpg");
+const PORTRAIT = imageSet("konstantin-portrait");
+const PORTRAIT_SIZES = "100vw";
 const NAME_LOOP = "Patsalides — Konstantin";
 const NAME_COPIES = 4;
 const INTRO_MS = PRELOADER_CURTAIN_MS;
@@ -38,7 +38,12 @@ export default function Hero() {
   const pathname = usePathname();
   const { done } = useIntro();
 
-  preload(PORTRAIT_WEBP, { as: "image", fetchPriority: "high" });
+  preload(PORTRAIT.src, {
+    as: "image",
+    fetchPriority: "high",
+    imageSrcSet: PORTRAIT.srcSet,
+    imageSizes: PORTRAIT_SIZES,
+  });
 
   useLayoutEffect(() => {
     if (!done) return;
@@ -169,7 +174,9 @@ export default function Hero() {
 
     renderMarquee();
 
+    let running = false;
     const tick = (now: number) => {
+      if (!running) return;
       const dt = Math.min((now - last) / 1000, 0.064);
       last = now;
       if (unit > 0) {
@@ -181,7 +188,24 @@ export default function Hero() {
       raf = window.requestAnimationFrame(tick);
     };
 
-    raf = window.requestAnimationFrame(tick);
+    /* Drift only while the hero is on screen: no per-frame work once scrolled past. */
+    const startLoop = () => {
+      if (running) return;
+      running = true;
+      last = performance.now();
+      raf = window.requestAnimationFrame(tick);
+    };
+    const stopLoop = () => {
+      running = false;
+      window.cancelAnimationFrame(raf);
+    };
+    const visibility = ScrollTrigger.create({
+      trigger: root,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: (self) => (self.isActive ? startLoop() : stopLoop()),
+    });
+    if (visibility.isActive) startLoop();
 
     const onResize = () => {
       measure();
@@ -191,7 +215,8 @@ export default function Hero() {
     window.addEventListener("resize", onResize);
 
       teardown = () => {
-        window.cancelAnimationFrame(raf);
+        stopLoop();
+        visibility.kill();
         window.removeEventListener("resize", onResize);
         scrollFx.kill();
         gsap.killTweensOf(motion);
@@ -221,11 +246,11 @@ export default function Hero() {
     >
       <figure className="hero__portrait" id="hero-portrait">
         <picture>
-          <source type="image/webp" srcSet={PORTRAIT_WEBP} />
+          <source type="image/webp" srcSet={PORTRAIT.srcSet} sizes={PORTRAIT_SIZES} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             ref={portraitRef}
-            src={PORTRAIT_JPG}
+            src={PORTRAIT.src}
             alt="Konstantin Patsalides, Portrait"
             width={1600}
             height={1600}

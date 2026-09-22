@@ -4,7 +4,7 @@ import PhotoPageHero from "@/components/blocks/PhotoPageHero";
 export default function ProjectsPhotoHero() {
   return (
     <PhotoPageHero
-      imageSrc="/pexels-truephotography-7185092.webp"
+      imageSrc="/img/pexels-truephotography-7185092.webp"
       titleLineA="Projek"
       titleLineB="te"
       scrollHref="#projekte-list"

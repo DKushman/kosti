@@ -3,6 +3,7 @@
 import { useRef, type MouseEvent } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { scrollToTarget } from "@/lib/lenis-store";
+import { scheduleRefresh } from "@/lib/st-refresh";
 import { CAREER_STATIONS } from "@/lib/content/werdegang";
 
 const SKIP_TARGET = "#projekte";
@@ -43,11 +44,14 @@ export default function Werdegang() {
         return Math.max(0, panelW * (count - 1));
       };
 
+      let lastIdx = -1;
       const setActiveTicks = (progress: number) => {
         const idx = Math.min(
           count - 1,
           Math.max(0, Math.round(progress * (count - 1)))
         );
+        if (idx === lastIdx) return;
+        lastIdx = idx;
         tickRefs.current.forEach((el, i) => {
           if (!el) return;
           el.classList.toggle("is-active", i <= idx);
@@ -90,7 +94,7 @@ export default function Werdegang() {
   const skipSection = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     scrollToTarget(SKIP_TARGET);
-    requestAnimationFrame(() => ScrollTrigger.refresh());
+    scheduleRefresh();
   };
 
   return (

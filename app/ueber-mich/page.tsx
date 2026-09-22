@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { ABOUT } from "@/lib/content/about";
 import AboutSplitHero from "@/components/blocks/AboutSplitHero";
-
-const BioCinematic = dynamic(
-  () => import("@/components/blocks/BioCinematic"),
-  { ssr: true }
-);
+import BioCinematic from "@/components/blocks/BioCinematic";
 import Section from "@/components/blocks/Section";
 import ValuesHaltungSection from "@/components/blocks/ValuesHaltungSection";
 import AboutMainStations from "@/components/blocks/AboutMainStations";

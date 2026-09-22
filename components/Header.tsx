@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { scheduleRefresh } from "@/lib/st-refresh";
 import { getLenis } from "@/lib/lenis-store";
 import { useNavigation } from "@/lib/navigation";
 import { SITE } from "@/lib/site";
@@ -9,7 +10,7 @@ import { withBasePath } from "@/lib/site-path";
 import MenuOverlay from "@/components/MenuOverlay";
 import TransitionLink from "@/components/TransitionLink";
 
-const BRAND_LOGO = withBasePath("/img/logo%20kosti.svg");
+const BRAND_LOGO = withBasePath("/img/logo-kosti.webp");
 
 function headerSolidThreshold() {
   return window.innerHeight * 0.72;
@@ -35,7 +36,7 @@ export default function Header() {
     if (menuOpen || !root.current) return;
     requestAnimationFrame(() => {
       if (root.current) syncHeaderSolid(root.current);
-      ScrollTrigger.refresh();
+      scheduleRefresh();
     });
   }, [menuOpen]);
 
@@ -87,8 +88,8 @@ export default function Header() {
             src={BRAND_LOGO}
             alt={SITE.name}
             className="brand__logo"
-            width={280}
-            height={61}
+            width={314}
+            height={200}
             decoding="async"
             draggable={false}
           />

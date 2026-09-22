@@ -1,5 +1,5 @@
 import { ABOUT } from "@/lib/content/about";
-import { withBasePath } from "@/lib/site-path";
+import { imageSetForPath } from "@/lib/images";
 import FillButton from "@/components/FillButton";
 
 const STATIONS = ABOUT.mainStations;
@@ -24,7 +24,9 @@ export default function AboutMainStations() {
           <FillButton href="/projekte">Alle anzeigen</FillButton>
         </div>
 
-        {STATIONS.map((station, i) => (
+        {STATIONS.map((station, i) => {
+          const img = imageSetForPath(station.image);
+          return (
           <article
             key={station.id}
             id={`station-${station.id}`}
@@ -45,15 +47,24 @@ export default function AboutMainStations() {
                 </div>
 
                 <figure className="about-stations__figure">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={withBasePath(station.image)}
-                    alt=""
-                    width={960}
-                    height={1200}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                  />
+                  <picture>
+                    {img.srcSet ? (
+                      <source
+                        type="image/webp"
+                        srcSet={img.srcSet}
+                        sizes="(max-width: 900px) 100vw, 50vw"
+                      />
+                    ) : null}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={img.src}
+                      alt=""
+                      width={960}
+                      height={1200}
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  </picture>
                 </figure>
 
                 <h3 className="about-stations__title">{station.title}</h3>
@@ -63,7 +74,8 @@ export default function AboutMainStations() {
               <div className="about-stations__rule" role="presentation" />
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

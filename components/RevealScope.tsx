@@ -2,7 +2,8 @@
 
 import { useRef, type ElementType, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { gsap, SplitText, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { scheduleRefresh } from "@/lib/st-refresh";
 import { peekPending } from "@/lib/curtain";
 import { onPageEnter } from "@/lib/page-enter";
 
@@ -181,7 +182,7 @@ export default function RevealScope({
           });
 
           if (afterPageEnter) {
-            requestAnimationFrame(() => ScrollTrigger.refresh());
+            scheduleRefresh();
           }
         });
       };

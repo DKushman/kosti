@@ -1944,7 +1944,6 @@ body:has(.page--photo-hero) .header.is-solid::before {
   height: 120%;
   object-fit: cover;
   object-position: center;
-  will-change: transform;
 }
 
 .work__item figcaption {
@@ -2513,7 +2512,6 @@ body:has(.page--photo-hero) .header.is-solid::before {
   inset: -14% 0;
   height: 128%;
   overflow: hidden;
-  will-change: transform;
 }
 
 .prefooter-contact__media picture,
@@ -2980,7 +2978,6 @@ body:has(.page--photo-hero) .header.is-solid::before {
   max-height: 100%;
   display: flex;
   flex-direction: column;
-  will-change: transform;
 }
 
 .photo-hero__media {
@@ -4294,6 +4291,18 @@ body:has(.page--photo-hero) .header.is-solid::before {
 
 .values-sticky__mask-caption {
   z-index: 2;
+}
+
+/* Caption lives outside the transformed mask (text must not be scaled);
+   the scene keeps this frame aligned with the mask rect every frame. */
+.values-sticky__mask-caption-frame {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateZ(0);
 }
 
 .values-sticky__line-mask {

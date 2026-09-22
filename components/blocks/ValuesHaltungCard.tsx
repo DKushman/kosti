@@ -1,4 +1,4 @@
-import { withBasePath } from "@/lib/site-path";
+import { imageSetForPath } from "@/lib/images";
 
 type Item = { title: string; text: string; image: string };
 
@@ -20,20 +20,30 @@ export function ValuesHaltungCard({
   hideMedia = false,
   hideCaption = false,
 }: Props) {
+  const img = imageSetForPath(item.image);
   return (
     <article className={`values-haltung-card${className ? ` ${className}` : ""}`}>
       {hideMedia ? null : (
         <div className="values-haltung-card__media">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={withBasePath(item.image)}
-            alt=""
-            width={960}
-            height={640}
-            loading={priority ? "eager" : "lazy"}
-            decoding="async"
-            fetchPriority={priority ? "high" : undefined}
-          />
+          <picture>
+            {img.srcSet ? (
+              <source
+                type="image/webp"
+                srcSet={img.srcSet}
+                sizes="(max-width: 900px) 92vw, 34vw"
+              />
+            ) : null}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={img.src}
+              alt=""
+              width={960}
+              height={640}
+              loading={priority ? "eager" : "lazy"}
+              decoding="async"
+              fetchPriority={priority ? "high" : undefined}
+            />
+          </picture>
         </div>
       )}
       {hideCaption ? null : (

@@ -69,6 +69,10 @@ export default function Projects() {
               start: "top bottom",
               end: "bottom top",
               scrub: true,
+              /* GPU layer only while the item is on screen */
+              onToggle: (self) => {
+                if (img) gsap.set(img, { willChange: self.isActive ? "transform" : "auto" });
+              },
             },
           }
         );

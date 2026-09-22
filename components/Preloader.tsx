@@ -10,6 +10,27 @@ const HOLD_MS = 320;
 /** Must match CSS keyframe duration */
 const SWAP_MS = 480;
 const CURTAIN_MS = PRELOADER_CURTAIN_MS;
+/**
+ * Repeat full loads within the same tab session (reload, back from an
+ * external site, deep link) jump straight to the last word instead of
+ * replaying all six. First impression stays untouched. Set to false to
+ * always play the full sequence.
+ */
+const SHORT_ON_REPEAT_VISIT = true;
+const SESSION_KEY = "kp-preloader-seen";
+let repeatVisitDecision: boolean | null = null;
+
+function isRepeatVisit() {
+  if (repeatVisitDecision === null) {
+    try {
+      repeatVisitDecision = window.sessionStorage.getItem(SESSION_KEY) === "1";
+      window.sessionStorage.setItem(SESSION_KEY, "1");
+    } catch {
+      repeatVisitDecision = false;
+    }
+  }
+  return repeatVisitDecision;
+}
 
 /**
  * Vertical slot swap: outgoing + incoming share one ease/duration
@@ -37,15 +58,18 @@ export default function Preloader() {
       return;
     }
 
+    const first =
+      SHORT_ON_REPEAT_VISIT && isRepeatVisit() ? PRELOADER_WORDS.length - 1 : 0;
+
     const run = async () => {
       await wait(80);
       if (cancelled) return;
 
-      setIndex(0);
+      setIndex(first);
       await wait(HOLD_MS + SWAP_MS);
       if (cancelled) return;
 
-      for (let i = 1; i < PRELOADER_WORDS.length; i++) {
+      for (let i = first + 1; i < PRELOADER_WORDS.length; i++) {
         setIndex(i);
         await wait(HOLD_MS + SWAP_MS);
         if (cancelled) return;

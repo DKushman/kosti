@@ -3,12 +3,12 @@
 import { useRef, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
 import { ABOUT } from "@/lib/content/about";
-import { withBasePath } from "@/lib/site-path";
+import { imageSetForPath } from "@/lib/images";
 
-const IMG_ZYPERN = withBasePath("/img/pexels-mikhail-nilov-8332863.webp");
-const IMG_BERLIN = withBasePath(
-  "/img/pexels-marcel-condurachi-765466373-35828097.webp"
-);
+const IMG_ZYPERN = "/img/pexels-mikhail-nilov-8332863.webp";
+const IMG_BERLIN = "/img/pexels-marcel-condurachi-765466373-35828097.webp";
+/** Thumbnails render at 440px: never decode the full-size photo for them. */
+const THUMB_SIZES = "440px";
 
 type HoverWordProps = {
   id: string;
@@ -18,20 +18,26 @@ type HoverWordProps = {
 };
 
 function BioInlineWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
+  const img = imageSetForPath(imageSrc);
   return (
     <span className="bio-word bio-word--inline" id={id}>
       <span className="bio-word__text">{children}</span>
       <span className="bio-word__thumb" aria-hidden="true">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imageSrc}
-          alt={imageAlt}
-          width={440}
-          height={330}
-          loading="lazy"
-          decoding="async"
-          fetchPriority="low"
-        />
+        <picture>
+          {img.srcSet ? (
+            <source type="image/webp" srcSet={img.srcSet} sizes={THUMB_SIZES} />
+          ) : null}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={img.src}
+            alt={imageAlt}
+            width={440}
+            height={330}
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
+          />
+        </picture>
       </span>
     </span>
   );
@@ -39,6 +45,7 @@ function BioInlineWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
 
 function BioHoverWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
   const [showPreview, setShowPreview] = useState(false);
+  const img = imageSetForPath(imageSrc);
 
   return (
     <span
@@ -51,15 +58,20 @@ function BioHoverWord({ id, children, imageSrc, imageAlt }: HoverWordProps) {
       <span className="bio-word__text">{children}</span>
       {showPreview ? (
         <span className="bio-word__preview" aria-hidden="true">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={imageSrc}
-            alt={imageAlt}
-            width={440}
-            height={330}
-            loading="lazy"
-            decoding="async"
-          />
+          <picture>
+            {img.srcSet ? (
+              <source type="image/webp" srcSet={img.srcSet} sizes={THUMB_SIZES} />
+            ) : null}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={img.src}
+              alt={imageAlt}
+              width={440}
+              height={330}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
         </span>
       ) : null}
     </span>

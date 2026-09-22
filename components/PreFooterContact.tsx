@@ -37,6 +37,9 @@ export default function PreFooterContact() {
             start: "top bottom",
             end: "bottom top",
             scrub: 0.4,
+            /* GPU layer only while the band is on screen */
+            onToggle: (self) =>
+              gsap.set(media, { willChange: self.isActive ? "transform" : "auto" }),
           },
         }
       );

@@ -1,8 +1,9 @@
 "use client";
 
 import { forwardRef, type AnchorHTMLAttributes, type MouseEvent } from "react";
+import { useRouter } from "next/navigation";
 import { setFillOrigin } from "@/lib/set-fill-origin";
-import { useNavigation } from "@/lib/navigation";
+import { parseHref, useNavigation } from "@/lib/navigation";
 import { withBasePath } from "@/lib/site-path";
 
 type Props = AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -27,6 +28,7 @@ const TransitionLink = forwardRef<HTMLAnchorElement, Props>(function TransitionL
   ref
 ) {
   const { navigate } = useNavigation();
+  const router = useRouter();
   const isFill =
     typeof className === "string" && className.includes("btn-fill");
 
@@ -54,6 +56,8 @@ const TransitionLink = forwardRef<HTMLAnchorElement, Props>(function TransitionL
       onClick={handleClick}
       onMouseEnter={(e) => {
         if (isFill) setFillOrigin(e.currentTarget, e.clientX, e.clientY);
+        /* warm the route on hover so the curtain never waits for the network */
+        if (href.startsWith("/")) router.prefetch(parseHref(href).path);
         onMouseEnter?.(e);
       }}
       {...rest}

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
 import { ValuesHaltungCard } from "@/components/blocks/ValuesHaltungCard";
-import { withBasePath } from "@/lib/site-path";
+import { imageSetForPath } from "@/lib/images";
 
 type ValueItem = { title: string; text: string; image: string };
 
@@ -24,6 +24,9 @@ const CARD_SIDE: Record<number, "left" | "right" | "center"> = {
   3: "right",
   4: "right",
 };
+
+const MASK_SIZES = "100vw";
+const MASK_ASPECT_FALLBACK = 1600 / 1067;
 
 function readSlotMetrics(pin: HTMLElement, slot: HTMLElement): SlotMetrics {
   const pinR = pin.getBoundingClientRect();
@@ -48,7 +51,21 @@ function readHeroOpenMetrics(pin: HTMLElement): SlotMetrics {
   };
 }
 
-/** Desktop: sticky pin — mask (hero window) moves; head fades via opacity only. */
+/** Rendered width of an image with aspect `a` when it cover-fits a w×h box. */
+function coverWidth(w: number, h: number, a: number) {
+  return Math.max(w, h * a);
+}
+
+/**
+ * Desktop: sticky pin — the hero window morphs into the centre mosaic card.
+ *
+ * Performance note: the mask is laid out ONCE at its open size. The scroll
+ * morph writes transforms only (mask translate + non-uniform scale, photo
+ * counter-scaled so it stays cover-fitted and undistorted, corner radius
+ * compensated per axis). No frame triggers layout or re-rasterises the
+ * photo. The caption text cannot live inside a non-uniformly scaled box, so
+ * it sits in its own frame that follows the mask rect.
+ */
 export default function ValuesHaltungScene({
   eyebrow,
   title,
@@ -57,9 +74,12 @@ export default function ValuesHaltungScene({
   items,
 }: Props) {
   const center = items[2];
+  const centerImage = imageSetForPath(center.image);
   const trackRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const maskRef = useRef<HTMLDivElement>(null);
+  const maskImgRef = useRef<HTMLImageElement>(null);
+  const captionFrameRef = useRef<HTMLDivElement>(null);
   const maskCaptionRef = useRef<HTMLDivElement>(null);
   const headRef = useRef<HTMLDivElement>(null);
   const eyebrowWrapRef = useRef<HTMLDivElement>(null);
@@ -76,6 +96,8 @@ export default function ValuesHaltungScene({
       const track = trackRef.current;
       const pin = pinRef.current;
       const mask = maskRef.current;
+      const maskImg = maskImgRef.current;
+      const captionFrame = captionFrameRef.current;
       const maskCaption = maskCaptionRef.current;
       const head = headRef.current;
       const eyebrowWrap = eyebrowWrapRef.current;
@@ -89,6 +111,8 @@ export default function ValuesHaltungScene({
         !track ||
         !pin ||
         !mask ||
+        !maskImg ||
+        !captionFrame ||
         !maskCaption ||
         !head ||
         !eyebrowWrap ||
@@ -125,23 +149,76 @@ export default function ValuesHaltungScene({
 
       if (reduced) {
         gsap.set([mask, head, ...sideCards], { clearProps: "all" });
-        gsap.set(mask, { autoAlpha: 0 });
+        gsap.set([mask, captionFrame], { autoAlpha: 0 });
         gsap.set(head, { autoAlpha: 1 });
         gsap.set(centerCaption, { autoAlpha: 1, yPercent: 0 });
         gsap.set(sideCards, { x: 0, autoAlpha: 1 });
         return;
       }
 
-      gsap.set(mask, {
-        position: "absolute",
-        top: openMetrics.top,
-        left: openMetrics.left,
-        width: openMetrics.width,
-        height: openMetrics.height,
-        borderRadius: radiusStart,
-        autoAlpha: 1,
-        force3D: true,
-      });
+      const aspect =
+        centerImage.width && centerImage.height
+          ? centerImage.width / centerImage.height
+          : MASK_ASPECT_FALLBACK;
+
+      /*
+       * One-time layout: mask at its open size, photo sized to its
+       * cover-fit dimensions and centred (instead of object-fit, whose box
+       * would clip the photo once the box is counter-scaled).
+       */
+      const layoutMask = () => {
+        const o = openMetrics;
+        gsap.set(mask, {
+          position: "absolute",
+          top: o.top,
+          left: o.left,
+          width: o.width,
+          height: o.height,
+          autoAlpha: 1,
+        });
+        const cw = coverWidth(o.width, o.height, aspect);
+        const ch = cw / aspect;
+        gsap.set(maskImg, {
+          position: "absolute",
+          left: (o.width - cw) / 2,
+          top: (o.height - ch) / 2,
+          width: cw,
+          height: ch,
+          objectFit: "fill",
+        });
+      };
+
+      /* transform-only morph, p = 0 (open) … 1 (centre slot) */
+      const applyMorph = (p: number) => {
+        const o = openMetrics;
+        const s = slotMetrics;
+        if (!o.width || !o.height) return;
+
+        const w = o.width + (s.width - o.width) * p;
+        const h = o.height + (s.height - o.height) * p;
+        const x = o.left + (s.left - o.left) * p;
+        const y = o.top + (s.top - o.top) * p;
+        const sx = w / o.width;
+        const sy = h / o.height;
+        const tx = x + w / 2 - (o.left + o.width / 2);
+        const ty = y + h / 2 - (o.top + o.height / 2);
+        const r = radiusStart + (radiusEnd - radiusStart) * p;
+
+        mask.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${sx}, ${sy})`;
+        mask.style.borderRadius = `${r / sx}px / ${r / sy}px`;
+
+        const k =
+          coverWidth(w, h, aspect) / coverWidth(o.width, o.height, aspect);
+        maskImg.style.transform = `translate3d(0, 0, 0) scale(${k / sx}, ${k / sy})`;
+
+        captionFrame.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        captionFrame.style.width = `${w}px`;
+        captionFrame.style.height = `${h}px`;
+        captionFrame.style.borderRadius = `${r}px`;
+      };
+
+      layoutMask();
+      applyMorph(0);
       gsap.set(head, { autoAlpha: 1, force3D: true });
       gsap.set(centerCaption, { autoAlpha: 0, yPercent: 18, force3D: true });
 
@@ -206,8 +283,10 @@ export default function ValuesHaltungScene({
 
       syncMetrics();
 
+      const morph = { p: 0 };
+
       const scrollTl = gsap.timeline({
-        defaults: { ease: "none", force3D: true },
+        defaults: { ease: "none" },
         scrollTrigger: {
           trigger: track,
           start: "top top",
@@ -220,24 +299,21 @@ export default function ValuesHaltungScene({
       const morphStart = 0.06;
       const morphDur = 0.82;
 
-      scrollTl.to(
-        mask,
+      scrollTl.fromTo(
+        morph,
+        { p: 0 },
         {
-          top: () => slotMetrics.top,
-          left: () => slotMetrics.left,
-          width: () => slotMetrics.width,
-          height: () => slotMetrics.height,
-          borderRadius: radiusEnd,
+          p: 1,
           duration: morphDur,
           ease: "power1.inOut",
-          overwrite: "auto",
+          onUpdate: () => applyMorph(morph.p),
         },
         morphStart
       );
 
       scrollTl.to(
         head,
-        { autoAlpha: 0, duration: morphDur * 0.88, ease: "power1.inOut" },
+        { autoAlpha: 0, duration: morphDur * 0.88, ease: "power1.inOut", force3D: true },
         morphStart
       );
 
@@ -252,6 +328,7 @@ export default function ValuesHaltungScene({
           autoAlpha: 1,
           duration: 0.55,
           ease: "power1.out",
+          force3D: true,
         },
         morphStart + morphDur * 0.72
       );
@@ -264,12 +341,15 @@ export default function ValuesHaltungScene({
           duration: 0.78,
           stagger: { each: 0.11, from: "center" },
           ease: "power1.out",
+          force3D: true,
         },
         cardsIn
       );
 
       const onRefreshInit = () => {
         syncMetrics();
+        layoutMask();
+        applyMorph(morph.p);
         scrollTl.invalidate();
       };
       ScrollTrigger.addEventListener("refreshInit", onRefreshInit);
@@ -289,17 +369,30 @@ export default function ValuesHaltungScene({
     <div className="values-sticky__track" ref={trackRef}>
       <div className="values-sticky__pin" ref={pinRef}>
         <div className="values-sticky__mask" ref={maskRef}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="values-sticky__mask-img"
-            src={withBasePath(center.image)}
-            alt=""
-            width={1600}
-            height={1067}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
+          <picture>
+            {centerImage.srcSet ? (
+              <source
+                type="image/webp"
+                srcSet={centerImage.srcSet}
+                sizes={MASK_SIZES}
+              />
+            ) : null}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              ref={maskImgRef}
+              className="values-sticky__mask-img"
+              src={centerImage.src}
+              alt=""
+              width={centerImage.width || 1600}
+              height={centerImage.height || 1067}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </picture>
+        </div>
+
+        <div className="values-sticky__mask-caption-frame" ref={captionFrameRef}>
           <div
             className="values-haltung-card__body values-sticky__mask-caption"
             ref={maskCaptionRef}
