@@ -20,6 +20,9 @@ function supportsScrollTimeline() {
   );
 }
 
+const WORK_CLIP_FROM = "inset(100% 0% 0% 0%)";
+const WORK_CLIP_TO = "inset(0% 0% 0% 0%)";
+
 /**
  * Staggered editorial grid on warm paper (Startseite Block 4). Every
  * image parallaxes inside its clipped frame; captions and the section
@@ -69,19 +72,43 @@ export default function Projects() {
       const caption = item.querySelector<HTMLElement>("[data-work-caption]");
 
       if (media) {
-        cleanups.push(
-          observeRevealOnce(media, {
-            startTop: REVEAL_START.workItem,
-            onEnter: () => markRevealed(media),
-          })
-        );
-      }
+        gsap.set(media, { clipPath: WORK_CLIP_FROM });
 
-      if (caption) {
         cleanups.push(
-          observeRevealOnce(caption, {
-            startTop: REVEAL_START.workCaption,
-            onEnter: () => markRevealed(caption),
+          observeRevealOnce(item, {
+            startTop: REVEAL_START.workMediaUnfold,
+            onEnter: () => {
+              gsap.fromTo(
+                media,
+                { clipPath: WORK_CLIP_FROM },
+                {
+                  clipPath: WORK_CLIP_TO,
+                  duration: 1.2,
+                  ease: "power4.inOut",
+                  overwrite: "auto",
+                }
+              );
+
+              if (caption) {
+                gsap.fromTo(
+                  caption,
+                  { autoAlpha: 0, y: 28 },
+                  {
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    delay: 0.12,
+                    onComplete: () => {
+                      markRevealed(caption);
+                      gsap.set(caption, {
+                        clearProps: "opacity,visibility,transform",
+                      });
+                    },
+                  }
+                );
+              }
+            },
           })
         );
       }

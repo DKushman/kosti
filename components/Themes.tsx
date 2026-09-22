@@ -104,28 +104,24 @@ export default function Themes() {
       );
     }
 
-    const mobileSectors = window.matchMedia("(max-width: 900px)").matches;
-    if (!mobileSectors) {
-      root.current.querySelectorAll<HTMLElement>("[data-sector-item]").forEach((item) => {
-        const link = item.querySelector<HTMLElement>(".sectors__link");
-        if (link) {
-          cleanups.push(
-            observeRevealOnce(link, {
-              startTop: REVEAL_START.sectorItem,
-              onEnter: () => link.classList.add("is-revealed"),
-            })
-          );
-        }
-        item.querySelectorAll<HTMLElement>("[data-sector-rule]").forEach((rule) => {
-          cleanups.push(
-            observeRevealOnce(rule, {
-              startTop: REVEAL_START.sectorRule,
-              onEnter: () => rule.classList.add("is-revealed"),
-            })
-          );
-        });
-      });
-    }
+    root.current.querySelectorAll<HTMLElement>("[data-sector-item]").forEach((item, i) => {
+      const clip = item.querySelector<HTMLElement>("[data-sector-clip]");
+      if (!clip) return;
+
+      item.style.setProperty("--sector-i", String(i));
+
+      cleanups.push(
+        observeRevealOnce(item, {
+          startTop: REVEAL_START.sectorItem,
+          onEnter: () => {
+            clip.classList.add("is-revealed");
+            item.querySelectorAll<HTMLElement>("[data-sector-rule]").forEach((rule) => {
+              rule.classList.add("is-revealed");
+            });
+          },
+        })
+      );
+    });
 
     return () => cleanups.forEach((fn) => fn());
   }, []);
@@ -161,6 +157,37 @@ export default function Themes() {
               key={theme.name}
             >
               <span className="sectors__rule" data-sector-rule aria-hidden="true" />
+              <div className="sectors__item-clip" data-sector-clip>
+                <div className="sectors__item-rise">
+                  <div className="sectors__card-media" aria-hidden="true">
+                    <Pic
+                      name={theme.img}
+                      sizes="(max-width: 900px) 86vw, 0px"
+                      alt=""
+                    />
+                  </div>
+                  <TransitionLink
+                    className="sectors__link display"
+                    href={theme.href}
+                    onMouseEnter={() => setActive(i)}
+                    onFocus={() => setActive(i)}
+                  >
+                    <span className="sectors__link-title">
+                      <span className="split-line">
+                        <span data-sector-name>{theme.name}</span>
+                      </span>
+                    </span>
+                    <span className="sectors__card-eyebrow">{theme.name}</span>
+                    <span className="sectors__card-copy">
+                      <span className="sectors__card-headline">{theme.text}</span>
+                    </span>
+                    <span className="sectors__card-action" aria-hidden="true">
+                      +
+                    </span>
+                  </TransitionLink>
+                  <p className="sectors__desc">{theme.text}</p>
+                </div>
+              </div>
               {i === HOME_THEMES.length - 1 && (
                 <span
                   className="sectors__rule sectors__rule--bottom"
@@ -168,33 +195,6 @@ export default function Themes() {
                   aria-hidden="true"
                 />
               )}
-              <div className="sectors__card-media" aria-hidden="true">
-                <Pic
-                  name={theme.img}
-                  sizes="(max-width: 900px) 86vw, 0px"
-                  alt=""
-                />
-              </div>
-              <TransitionLink
-                className="sectors__link display"
-                href={theme.href}
-                onMouseEnter={() => setActive(i)}
-                onFocus={() => setActive(i)}
-              >
-                <span className="sectors__link-title">
-                  <span className="split-line">
-                    <span data-sector-name>{theme.name}</span>
-                  </span>
-                </span>
-                <span className="sectors__card-eyebrow">{theme.name}</span>
-                <span className="sectors__card-copy">
-                  <span className="sectors__card-headline">{theme.text}</span>
-                </span>
-                <span className="sectors__card-action" aria-hidden="true">
-                  +
-                </span>
-              </TransitionLink>
-              <p className="sectors__desc">{theme.text}</p>
             </li>
           ))}
         </ul>

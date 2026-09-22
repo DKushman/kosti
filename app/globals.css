@@ -528,16 +528,12 @@ ol[role="list"] {
   transition-duration: 0.85s;
 }
 
-[data-work-media] {
+.work__media[data-work-media] {
   clip-path: inset(100% 0% 0% 0%);
+  contain: layout style paint;
 }
 
-[data-work-media].is-revealed {
-  clip-path: inset(0% 0% 0% 0%);
-  transition: clip-path 1.2s var(--ease-reveal-out);
-}
-
-[data-work-caption] {
+[data-work-caption]:not(.is-revealed) {
   opacity: 0;
   transform: translate3d(0, 28px, 0);
 }
@@ -563,13 +559,19 @@ ol[role="list"] {
     transform 0.8s var(--ease-reveal-soft);
 }
 
-.sectors__link {
-  transform: translate3d(0, 100%, 0);
+.sectors__item-clip {
+  overflow: clip;
 }
 
-.sectors__link.is-revealed {
-  transform: none;
-  transition: transform 1.1s var(--ease-reveal-out);
+.sectors__item-rise {
+  transform: translate3d(0, 110%, 0);
+  will-change: transform;
+}
+
+.sectors__item-clip.is-revealed .sectors__item-rise {
+  transform: translate3d(0, 0, 0);
+  transition: transform 1.05s var(--ease-reveal-out);
+  transition-delay: calc(var(--sector-i, 0) * 0.07s);
 }
 
 [data-sector-rule] {
@@ -580,6 +582,7 @@ ol[role="list"] {
 [data-sector-rule].is-revealed {
   transform: scaleX(1);
   transition: transform 1.2s var(--ease-reveal-inout);
+  transition-delay: calc(var(--sector-i, 0) * 0.07s + 0.08s);
 }
 
 [data-station] {
@@ -633,7 +636,7 @@ ol[role="list"] {
   [data-work-media],
   [data-work-caption],
   [data-sectors-cta],
-  .sectors__link,
+  .sectors__item-rise,
   [data-sector-rule],
   [data-station],
   [data-dot],
@@ -669,35 +672,6 @@ ol[role="list"] {
     animation-timeline: --photo-hero-sticky;
     animation-range: cover 0% cover 100%;
     transform-origin: 50% 100%;
-  }
-
-  .mission {
-    view-timeline-name: --mission-block;
-    view-timeline-axis: block;
-  }
-
-  [data-mission-line-fill] {
-    animation: mission-line-fill linear both;
-    animation-timeline: --mission-block;
-  }
-
-  .mission__line-stack:nth-child(1) [data-mission-line-fill] {
-    animation-range: entry 32% entry 48%;
-  }
-
-  .mission__line-stack:nth-child(2) [data-mission-line-fill] {
-    animation-range: entry 42% entry 58%;
-  }
-
-  .mission__line-stack:nth-child(3) [data-mission-line-fill] {
-    animation-range: entry 52% entry 68%;
-  }
-
-  [data-mission-graphic] {
-    animation: mission-graphic-drift linear both;
-    animation-timeline: --mission-block;
-    animation-range: cover 0% cover 100%;
-    transform-origin: center center;
   }
 
   .work__item {
@@ -754,24 +728,6 @@ ol[role="list"] {
   }
 }
 
-@keyframes mission-line-fill {
-  from {
-    clip-path: inset(0% 100% 0% 0%);
-  }
-  to {
-    clip-path: inset(0% 0% 0% 0%);
-  }
-}
-
-@keyframes mission-graphic-drift {
-  from {
-    transform: translate3d(0, 10%, 0) rotate(-12deg) scale(0.94);
-  }
-  to {
-    transform: translate3d(0, -12%, 0) rotate(10deg) scale(1.06);
-  }
-}
-
 @keyframes work-img-parallax {
   from {
     transform: translate3d(0, -12%, 0);
@@ -796,16 +752,6 @@ ol[role="list"] {
   }
   to {
     rotate: 120deg;
-  }
-}
-
-[data-mission-line-fill] {
-  clip-path: inset(0% 100% 0% 0%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  [data-mission-line-fill] {
-    clip-path: inset(0% 0% 0% 0%);
   }
 }
 
@@ -2390,7 +2336,6 @@ body:has(.page--photo-hero) .header.is-solid::before {
 .work__media {
   overflow: clip;
   aspect-ratio: 7 / 5;
-  clip-path: inset(0% 0% 0% 0%);
   flex-shrink: 0;
 }
 
@@ -7129,6 +7074,16 @@ body:has(.page--photo-hero) .header.is-solid::before {
     isolation: isolate;
     background: var(--ink);
     touch-action: pan-x pan-y;
+  }
+
+  .sectors__item-clip {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .sectors__item-rise {
+    min-height: 100%;
   }
 
   .sectors__rule,

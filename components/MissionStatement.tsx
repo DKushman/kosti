@@ -10,12 +10,9 @@ const MISSION_LINES = [
   "Zukunft gestalten.",
 ] as const;
 
-function supportsScrollTimeline() {
-  return (
-    typeof CSS !== "undefined" &&
-    CSS.supports("animation-timeline", "view()")
-  );
-}
+/** An `.mission__inner` gekoppelt — Fill startet, wenn der Textblock sichtbar wird. */
+const MISSION_FILL_START = "top 58%";
+const MISSION_FILL_END = "center 24%";
 
 /**
  * Three lines: each fills left → right in sequence while scrolling.
@@ -25,12 +22,14 @@ export default function MissionStatement() {
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (!root.current) return;
+    const section = root.current;
+    if (!section) return;
+
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    const fills = root.current.querySelectorAll<HTMLElement>(
+    const fills = section.querySelectorAll<HTMLElement>(
       "[data-mission-line-fill]"
     );
     if (!fills.length) return;
@@ -44,18 +43,18 @@ export default function MissionStatement() {
 
     const cleanups: (() => void)[] = [];
 
-    if (supportsScrollTimeline()) {
-      return;
-    }
-
     gsap.set(fills, { clipPath: "inset(0% 100% 0% 0%)" });
+
+    const trigger =
+      section.querySelector<HTMLElement>(".mission__inner") ?? section;
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: root.current,
-        start: "top 62%",
-        end: "center 22%",
+        trigger,
+        start: MISSION_FILL_START,
+        end: MISSION_FILL_END,
         scrub: true,
+        invalidateOnRefresh: true,
       },
     });
 
@@ -67,7 +66,7 @@ export default function MissionStatement() {
       });
     });
 
-    const graphic = root.current.querySelector<HTMLElement>(
+    const graphic = section.querySelector<HTMLElement>(
       "[data-mission-graphic]"
     );
     if (graphic) {
@@ -80,10 +79,11 @@ export default function MissionStatement() {
           scale: 1.06,
           ease: "none",
           scrollTrigger: {
-            trigger: root.current,
+            trigger,
             start: "top bottom",
             end: "bottom top",
             scrub: true,
+            invalidateOnRefresh: true,
           },
         }
       );

@@ -79,10 +79,11 @@ export const REVEAL_START = {
   quote: 85,
   sectorsLede: 82,
   sectorsCta: 88,
-  sectorItem: 88,
+  sectorItem: 72,
   sectorRule: 92,
   workHead: 85,
-  workItem: 85,
+  /** Projekt-Karte: Fenster-Aufklappen wenn Karte im unteren Drittel sichtbar wird */
+  workMediaUnfold: 68,
   workCaption: 70,
   networkSvg: 80,
   studioRadial: 85,
