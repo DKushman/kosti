@@ -135,16 +135,6 @@ export default function ContactForm() {
         <button type="submit" className="btn-fill">
           Nachricht senden
         </button>
-        {status === "sent" ? (
-          <p className="contact-form__hint" role="status">
-            Dein E-Mail-Programm öffnet sich — dort kannst du die Nachricht abschicken.
-          </p>
-        ) : (
-          <p className="contact-form__hint">
-            Mit dem Senden öffnet sich dein E-Mail-Programm. Alternativ direkt an{" "}
-            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
-          </p>
-        )}
       </div>
     </form>
   );

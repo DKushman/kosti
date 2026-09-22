@@ -3858,23 +3858,37 @@ body:has(.hero--paper) .header:not(.is-solid):not(.is-menu-open) .brand__logo {
 
 .about-hero__kosti-wrap {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: block;
   width: 100%;
+  cursor: pointer;
 }
 
 .about-hero__kosti-slot {
   position: relative;
   z-index: 2;
-  display: block;
-  width: clamp(5rem, 18cqw, 9.5rem);
-  margin: 0 0 clamp(0.15rem, 1vh, 0.35rem);
+  width: 100%;
+  height: clamp(5rem, 18cqw, 9.5rem);
+  margin-bottom: -0.12em;
   overflow: hidden;
   pointer-events: none;
 }
 
-.about-hero__kosti-rise {
+.about-hero__kosti-icon {
+  position: absolute;
+  left: 4%;
+  bottom: 0;
+  z-index: 1;
+  width: clamp(5rem, 18cqw, 9.5rem);
+  height: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, 35%, 0);
+  transform-origin: 50% 100%;
+  transition: transform 0.12s var(--ease-out);
+  will-change: transform, opacity;
+}
+
+.about-hero__kosti-icon-motion {
   display: block;
   will-change: transform;
 }
@@ -3936,6 +3950,12 @@ body:has(.hero--paper) .header:not(.is-solid):not(.is-menu-open) .brand__logo {
   fill: #24150f;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .about-hero__kosti-icon {
+    transition: none;
+  }
+}
+
 .about-hero__media {
   position: relative;
   min-height: clamp(22rem, 52vh, 100%);
@@ -3979,8 +3999,28 @@ body:has(.hero--paper) .header:not(.is-solid):not(.is-menu-open) .brand__logo {
     width: calc(100% + var(--gutter));
   }
 
+  .about-hero__kosti-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    cursor: default;
+  }
+
   .about-hero__kosti-slot {
     width: clamp(4.25rem, 22vw, 7rem);
+    height: clamp(4.25rem, 22vw, 7rem);
+    margin: 0 0 clamp(0.15rem, 1vh, 0.35rem);
+  }
+
+  .about-hero__kosti-icon {
+    position: static;
+    left: auto;
+    bottom: auto;
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
   }
 
   .about-hero__title-kosti {

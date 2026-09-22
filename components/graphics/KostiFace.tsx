@@ -1,7 +1,10 @@
-import { useId } from "react";
+import { useId, type RefObject } from "react";
 
 type Props = {
   className?: string;
+  svgRef?: RefObject<SVGSVGElement | null>;
+  leftPupilRef?: RefObject<SVGCircleElement | null>;
+  rightPupilRef?: RefObject<SVGCircleElement | null>;
 };
 
 const EYE = {
@@ -9,8 +12,13 @@ const EYE = {
   right: { x: 49.4, y: 31.2 },
 } as const;
 
-/** Statisches Kosti-Gesicht (Über-mich-Hero). */
-export default function KostiFace({ className }: Props) {
+/** Kosti-Gesicht (Über-mich-Hero). */
+export default function KostiFace({
+  className,
+  svgRef,
+  leftPupilRef,
+  rightPupilRef,
+}: Props) {
   const uid = useId().replace(/:/g, "");
   const headClip = `kosti-head-clip-${uid}`;
   const eyeLeft = `kosti-eye-left-${uid}`;
@@ -19,6 +27,7 @@ export default function KostiFace({ className }: Props) {
 
   return (
     <svg
+      ref={svgRef}
       className={className}
       viewBox="0 0 80 80"
       fill="none"
@@ -66,10 +75,22 @@ export default function KostiFace({ className }: Props) {
       <ellipse cx={EYE.left.x} cy={EYE.left.y} rx="5.6" ry="5.8" className="about-hero__kosti-eye" />
       <ellipse cx={EYE.right.x} cy={EYE.right.y} rx="5.6" ry="5.8" className="about-hero__kosti-eye" />
       <g clipPath={`url(#${eyeLeft})`}>
-        <circle cx={EYE.left.x} cy={EYE.left.y} r="3.05" className="about-hero__kosti-pupil" />
+        <circle
+          ref={leftPupilRef}
+          cx={EYE.left.x}
+          cy={EYE.left.y}
+          r="3.05"
+          className="about-hero__kosti-pupil"
+        />
       </g>
       <g clipPath={`url(#${eyeRight})`}>
-        <circle cx={EYE.right.x} cy={EYE.right.y} r="3.05" className="about-hero__kosti-pupil" />
+        <circle
+          ref={rightPupilRef}
+          cx={EYE.right.x}
+          cy={EYE.right.y}
+          r="3.05"
+          className="about-hero__kosti-pupil"
+        />
       </g>
       <path className="about-hero__kosti-shirt-front" d="M33 59.2 L38.6 80 L41.4 80 L47 59.2 Z" />
       <path className="about-hero__kosti-lapel" d="M18 61.2 L35.8 59.8 L38.6 80 L20 80 L8.5 72.5 Z" />
