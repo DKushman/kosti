@@ -1,3 +1,7 @@
+import { withBasePath } from "@/lib/site-path";
+
+const postCover = (slug: string) => withBasePath(`/img/posts/${slug}.webp`);
+
 export type ArticleCategory =
   | "Wirtschaft"
   | "Stadtentwicklung"
@@ -17,6 +21,8 @@ export type Article = {
   /** TODO: Link zum LinkedIn-Originalbeitrag */
   linkedin?: string;
   img?: "project-1" | "project-2" | "project-3" | "project-4" | "hero" | "sector-workplace" | "sector-exhibition";
+  /** WebP unter public/img/posts/ (Pexels) */
+  image?: string;
 };
 
 export const ARTICLE_CATEGORIES: { id: ArticleCategory; question: string }[] = [
@@ -51,6 +57,7 @@ export const ARTICLES: Article[] = [
     category: "Wirtschaft",
     tags: ["Bürokratie", "Mittelstand", "Verwaltung"],
     img: "sector-workplace",
+    image: postCover("weniger-buerokratie-mehr-unternehmertum"),
     body: [
       "Eine funktionierende Stadt braucht erfolgreiche Unternehmen. Das klingt selbstverständlich, ist es in Berlin aber nicht immer. Wer ein Unternehmen führt, kennt die Situation: Zu viel Zeit fließt in Formulare, Genehmigungen und Abstimmungen – Zeit, die in Produkte, Mitarbeiter und Kunden gehört.",
       "Investitionen entstehen dort, wo Entscheidungen nachvollziehbar und Rahmenbedingungen verlässlich sind. Planungssicherheit ist deshalb keine Nebensache, sondern die wichtigste Standortpolitik, die eine Stadt betreiben kann.",
@@ -67,6 +74,7 @@ export const ARTICLES: Article[] = [
     category: "Stadtentwicklung",
     tags: ["Innenstadt", "Ku'damm", "AG City"],
     img: "project-2",
+    image: postCover("die-city-west-braucht-alles-gleichzeitig"),
     body: [
       "City West, Ku'damm, Potsdamer Platz – Berlins Zentren stehen im Wettbewerb. Nicht nur untereinander, sondern mit den Innenstädten anderer europäischer Metropolen. Wer dort gewinnt, hat verstanden, dass ein Zentrum kein Einkaufsort ist, sondern ein Erlebnisraum.",
       "Handel braucht Gastronomie. Gastronomie braucht Kultur. Kultur braucht Veranstaltungen. Und alles zusammen braucht öffentliche Räume, in denen sich Menschen gerne aufhalten – und eine Mobilität, die Bewohner, Mitarbeiter, Kunden und Besucher gleichermaßen ankommen lässt.",
@@ -83,6 +91,7 @@ export const ARTICLES: Article[] = [
     category: "Innovation",
     tags: ["Digital Out of Home", "HYGH", "Digitalisierung"],
     img: "project-3",
+    image: postCover("wie-technologie-teil-der-stadt-wird"),
     body: [
       "Digitale Kommunikation im öffentlichen Raum verbindet Technologie, Werbung, Architektur, Handel und Stadtentwicklung. Was früher ein Plakat war, ist heute Teil der digitalen Infrastruktur einer Stadt.",
       "Digitale Screens in Schaufenstern, Premium-Standorte am Kurfürstendamm, großformatige digitale Landmarken am Potsdamer Platz: Diese Flächen prägen, wie Berlin wahrgenommen wird – und sie können mehr als Werbung. Sie können informieren, verbinden und eine Stadt in Echtzeit erzählen.",
@@ -99,6 +108,7 @@ export const ARTICLES: Article[] = [
     category: "Berlin international",
     tags: ["EXPO 2035", "Standortmarketing", "Internationale Beziehungen"],
     img: "hero",
+    image: postCover("berlin-sollte-selbstbewusster-auftreten"),
     body: [
       "Berlin gehört zu den spannendsten Städten Europas. Aber internationaler Erfolg ist kein Selbstläufer. Andere Metropolen investieren massiv in Infrastruktur, Innovation, Digitalisierung, Kultur, Tourismus und Standortmarketing.",
       "Meine eigene Geschichte verbindet Berlin mit Europa und insbesondere mit Zypern. Sie hat mir gezeigt, wie viel Kraft in Beziehungen zwischen Städten steckt: Städtepartnerschaften, Tourismus, internationale Unternehmen, Austausch zwischen Metropolen.",
@@ -115,6 +125,7 @@ export const ARTICLES: Article[] = [
     category: "Menschen",
     tags: ["Kiez", "Begegnung", "Wilmersdorf"],
     img: "project-4",
+    image: postCover("aus-einem-kaffee-ein-gespraech"),
     body: [
       "Große Stadtentwicklung und lokale Gemeinschaft sind keine Gegensätze. Mein Kiezcafé im Pangea-Haus in Berlin-Wilmersdorf verbindet Gastronomie mit Begegnung, Kultur, Familienangeboten und gesellschaftlichem Austausch.",
       "> Aus einem Kaffee ein Gespräch, aus einem Gespräch eine Idee, aus einer Idee ein gemeinsames Projekt.",
@@ -130,6 +141,7 @@ export const ARTICLES: Article[] = [
     category: "Menschen",
     tags: ["MyBLN", "Netzwerk", "Kooperation"],
     img: "project-1",
+    image: postCover("netzwerke-brauchen-raeume"),
     body: [
       "Berlin lebt von Begegnungen zwischen Wirtschaft, Politik, Wissenschaft und Kultur. Netzwerke sind dabei kein Selbstzweck. Sie sind Räume, in denen Menschen einander finden, Ideen testen und Verantwortung teilen.",
       "Ob Unternehmerforum, Brancheninitiative oder Stadtteilprojekt – entscheidend ist, dass Kontakte nicht bei der Visitenkarte enden. Vertrauen entsteht, wenn Menschen wiederholt zusammenarbeiten und Ergebnisse sichtbar werden.",
@@ -146,6 +158,7 @@ export const ARTICLES: Article[] = [
     category: "Innovation",
     tags: ["Zukunftsorte", "Transfer", "Start-ups"],
     img: "sector-exhibition",
+    image: postCover("zukunftsorte-verbinden-wissenschaft-und-wirtschaft"),
     body: [
       "Berlin verfügt über herausragende Hochschulen, Forschungseinrichtungen und ein wachsendes Start-up-Ökosystem. Die Herausforderung liegt selten im Fehlen von Ideen – sondern in der Verbindung zwischen Laboren, Unternehmen und Anwendern.",
       "Zukunftsorte können diese Brücke bauen: als Orte, an denen Wissenschaft sichtbar wird, Gründerinnen und Gründer Zugang zu Expertise finden und etablierte Unternehmen frühzeitig an Trends herangeführt werden.",
@@ -162,6 +175,7 @@ export const ARTICLES: Article[] = [
     category: "Stadtentwicklung",
     tags: ["Innenstadt", "Handel", "Mobilität"],
     img: "project-2",
+    image: postCover("innenstadt-braucht-mut-zur-veränderung"),
     body: [
       "Viele Berliner Innenstadtlagen wirken noch lebendig – und doch spürt man den Druck: veränderte Kaufverhalten, Leerstände, Debatten über Verkehr und Aufenthaltsqualität. Die Antwort darf nicht in Nostalgie liegen.",
       "Attraktive Zentren entstehen, wenn Handel, Gastronomie, Kultur und öffentlicher Raum gemeinsam gedacht werden. Das bedeutet auch, neue Nutzungen auszuprobieren und Entscheidungen schneller zu treffen.",

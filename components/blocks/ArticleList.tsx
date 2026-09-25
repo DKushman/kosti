@@ -6,7 +6,7 @@ import {
   type Article,
   type ArticleCategory,
 } from "@/lib/content/positionen";
-import Pic from "@/components/Pic";
+import ArticleCover from "@/components/ArticleCover";
 import TransitionLink from "@/components/TransitionLink";
 
 type Props = { articles: readonly Article[] };
@@ -87,8 +87,8 @@ export default function ArticleList({ articles }: Props) {
               className="article-card"
             >
               <span className="article-card__media">
-                <Pic
-                  name={article.img ?? "hero"}
+                <ArticleCover
+                  article={article}
                   sizes="(max-width: 700px) 100vw, 33vw"
                   alt=""
                 />

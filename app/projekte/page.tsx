@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PROJECTS } from "@/lib/content/projekte";
 import ProjectsPhotoHero from "@/components/blocks/ProjectsPhotoHero";
 import RevealScope from "@/components/RevealScope";
-import Pic from "@/components/Pic";
+import ProjectCover from "@/components/ProjectCover";
 import TransitionLink from "@/components/TransitionLink";
 
 const PROJECT_PLACEHOLDER =
@@ -30,8 +30,8 @@ export default function ProjektePage() {
               <li className="proj-showcase__item" key={p.slug} data-reveal="up">
                 <TransitionLink href={`/projekte/${p.slug}`} className="proj-showcase__link">
                   <div className="proj-showcase__media">
-                    <Pic
-                      name={p.img}
+                    <ProjectCover
+                      project={p}
                       sizes="(max-width: 900px) 100vw, 50vw"
                       alt=""
                     />

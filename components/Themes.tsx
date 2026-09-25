@@ -4,9 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { SplitText } from "@/lib/gsap";
 import { fitSectorNames } from "@/lib/fit-display-text";
 import { HOME_THEMES } from "@/lib/content/themen";
-import Pic from "@/components/Pic";
 import FillButton from "@/components/FillButton";
-import TransitionLink from "@/components/TransitionLink";
+import RevealScope from "@/components/RevealScope";
 import {
   REVEAL_START,
   markRevealed,
@@ -104,24 +103,28 @@ export default function Themes() {
       );
     }
 
-    root.current.querySelectorAll<HTMLElement>("[data-sector-item]").forEach((item, i) => {
-      const clip = item.querySelector<HTMLElement>("[data-sector-clip]");
-      if (!clip) return;
+    const mobileSectors = window.matchMedia("(max-width: 900px)").matches;
 
-      item.style.setProperty("--sector-i", String(i));
+    if (!mobileSectors) {
+      root.current.querySelectorAll<HTMLElement>("[data-sector-item]").forEach((item, i) => {
+        const clip = item.querySelector<HTMLElement>("[data-sector-clip]");
+        if (!clip) return;
 
-      cleanups.push(
-        observeRevealOnce(item, {
-          startTop: REVEAL_START.sectorItem,
-          onEnter: () => {
-            clip.classList.add("is-revealed");
-            item.querySelectorAll<HTMLElement>("[data-sector-rule]").forEach((rule) => {
-              rule.classList.add("is-revealed");
-            });
-          },
-        })
-      );
-    });
+        item.style.setProperty("--sector-i", String(i));
+
+        cleanups.push(
+          observeRevealOnce(item, {
+            startTop: REVEAL_START.sectorItem,
+            onEnter: () => {
+              clip.classList.add("is-revealed");
+              item.querySelectorAll<HTMLElement>("[data-sector-rule]").forEach((rule) => {
+                rule.classList.add("is-revealed");
+              });
+            },
+          })
+        );
+      });
+    }
 
     return () => cleanups.forEach((fn) => fn());
   }, []);
@@ -147,9 +150,12 @@ export default function Themes() {
         </FillButton>
       </div>
 
-      <p className="sectors__body-label">Themen, mit den ich mich befasse.</p>
-      <div className="sectors__body" data-sectors-body>
-        <ul className="sectors__list" role="list">
+      <RevealScope>
+        <p className="sectors__body-label" data-reveal="up">
+          Themen, mit den ich mich befasse.
+        </p>
+        <div className="sectors__body sectors__carousel" data-sectors-body data-reveal="up">
+          <ul className="sectors__list" role="list">
           {HOME_THEMES.map((theme, i) => (
             <li
               className={`sectors__item${active === i ? " is-active" : ""}`}
@@ -159,19 +165,30 @@ export default function Themes() {
               <span className="sectors__rule" data-sector-rule aria-hidden="true" />
               <div className="sectors__item-clip" data-sector-clip>
                 <div className="sectors__item-rise">
-                  <div className="sectors__card-media" aria-hidden="true">
-                    <Pic
-                      name={theme.img}
-                      sizes="(max-width: 900px) 86vw, 0px"
-                      alt=""
-                    />
-                  </div>
-                  <TransitionLink
+                  <span
                     className="sectors__link display"
-                    href={theme.href}
+                    role="group"
+                    tabIndex={0}
                     onMouseEnter={() => setActive(i)}
                     onFocus={() => setActive(i)}
                   >
+                    <span className="sectors__card-media" aria-hidden="true">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={theme.image}
+                        alt=""
+                        loading={i < 2 ? "eager" : "lazy"}
+                        fetchPriority={i < 2 ? "high" : undefined}
+                        decoding="async"
+                        draggable={false}
+                        style={
+                          "imagePosition" in theme && theme.imagePosition
+                            ? { objectPosition: theme.imagePosition }
+                            : undefined
+                        }
+                      />
+                    </span>
+                    <span className="sectors__overlay" aria-hidden="true" />
                     <span className="sectors__link-title">
                       <span className="split-line">
                         <span data-sector-name>{theme.name}</span>
@@ -181,7 +198,7 @@ export default function Themes() {
                     <span className="sectors__card-copy">
                       <span className="sectors__card-headline">{theme.text}</span>
                     </span>
-                  </TransitionLink>
+                  </span>
                   <p className="sectors__desc">{theme.text}</p>
                 </div>
               </div>
@@ -198,17 +215,26 @@ export default function Themes() {
 
         <div className="sectors__media" data-sectors-media aria-hidden="true">
           {HOME_THEMES.map((theme, i) => (
-            <Pic
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
               key={theme.name}
-              name={theme.img}
-              sizes="(max-width: 900px) 420px, 38vw"
+              src={theme.image}
               alt=""
+              loading={i === 0 ? "eager" : "lazy"}
+              decoding="async"
+              draggable={false}
               className={active === i ? "is-active" : ""}
+              style={
+                "imagePosition" in theme && theme.imagePosition
+                  ? { objectPosition: theme.imagePosition }
+                  : undefined
+              }
             />
           ))}
           <p className="sectors__media-caption">{HOME_THEMES[active].text}</p>
         </div>
-      </div>
+        </div>
+      </RevealScope>
     </section>
   );
 }

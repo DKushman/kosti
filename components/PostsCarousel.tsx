@@ -2,17 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Article } from "@/lib/content/positionen";
-import type { ImageName } from "@/lib/images";
-import Pic from "@/components/Pic";
+import ArticleCover from "@/components/ArticleCover";
 import TransitionLink from "@/components/TransitionLink";
 
 type Props = {
   articles: readonly Article[];
 };
-
-function postImage(article: Article): ImageName {
-  return article.img ?? "project-1";
-}
 
 function stepSize() {
   if (typeof window === "undefined") return 3;
@@ -96,8 +91,8 @@ export default function PostsCarousel({ articles }: Props) {
             >
               <span className="visually-hidden">{article.title}</span>
               <span className="posts__media">
-                <Pic
-                  name={postImage(article)}
+                <ArticleCover
+                  article={article}
                   sizes="(max-width: 900px) 82vw, 42vw"
                   alt=""
                 />

@@ -1,4 +1,15 @@
 import type { ImageName } from "@/lib/images";
+import { withBasePath } from "@/lib/site-path";
+import {
+  AGCITY_IMAGE,
+  HYGH_NETWORK_IMAGE,
+  HYGH_PROJECT_IMAGE,
+  MYBLN_IMAGE,
+} from "@/lib/content/media-urls";
+
+export { HYGH_NETWORK_IMAGE, HYGH_PROJECT_IMAGE, MYBLN_IMAGE, AGCITY_IMAGE };
+/** @deprecated alias */
+export const HYGH_IMAGE = HYGH_NETWORK_IMAGE;
 
 export type Project = {
   slug: string;
@@ -7,6 +18,8 @@ export type Project = {
   category: string;
   year: string;
   img: ImageName;
+  /** Direkte Cloudinary-URL statt lokalem Pic */
+  image?: string;
   intro: string;
   body: string[];
   formatsTitle: string;
@@ -22,6 +35,7 @@ export const PROJECTS: Project[] = [
     category: "Netzwerk — Berlin",
     year: "seit 2024",
     img: "project-1",
+    image: MYBLN_IMAGE,
     intro:
       "MyBLN bringt Menschen aus Wirtschaft, Kultur, Politik, Wissenschaft, Sport und Gesellschaft zusammen. Nicht Visitenkarten stehen im Mittelpunkt, sondern die Frage: Was können wir gemeinsam für Berlin bewegen?",
     body: [
@@ -45,6 +59,7 @@ export const PROJECTS: Project[] = [
     category: "Vorstand — City West",
     year: "laufend",
     img: "project-2",
+    image: AGCITY_IMAGE,
     intro:
       "Die AG City ist seit Jahrzehnten eine wichtige Stimme der Berliner City West. Als Teil des Vorstands arbeite ich an den Themen, die den Ku'damm und seine Umgebung als Zentrum stark halten.",
     body: [
@@ -69,6 +84,7 @@ export const PROJECTS: Project[] = [
     category: "Digital Out of Home — Berlin",
     year: "laufend",
     img: "project-3",
+    image: HYGH_PROJECT_IMAGE,
     intro:
       "Digital Out of Home verbindet Technologie, Werbung, Architektur, Handel und Stadtentwicklung. Bei HYGH arbeite ich daran, wie Kommunikation Teil der digitalen Infrastruktur einer Metropole wird.",
     body: [
@@ -93,6 +109,7 @@ export const PROJECTS: Project[] = [
     category: "Innovation — Berlin",
     year: "laufend",
     img: "project-4",
+    image: withBasePath("/img/pexels-burkaycanatar-30036675.webp"),
     intro:
       "Berlins Wissenschafts-, Technologie- und Innovationsstandorte stärker mit Wirtschaft und Stadt verbinden – damit aus Forschung wirtschaftlicher Erfolg wird.",
     body: [
@@ -114,6 +131,7 @@ export const PROJECTS: Project[] = [
     category: "Internationale Sichtbarkeit — Berlin",
     year: "Vision",
     img: "hero",
+    image: withBasePath("/img/pexels-bence-szemerey-337043-7081214.webp"),
     intro:
       "Eine EXPO als gemeinsamer Zukunftsprozess für Berlin – und als internationale Bühne für Lösungen der Stadt von morgen.",
     body: [

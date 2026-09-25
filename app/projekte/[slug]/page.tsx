@@ -4,7 +4,7 @@ import { PROJECTS, getProject } from "@/lib/content/projekte";
 import PageHero from "@/components/blocks/PageHero";
 import Section from "@/components/blocks/Section";
 import CtaBand from "@/components/blocks/CtaBand";
-import Pic from "@/components/Pic";
+import ProjectCover from "@/components/ProjectCover";
 import FillButton from "@/components/FillButton";
 
 type Params = { slug: string };
@@ -47,7 +47,7 @@ export default async function ProjektPage({ params }: { params: Promise<Params> 
 
       <Section tone="paper" wide className="project-media">
         <div className="project-media__frame" data-reveal="clip">
-          <Pic name={project.img} sizes="100vw" alt="" priority />
+          <ProjectCover project={project} sizes="100vw" alt="" priority />
         </div>
       </Section>
 

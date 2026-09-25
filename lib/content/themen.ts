@@ -74,11 +74,42 @@ export const THEMEN = {
   },
 } as const;
 
-/** Startseite – Block 3 „Meine Themen“ */
+/** Startseite – Block 3 „Meine Themen“ (Bilder: Cloudinary) */
 export const HOME_THEMES = [
-  { name: "Wirtschaft", href: "/themen#wirtschaft", img: "sector-workplace", text: "Gute Rahmenbedingungen, Planungssicherheit und eine Verwaltung, die wirtschaftliche Entwicklung ermöglicht." },
-  { name: "Berlin", href: "/themen#berlin", img: "hero", text: "Lebenswerte Metropole und international wettbewerbsfähiger Wirtschaftsstandort." },
-  { name: "Innovation", href: "/themen#innovation", img: "sector-exhibition", text: "Neue Technologien und Geschäftsmodelle als Chance für Berlin." },
-  { name: "Netzwerke", href: "/netzwerk", img: "sector-hospitality", text: "Wirtschaft, Politik, Wissenschaft, Kultur und Gesellschaft zusammenbringen." },
-  { name: "Gesellschaft", href: "/ueber-mich#haltung", img: "sector-retail", text: "Wirtschaftlichen Erfolg mit gesellschaftlicher Verantwortung verbinden." },
+  {
+    name: "Wirtschaft",
+    href: "/themen#wirtschaft",
+    image:
+      "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1790354321/DSC09955_k9nzxy.jpg",
+    text: "Gute Rahmenbedingungen, Planungssicherheit und eine Verwaltung, die wirtschaftliche Entwicklung ermöglicht.",
+  },
+  {
+    name: "Berlin",
+    href: "/themen#berlin",
+    image:
+      "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1790354293/1._1760990169895_ms8tys.jpg",
+    text: "Lebenswerte Metropole und international wettbewerbsfähiger Wirtschaftsstandort.",
+  },
+  {
+    name: "Innovation",
+    href: "/themen#innovation",
+    image:
+      "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1790354271/1._WhatsApp_Image_2024-04-30_at_10.48.47_dg480p.jpg",
+    text: "Neue Technologien und Geschäftsmodelle als Chance für Berlin.",
+  },
+  {
+    name: "Netzwerke",
+    href: "/netzwerk",
+    image:
+      "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1790354270/1._988b4552-cd80-4ff0-a91d-42a80cd4bc45_y0pa4a.jpg",
+    imagePosition: "18% center",
+    text: "Wirtschaft, Politik, Wissenschaft, Kultur und Gesellschaft zusammenbringen.",
+  },
+  {
+    name: "Gesellschaft",
+    href: "/ueber-mich#haltung",
+    image:
+      "https://res.cloudinary.com/dqcdbdt4v/image/upload/v1790354272/1._LM1A3846_Kopie_z0oh4z.jpg",
+    text: "Wirtschaftlichen Erfolg mit gesellschaftlicher Verantwortung verbinden.",
+  },
 ] as const;

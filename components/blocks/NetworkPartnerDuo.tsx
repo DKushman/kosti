@@ -1,6 +1,10 @@
 "use client";
 
-import { imageSet, type ImageName } from "@/lib/images";
+import {
+  AGCITY_IMAGE,
+  HYGH_NETWORK_IMAGE,
+  MYBLN_IMAGE,
+} from "@/lib/content/media-urls";
 import { useNetDuoTiles, type NetDuoTileEl } from "@/lib/net-duo-tile";
 import TransitionLink from "@/components/TransitionLink";
 
@@ -11,7 +15,7 @@ const PARTNERS = [
     handle: "Vorstandsvorsitzender bei AG City West",
     text: "Die Stimme der City West – Handel, Tourismus und Innenstadtentwicklung im Zusammenspiel.",
     href: "/projekte/ag-city",
-    img: "project-2" as ImageName,
+    image: AGCITY_IMAGE,
   },
   {
     id: "mybln",
@@ -19,7 +23,15 @@ const PARTNERS = [
     handle: "Vorstand bei MyBLN",
     text: "Echt. Laut. Berlin. – Menschen verbinden, damit aus Ideen gemeinsame Projekte werden.",
     href: "/projekte/mybln",
-    img: "project-1" as ImageName,
+    image: MYBLN_IMAGE,
+  },
+  {
+    id: "hygh",
+    title: "HYGH",
+    handle: "Director Direct Sales · HYGH",
+    text: "Digitale Kommunikation im Stadtraum – vom Schaufenster bis zur Landmarke am Potsdamer Platz.",
+    href: "/projekte/hygh",
+    image: HYGH_NETWORK_IMAGE,
   },
 ] as const;
 
@@ -30,7 +42,6 @@ export default function NetworkPartnerDuo() {
     <div className="net-duo">
       <div className="net-duo__grid" data-reveal="stagger">
         {PARTNERS.map((p) => {
-          const img = imageSet(p.img);
           return (
             <TransitionLink
               key={p.id}
@@ -44,12 +55,12 @@ export default function NetworkPartnerDuo() {
               <div className="net-duo__media" aria-hidden="true">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={img.src}
-                  srcSet={img.srcSet || undefined}
+                  src={p.image}
                   sizes="(max-width: 900px) 100vw, 50vw"
                   alt=""
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
+                  draggable={false}
                 />
                 <div className="net-duo__shade" />
               </div>

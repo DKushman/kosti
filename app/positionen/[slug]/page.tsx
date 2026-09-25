@@ -10,7 +10,7 @@ import { SITE } from "@/lib/site";
 import RevealScope from "@/components/RevealScope";
 import ShareButton from "@/components/blocks/ShareButton";
 import ArticleNextReads from "@/components/blocks/ArticleNextReads";
-import Pic from "@/components/Pic";
+import ArticleCover from "@/components/ArticleCover";
 type Params = { slug: string };
 
 export function generateStaticParams(): Params[] {
@@ -65,9 +65,14 @@ export default async function ArtikelPage({ params }: { params: Promise<Params> 
           </p>
         </header>
 
-        {article.img ? (
+        {article.image || article.img ? (
           <div className="article__media" data-reveal="clip">
-            <Pic name={article.img} sizes="(max-width: 1100px) 100vw, 1100px" alt="" priority />
+            <ArticleCover
+              article={article}
+              sizes="(max-width: 1100px) 100vw, 1100px"
+              alt=""
+              priority
+            />
           </div>
         ) : null}
 

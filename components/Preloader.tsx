@@ -3,19 +3,17 @@
 import { useEffect, useState } from "react";
 import { useIntro } from "@/lib/intro-context";
 import { dispatchPageEnter } from "@/lib/page-enter";
-import { PRELOADER_CURTAIN_MS, PRELOADER_WORDS } from "@/lib/intro-sequence";
+import {
+  PRELOADER_BEFORE_NAME_MS,
+  PRELOADER_CURTAIN_MS,
+  PRELOADER_NAME,
+  PRELOADER_NAME_INDEX,
+  PRELOADER_STEP_MS,
+  PRELOADER_STEPS,
+  type PreloaderStep,
+} from "@/lib/intro-sequence";
 
-/** Visible pause while a word sits in the slot */
-const HOLD_MS = 320;
-/** Must match CSS keyframe duration */
-const SWAP_MS = 480;
 const CURTAIN_MS = PRELOADER_CURTAIN_MS;
-/**
- * Repeat full loads within the same tab session (reload, back from an
- * external site, deep link) jump straight to the last word instead of
- * replaying all six. First impression stays untouched. Set to false to
- * always play the full sequence.
- */
 const SHORT_ON_REPEAT_VISIT = true;
 const SESSION_KEY = "kp-preloader-seen";
 let repeatVisitDecision: boolean | null = null;
@@ -30,6 +28,10 @@ function isRepeatVisit() {
     }
   }
   return repeatVisitDecision;
+}
+
+function isNameStep(step: PreloaderStep) {
+  return step.label === PRELOADER_NAME;
 }
 
 /**
@@ -59,19 +61,23 @@ export default function Preloader() {
     }
 
     const first =
-      SHORT_ON_REPEAT_VISIT && isRepeatVisit() ? PRELOADER_WORDS.length - 1 : 0;
+      SHORT_ON_REPEAT_VISIT && isRepeatVisit() ? PRELOADER_STEPS.length - 1 : 0;
 
     const run = async () => {
       await wait(80);
       if (cancelled) return;
 
       setIndex(first);
-      await wait(HOLD_MS + SWAP_MS);
+      await wait(PRELOADER_STEP_MS);
       if (cancelled) return;
 
-      for (let i = first + 1; i < PRELOADER_WORDS.length; i++) {
+      for (let i = first + 1; i < PRELOADER_STEPS.length; i++) {
+        if (i === PRELOADER_NAME_INDEX) {
+          await wait(PRELOADER_BEFORE_NAME_MS);
+          if (cancelled) return;
+        }
         setIndex(i);
-        await wait(HOLD_MS + SWAP_MS);
+        await wait(PRELOADER_STEP_MS);
         if (cancelled) return;
       }
 
@@ -93,14 +99,17 @@ export default function Preloader() {
 
   if (gone) return null;
 
-  const incoming = !curtain && index >= 0 ? PRELOADER_WORDS[index] : null;
+  const incoming = !curtain && index >= 0 ? PRELOADER_STEPS[index] : null;
   const outgoing = curtain
     ? index >= 0
-      ? PRELOADER_WORDS[index]
+      ? PRELOADER_STEPS[index]
       : null
     : index > 0
-      ? PRELOADER_WORDS[index - 1]
+      ? PRELOADER_STEPS[index - 1]
       : null;
+
+  const nameOnStage =
+    (incoming && isNameStep(incoming)) || (outgoing && isNameStep(outgoing));
 
   return (
     <div
@@ -109,23 +118,24 @@ export default function Preloader() {
       aria-live="polite"
       aria-label="Loading Konstantin Patsalides"
     >
-      <div className="preloader__stage" aria-hidden="true">
+      <div
+        className={`preloader__stage${nameOnStage ? " is-name" : ""}`}
+        aria-hidden="true"
+      >
         {outgoing ? (
           <p
-            className="preloader__word is-out"
+            className={`preloader__word is-out${isNameStep(outgoing) ? " preloader__word--name" : ""}`}
             key={`out-${outgoing.label}-${index}-${curtain ? "c" : "s"}`}
           >
-            <span className="preloader__emoji">{outgoing.emoji}</span>
-            <span className="preloader__label">{outgoing.label}</span>
+            {outgoing.label}
           </p>
         ) : null}
         {incoming ? (
           <p
-            className="preloader__word is-in"
+            className={`preloader__word is-in${isNameStep(incoming) ? " preloader__word--name" : ""}`}
             key={`in-${incoming.label}-${index}`}
           >
-            <span className="preloader__emoji">{incoming.emoji}</span>
-            <span className="preloader__label">{incoming.label}</span>
+            {incoming.label}
           </p>
         ) : null}
       </div>

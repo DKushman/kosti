@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import Pic from "@/components/Pic";
 import FillButton from "@/components/FillButton";
+import { PREFOOTER_CTA_IMAGE } from "@/lib/content/media-urls";
 
 function supportsScrollTimeline() {
   return (
@@ -66,7 +66,15 @@ export default function PreFooterContact() {
     >
       <div className="prefooter-contact__frame">
         <div className="prefooter-contact__media" aria-hidden="true">
-          <Pic name="hero" sizes="98vw" alt="" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={PREFOOTER_CTA_IMAGE}
+            alt=""
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            draggable={false}
+          />
         </div>
         <div className="prefooter-contact__scrim" aria-hidden="true" />
         <div className="prefooter-contact__content">

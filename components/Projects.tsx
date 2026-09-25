@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, SplitText, ScrollTrigger } from "@/lib/gsap";
 import { PROJECTS } from "@/lib/content/projekte";
-import Pic from "@/components/Pic";
+import ProjectCover from "@/components/ProjectCover";
 import FillButton from "@/components/FillButton";
 import TransitionLink from "@/components/TransitionLink";
 import BerlinWord from "@/components/BerlinWord";
@@ -173,8 +173,8 @@ export default function Projects() {
             >
               <figure>
                 <div className="work__media" data-work-media>
-                  <Pic
-                    name={project.img}
+                  <ProjectCover
+                    project={project}
                     sizes="(max-width: 900px) 100vw, 58vw"
                     alt=""
                     data-work-parallax=""

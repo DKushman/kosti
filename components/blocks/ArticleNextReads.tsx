@@ -2,7 +2,7 @@
 
 import type { Article } from "@/lib/content/positionen";
 import { useNetDuoTiles, type NetDuoTileEl } from "@/lib/net-duo-tile";
-import Pic from "@/components/Pic";
+import ArticleCover from "@/components/ArticleCover";
 import TransitionLink from "@/components/TransitionLink";
 import RevealScope from "@/components/RevealScope";
 
@@ -38,8 +38,8 @@ export default function ArticleNextReads({ articles }: Props) {
               onMouseLeave={onMouseLeave}
             >
               <div className="net-duo__media" aria-hidden="true">
-                <Pic
-                  name={article.img ?? "hero"}
+                <ArticleCover
+                  article={article}
                   sizes="(max-width: 900px) 100vw, 50vw"
                   alt=""
                 />

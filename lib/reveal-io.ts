@@ -14,6 +14,7 @@ type ObserveOnceOpts = {
   /** GSAP-style: trigger when element top crosses this % of viewport height */
   startTop?: number;
   root?: Element | null;
+  threshold?: number | number[];
   onEnter: () => void;
 };
 
@@ -23,7 +24,7 @@ type ObserveOnceOpts = {
  */
 export function observeRevealOnce(
   el: Element,
-  { startTop = 88, root = null, onEnter }: ObserveOnceOpts
+  { startTop = 88, root = null, threshold = 0, onEnter }: ObserveOnceOpts
 ) {
   if (typeof IntersectionObserver === "undefined") {
     onEnter();
@@ -43,7 +44,7 @@ export function observeRevealOnce(
     {
       root,
       rootMargin: rootMarginForTopStart(startTop),
-      threshold: 0,
+      threshold,
     }
   );
 
